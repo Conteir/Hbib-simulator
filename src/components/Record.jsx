@@ -16,10 +16,11 @@ export const Record = class Record extends React.Component {
   }
 
   codeSystemPromise = (url) => {
-    let promise = fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
+    let promise = fetch(url,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
       },
     }).then((response) => response.json());
     return promise;
@@ -32,7 +33,7 @@ export const Record = class Record extends React.Component {
 
     // ICPC2
     let codeSystemUrl1 =
-      "https://snowstorm.rundberg.no/browser/MAIN/ICPC2/members" +
+      "https://snowstorm.conteir.no/browser/MAIN/ICPC-2/members" +
       "?limit=10" +
       "&active=true" +
       "&referenceSet=450993002" +

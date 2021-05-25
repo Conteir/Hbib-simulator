@@ -20,6 +20,7 @@ export class IFrame extends Component {
     return (
       <iframe
         {...props}
+        title="My iframe"
         ref={this.setContentRef}
       >
         {mountNode && createPortal(children, mountNode)}
