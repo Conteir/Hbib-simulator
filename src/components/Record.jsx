@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import DisordersAutosuggest from "../components/DisordersAutosuggest";
 import { IFrame } from "./IFrameCompoment.jsx";
+import { snomedURLs } from "../config.ts";
 
 export const Record = class Record extends React.Component {
   constructor(props) {
@@ -32,13 +33,7 @@ export const Record = class Record extends React.Component {
     let content = {};
 
     // ICPC2
-    let codeSystemUrl1 =
-      "https://snowstorm.conteir.no/browser/MAIN/ICPC-2/members" +
-      "?limit=10" +
-      "&active=true" +
-      "&referenceSet=450993002" +
-      "&referencedComponentId=" +
-      conceptId;
+    let codeSystemUrl1 = snomedURLs.getICPC2 + conceptId;
 
     let promiseICPC2 = fetch(codeSystemUrl1)
       .then((response) => response.json())
@@ -55,13 +50,7 @@ export const Record = class Record extends React.Component {
     promises.push(promiseICPC2);
 
     // ICD
-    let codeSystemUrl =
-      "https://snowstorm.conteir.no/browser/MAIN/members" +
-      "?limit=10" +
-      "&active=true" +
-      "&referenceSet=447562003" +
-      "&referencedComponentId=" +
-      conceptId;
+    let codeSystemUrl = snomedURLs.getICD10 + conceptId;
 
     let promiseICD10 = fetch(codeSystemUrl)
       .then((response) => response.json())

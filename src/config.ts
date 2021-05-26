@@ -19,8 +19,6 @@ export const codeSystems = [
     },
   ]
 
- 
-  
   export const enviroments = [
     {
       id: "test-bt",
@@ -49,12 +47,29 @@ export const codeSystems = [
   ]
 
   //SNOMED CT CONFIGURATIONS
-  let terminlogyServer: string = 'https://snowstorm.conteir.no';
-  let branch: string = 'MAIN/SNOMEDCT-NO';
-  let urlParameters: string = '?limit=10&active=true&groupByConcept=true&language=no&language=nb&language=nn&language=en&conceptActive=true';
+  export let terminlogyServer: string = 'https://snowstorm.conteir.no';
+  export let branchICD10: string = 'MAIN/SNOMEDCT-NO';
+  export let branchICPC2: string = 'MAIN/ICPC-2';
+  export let branchHelsedir: string = 'MAIN/SNOMEDCT-NO/HELSEDIREKTORATET';
+
+  export let urlParameters: string = '?limit=10&active=true&groupByConcept=true&language=no&language=nb&language=nn&language=en&conceptActive=true';
 
   export const snomedURLs =  
   {
-    getTerms: terminlogyServer + '/browser/' + branch + '/descriptions' + urlParameters + '&term=',
+    getICD10: terminlogyServer + '/browser/' + branchICD10 + '/members' + urlParameters + + '&referenceSet=447562003'
+      + '&referencedComponentId=',
+    getICPC2: terminlogyServer + '/browser/' + branchICPC2 + '/members' + urlParameters + + '&referenceSet=450993002'
+      + '&referencedComponentId=',
+    getTerms: terminlogyServer + '/browser/' + branchHelsedir + '/descriptions' + urlParameters + '&term=',
   }
-  
+
+  export const codeSystemEnv = [
+    {
+      id: "ICPC-2",
+      title: "ICPC-2",
+    },
+    {
+      id: "ICD-10",
+      title: "ICD-10",
+    }
+  ]

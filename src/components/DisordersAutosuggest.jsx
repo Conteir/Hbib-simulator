@@ -40,7 +40,7 @@ export default class DisordersAutosuggest extends React.Component {
 
     //snomedURLs.getTerms = address
     //value = users input
-    if(inputValue && inputValue.length >= 3) {
+    if( inputValue && inputValue.length >= 3 && value == inputValue ) {
         fetch(snomedURLs.getTerms + value,
             {
                 method: 'GET',
