@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import DisordersAutosuggest from "../components/DisordersAutosuggest";
 import { IFrame } from "./IFrameCompoment.jsx";
-import { codeSystemEnv } from "../config.ts";
+import { codeSystemEnv, params } from "../config.ts";
 
 export const Record = class Record extends React.Component {
   constructor(props) {
@@ -16,13 +16,9 @@ export const Record = class Record extends React.Component {
   }
 
   codeSystemPromise = (url) => {
-    let promise = fetch(url,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-      },
-    }).then((response) => response.json());
+    let promise = fetch(url, 
+      params)
+    .then((response) => response.json());
     return promise;
   };
 
@@ -30,17 +26,9 @@ export const Record = class Record extends React.Component {
     // API key depends on environment: current -> Production
     const codeSystem = codeSystemResult.codeSystem;
     const code = codeSystemResult.code;
-    const apiKey = "89b72a3ad5cf4723b3f489c3eb4d82a1";
     const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";
     const url = hdBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
 
-    let params = {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Ocp-Apim-Subscription-Key": apiKey,
-      },
-    };
     fetch(url, params)
     .then(response => response.json())
     .then(data => {

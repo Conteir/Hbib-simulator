@@ -35,7 +35,8 @@ export default class DisordersAutosuggest extends React.Component {
     renderSuggestion = (suggestion) => (
     <div>
       {/** taking from hdir descriptions */}
-      {suggestion.term + ' (Snomed CT: ' + suggestion.concept.conceptId // items.concept.conceptId
+      {suggestion.term + ' (Snomed CT: ' + suggestion.concept.conceptId + ', ' // items.concept.conceptId
+          + suggestion.concept.fsn.term
           + ', ' + suggestion?.$codeSystemResult?.codeSystem
           + ': ' + suggestion?.$codeSystemResult?.code + ')'}
     </div>

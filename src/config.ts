@@ -73,3 +73,11 @@ export const codeSystems = [
         + '&referencedComponentId='
     }
   ]
+
+  export const params = {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Ocp-Apim-Subscription-Key": "89b72a3ad5cf4723b3f489c3eb4d82a1",
+    },
+  };
