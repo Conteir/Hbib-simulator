@@ -1,6 +1,6 @@
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
-import { snomedURLs } from '../config.ts';
+import { snomedURLs, codeSystemEnv } from '../config.ts';
 import './DisordersAutoSuggest.css';
 
 export default class DisordersAutosuggest extends React.Component {
@@ -22,14 +22,22 @@ export default class DisordersAutosuggest extends React.Component {
   // based on the clicked suggestion. Teach Autosuggest how to calculate the
   // input value for every given suggestion.
     getSuggestionValue = (suggestion) => {
-        this.props.suggestCallback(suggestion.concept.conceptId);
-        return suggestion.term + ' (' + suggestion.concept.conceptId + ')';
+      if(suggestion.$codeSystemResult) {
+        this.props.suggestCallback(suggestion.$codeSystemResult);
+      }
+
+      return suggestion.term + ' (Snomed CT: ' + suggestion.concept.conceptId
+        + ', ' + suggestion?.$codeSystemResult?.codeSystem
+        + ': ' + suggestion?.$codeSystemResult?.code + ')';
     }
   
   // Use your imagination to render suggestions.
     renderSuggestion = (suggestion) => (
     <div>
-      {suggestion.term + ' (' + suggestion.concept.conceptId + ')'}
+      {/** taking from hdir descriptions */}
+      {suggestion.term + ' (Snomed CT: ' + suggestion.concept.conceptId // items.concept.conceptId
+          + ', ' + suggestion?.$codeSystemResult?.codeSystem
+          + ': ' + suggestion?.$codeSystemResult?.code + ')'}
     </div>
   );
 
@@ -38,9 +46,8 @@ export default class DisordersAutosuggest extends React.Component {
   onSuggestionsFetchRequested = ({ value }) => {
     const inputValue = value.trim().toLowerCase();
 
-    //snomedURLs.getTerms = address
-    //value = users input
-    if( inputValue && inputValue.length >= 3 && value == inputValue ) {
+    //snomedURLs.getTerms = URLaddress; value = a term from users input
+    if( inputValue && inputValue.length >= 3) {
         fetch(snomedURLs.getTerms + value,
             {
                 method: 'GET',
@@ -51,20 +58,50 @@ export default class DisordersAutosuggest extends React.Component {
         )
         .then(response => response.json())
         .then(data => {
-            if(Array.isArray(data.items)) {
-                let items = [];
+          // check if input is still the same after fetch (fetch takes time)
+          if(this.state.value.trim().toLowerCase() === inputValue.trim().toLowerCase() && Array.isArray(data.items)) {
+            let items = []; // for suggestions
+            let promises = []; // promises with code system
 
-                data.items.forEach(el => {
-                    if(el.term && el.term.length > 0) items.push(el);
-                });
+            // let setEnviroments = enviroments.find(o => o.id === enviroment);
+            const selectedCodeSystem = codeSystemEnv.find(o => o.id === this.props.codeSystem); // using codeSystem prop from Record
+
+            //for eavh suggestion
+            data.items.forEach(el => {
+              const conceptId = el.concept.conceptId;
+
+              if(selectedCodeSystem) {
                 
-                // Need to be sure that entered word is the word in the current function call
-                if(this.state.value.trim().toLowerCase() === inputValue.trim().toLowerCase()) {
-                    this.setState({
-                        suggestions: items
-                    });
-                }
-            }
+                let codeSystemPromise = fetch(selectedCodeSystem.url + conceptId)
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log("Code system: " + selectedCodeSystem.id, data);
+                  if (data && Array.isArray(data.items) && data.items.length > 0) { //check if object is not empty
+                    if (data.items[0]?.additionalFields?.mapTarget) {
+                      el.$codeSystemResult = {
+                        codeSystem: selectedCodeSystem.id,
+                        code: data.items[0]?.additionalFields?.mapTarget || 'None'
+                      }
+                    }
+                  }
+                });
+
+                promises.push(codeSystemPromise);
+              }
+              
+              items.push(el);
+            });
+            
+            Promise.all(promises).then(() => {
+              // Need to be sure that entered word is the word in the current function call
+              if(this.state.value.trim().toLowerCase() === inputValue.trim().toLowerCase()) {
+                this.setState({
+                    suggestions: items
+                });
+              }
+            });
+            
+          }
         });
     } else {
         this.setState({
@@ -82,7 +119,6 @@ export default class DisordersAutosuggest extends React.Component {
 
   onChange = (event, { newValue }) => {
     //this.props.clearCallback();
-
     this.setState({
       value: newValue
     });

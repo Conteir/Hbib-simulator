@@ -334,14 +334,7 @@ export const HomePage = class HomePage extends React.Component {
             <select name="enviroment" id="enviroment"
               onChange={evt => this.ChangeHandlerEnviroment(evt)}
             >
-{/*
-      evt = { ...
-        target: {...
-          value: "string here"...
-        }
-        ...
-      }
- */}
+
               <option value="prod">Production</option>
               <option value="test-bt">Test BT</option>
               <option value="test-st">Test ST</option>

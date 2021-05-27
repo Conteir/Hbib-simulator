@@ -56,20 +56,20 @@ export const codeSystems = [
 
   export const snomedURLs =  
   {
-    getICD10: terminlogyServer + '/browser/' + branchICD10 + '/members' + urlParameters + + '&referenceSet=447562003'
-      + '&referencedComponentId=',
-    getICPC2: terminlogyServer + '/browser/' + branchICPC2 + '/members' + urlParameters + + '&referenceSet=450993002'
-      + '&referencedComponentId=',
     getTerms: terminlogyServer + '/browser/' + branchHelsedir + '/descriptions' + urlParameters + '&term=',
   }
 
   export const codeSystemEnv = [
     {
       id: "ICPC-2",
-      title: "ICPC-2",
+      title: "Primary Care (ICPC-2)",
+      url: terminlogyServer + '/browser/' + branchICPC2 + '/members' + urlParameters + '&referenceSet=450993002'
+        + '&referencedComponentId='
     },
     {
       id: "ICD-10",
-      title: "ICD-10",
+      title: "Hospital doctor (ICD-10)",
+      url: terminlogyServer + '/browser/' + branchICD10 + '/members' + urlParameters + '&referenceSet=447562003'
+        + '&referencedComponentId='
     }
   ]

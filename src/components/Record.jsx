@@ -3,16 +3,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import DisordersAutosuggest from "../components/DisordersAutosuggest";
 import { IFrame } from "./IFrameCompoment.jsx";
-import { snomedURLs } from "../config.ts";
+import { codeSystemEnv } from "../config.ts";
 
 export const Record = class Record extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      response: "",
-      icpc2Content: "",
-      icd10Content: "",
+      content: '',
+      env: ''
     };
   }
 
@@ -27,8 +26,34 @@ export const Record = class Record extends React.Component {
     return promise;
   };
 
+  fetchContent = (codeSystemResult) => {
+    // API key depends on environment: current -> Production
+    const codeSystem = codeSystemResult.codeSystem;
+    const code = codeSystemResult.code;
+    const apiKey = "89b72a3ad5cf4723b3f489c3eb4d82a1";
+    const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";
+    const url = hdBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
+
+    let params = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Ocp-Apim-Subscription-Key": apiKey,
+      },
+    };
+    fetch(url, params)
+    .then(response => response.json())
+    .then(data => {
+      console.log("Content for " + codeSystem + ":", data);
+      if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
+        this.setState({content: data[0].tekst});
+      }
+    });
+  };
+
+  /*
   // Getting a content from autosuggest
-  fetchContent = (conceptId) => {
+  fetchContentOld = (conceptId) => {
     let promises = [];
     let content = {};
 
@@ -123,7 +148,7 @@ export const Record = class Record extends React.Component {
         }
       });
     });
-  };
+  }; */
 
   render() {
     return (
@@ -133,7 +158,7 @@ export const Record = class Record extends React.Component {
         <div className="row">
           <div className="col-sm-6">
             <div className="form-group">
-              <label for="notat">Notat:</label>
+              <label htmlFor="notat">Notat:</label>
               <textarea
                 aria-label="Notat"
                 id="notat"
@@ -146,57 +171,74 @@ export const Record = class Record extends React.Component {
           <div className="col-sm-offset-1 col-sm-4">
             <p>Årsak (symptom, plage eller tentativ diagnose):</p>
             <div className="form-group">
-              <DisordersAutosuggest suggestCallback={this.fetchContent} />
+
+              {/* Pass this.state.env as codeSystem to DisordersAutosuggest
+                in order to get the correct code system url inside DisordersAutosuggest
+              */}
+              <DisordersAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env}/>
+            </div>
+          </div>
+
+          <div className="col-sm-2">
+            <p>Target code system</p>
+            <div className="form-group">
+
+              <select name="codeSystemEnv" id="codeSystemEnv"
+                onChange={evt => this.setState({env: evt.target.value})}
+              >
+                <option value="" select="default">Choose target code system</option>
+                  {/* Render options dynamically from codeSystemEnv */}
+                  {codeSystemEnv.map((codeSystem, key) => 
+                    <option key={key} value={codeSystem.id}>{codeSystem.title}</option>) }
+              </select>
+
             </div>
           </div>
         </div>
 
         {/* the third*/}
         <div className="row">
-          <div className="col">
-            <p>Funn:</p>
+          <div className="col-sm-6">
+            <div className="form-group">
+            <label htmlFor="funn">Funn:</label>
+              <textarea
+                id="funn"
+                type="text"
+                autoComplete="off"
+                placeholder="funn"
+                />
+            </div>
           </div>
-        </div>
-
-        <div className="form-group">
-          <textarea
-            id="funn"
-            type="text"
-            autoComplete="off"
-            placeholder="funn"
-          />
         </div>
 
         {/* the fourth*/}
         <div className="row">
-          <div className="col">
-            <p>Vurdering:</p>
+          <div className="col-sm-6">
+            <div className="form-group">
+              <label htmlFor="vurdering">Vurdering:</label>
+              <textarea
+                id="vurdering"
+                type="text"
+                autoComplete="off"
+                placeholder="vurdering"
+              />
+            </div>
           </div>
-        </div>
-
-        <div className="form-group">
-          <textarea
-            id="vurdering"
-            type="text"
-            autoComplete="off"
-            placeholder="vurdering"
-          />
         </div>
 
         {/* the fifth*/}
         <div className="row">
-          <div className="col">
-            <p>Tiltak:</p>
+          <div className="col col-sm-6">
+            <div className="form-group">
+              <label htmlFor="tiltak">Tiltak:</label>
+              <textarea
+                id="tiltak"
+                type="text"
+                autoComplete="off"
+                placeholder="tiltak"
+              />
+            </div>
           </div>
-        </div>
-
-        <div className="form-group">
-          <textarea
-            id="tiltak"
-            type="text"
-            autoComplete="off"
-            placeholder="tiltak"
-          />
         </div>
 
         {/*
@@ -209,24 +251,11 @@ export const Record = class Record extends React.Component {
 
         {/* rendering the thml-response */}
         <div>
-          <h2>ICPC2</h2>
-          {this.state.icpc2Content.length > 0 ? (
+          <h2>Content</h2>
+          {this.state.content.length > 0 ? (
             <IFrame>
               <div
-                dangerouslySetInnerHTML={{ __html: this.state.icpc2Content }}
-              ></div>
-            </IFrame>
-          ) : (
-            <div>None</div>
-          )}
-        </div>
-
-        <div>
-          <h2>ICD10</h2>
-          {this.state.icd10Content.length > 0 ? (
-            <IFrame>
-              <div
-                dangerouslySetInnerHTML={{ __html: this.state.icd10Content }}
+                dangerouslySetInnerHTML={{ __html: this.state.content }}
               ></div>
             </IFrame>
           ) : (
