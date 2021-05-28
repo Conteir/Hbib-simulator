@@ -59,6 +59,11 @@ export const codeSystems = [
     getTerms: terminlogyServer + '/browser/' + branchHelsedir + '/descriptions' + urlParameters + '&term=',
   }
 
+  export const termsForSemantic = 
+  {
+    semanticTerms: terminlogyServer + '/browser/' + branchICD10 + '/descriptions' + urlParameters + '&term=',
+  }
+
   export const codeSystemEnv = [
     {
       id: "ICPC-2",
@@ -81,3 +86,5 @@ export const codeSystems = [
       "Ocp-Apim-Subscription-Key": "89b72a3ad5cf4723b3f489c3eb4d82a1",
     },
   };
+
+  

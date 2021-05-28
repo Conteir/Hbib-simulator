@@ -1,12 +1,12 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
-import DisordersAutosuggest from "../components/DisordersAutosuggest";
+import DisordersAutosuggest from "./DisordersAutosuggest";
 import { IFrame } from "./IFrameCompoment.jsx";
 import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params } from "../config.ts";
 
-export const Record = class Record extends React.Component {
+export const HAPI = class Record extends React.Component {
   constructor(props) {
     super(props);
 
@@ -143,8 +143,6 @@ export const Record = class Record extends React.Component {
   render() {
     return (
       <div>
-        {/* the first*/}
-        {/* the second*/}
         <div className="row">
           <div className="col-sm-6">
             <div className="form-group">
@@ -158,6 +156,7 @@ export const Record = class Record extends React.Component {
               />
             </div>
           </div>
+
           <div className="col-sm-offset-1 col-sm-4">
             <p>Årsak (symptom, plage eller tentativ diagnose):</p>
             <div className="form-group">
@@ -245,9 +244,10 @@ export const Record = class Record extends React.Component {
           )}
           <HTMLRender data={this.state.data}/>
         </div>
+        
       </div>
     );
   }
 };
 
-export default Record;
+export default HAPI;

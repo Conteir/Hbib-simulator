@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { GetIDPage } from './components/GetIDPage.jsx';
 import { HomePage } from './components/HomePage.jsx';
 import { Documentation } from './components/Documentation.jsx';
-import { Record } from './components/Record.jsx';
+import { HAPI } from './components/HAPI.jsx';
+import { Semantic } from './components/Semantic.jsx';
+import { BMJ } from './components/BMJ.jsx';
 import Nav from 'react-bootstrap/Nav'
 
 
@@ -26,23 +28,39 @@ export const App = class App extends React.Component {
              
                 <Nav.Link href="/documentation">Documentation</Nav.Link>
             
-                <Nav.Link href="/record">Record</Nav.Link>
+                <Nav.Link href="/hapi">HAPI</Nav.Link>
+
+                <Nav.Link href="/semantic">Semantic</Nav.Link>
+
+                <Nav.Link href="/bmj">BMJ</Nav.Link>
+
             </Nav>
 
             <Switch>
-              <Route exact path="/" >
-                <HomePage/>
-              </Route>
-              <Route path="/getid" component={GetIDPage}>
-                <GetIDPage />
-              </Route>
-              <Route path="/documentation" component={Documentation}>
-                <Documentation />
-              </Route>
-              <Route path="/record" component={Record}>
-              {/*<iframe src="https://igerne94.github.io/gallery/" />*/}
-                <Record />
-              </Route>
+                <Route exact path="/" >
+                  <HomePage/>
+                </Route>
+
+                <Route path="/getid" component={GetIDPage}>
+                  <GetIDPage />
+                </Route>
+
+                <Route path="/documentation" component={Documentation}>
+                  <Documentation />
+                </Route>
+
+                <Route path="/hapi" component={HAPI}>
+                  <HAPI />
+                </Route>
+
+                <Route path="/semantic" component={Semantic}>
+                  <Semantic />
+                </Route>
+
+                <Route path="/bmj" component={BMJ}>
+                  <BMJ />
+                </Route>
+
             </Switch>
 
           </div>
