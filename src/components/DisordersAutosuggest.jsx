@@ -22,11 +22,11 @@ export default class DisordersAutosuggest extends React.Component {
   // based on the clicked suggestion. Teach Autosuggest how to calculate the
   // input value for every given suggestion.
     getSuggestionValue = (suggestion) => {
-      if(suggestion.$codeSystemResult) {
+      if(suggestion.$codeSystemResult) { // using a new $field with the code system
         this.props.suggestCallback(suggestion.$codeSystemResult);
       }
 
-      return suggestion.term + ' (Snomed CT: ' + suggestion.concept.conceptId
+      return suggestion.term + ' (SCTID: ' + suggestion.concept.conceptId
         + ', ' + suggestion?.$codeSystemResult?.codeSystem
         + ': ' + suggestion?.$codeSystemResult?.code + ')';
     }
@@ -35,8 +35,7 @@ export default class DisordersAutosuggest extends React.Component {
     renderSuggestion = (suggestion) => (
     <div>
       {/** taking from hdir descriptions */}
-      {suggestion.term + ' (Snomed CT: ' + suggestion.concept.conceptId + ', ' // items.concept.conceptId
-          + suggestion.concept.fsn.term
+      {suggestion.term + ' (SCTID: ' + suggestion.concept.conceptId // items.concept.conceptId
           + ', ' + suggestion?.$codeSystemResult?.codeSystem
           + ': ' + suggestion?.$codeSystemResult?.code + ')'}
     </div>
@@ -49,6 +48,7 @@ export default class DisordersAutosuggest extends React.Component {
 
     //snomedURLs.getTerms = URLaddress; value = a term from users input
     if( inputValue && inputValue.length >= 3) {
+        // First request to Snomed: search by term
         fetch(snomedURLs.getTerms + value,
             {
                 method: 'GET',
@@ -60,7 +60,8 @@ export default class DisordersAutosuggest extends React.Component {
         .then(response => response.json())
         .then(data => {
           // check if input is still the same after fetch (fetch takes time)
-          if(this.state.value.trim().toLowerCase() === inputValue.trim().toLowerCase() && Array.isArray(data.items)) {
+          if(this.state.value.trim().toLowerCase() === inputValue && Array.isArray(data.items)) {
+            console.log("Snomed Search by term: " + inputValue + ":", data);
             let items = []; // for suggestions
             let promises = []; // promises with code system
 
@@ -73,12 +74,17 @@ export default class DisordersAutosuggest extends React.Component {
 
               if(selectedCodeSystem) {
                 
+                // send request to get code in the selected code system
+                // selectedCodeSystem contains one object from codeSystemEnv list in config.ts
                 let codeSystemPromise = fetch(selectedCodeSystem.url + conceptId)
                 .then((response) => response.json())
                 .then((data) => {
                   console.log("Code system: " + selectedCodeSystem.id, data);
+                  // Check if array is not empty (means that there is no info for this term, probably its children have)
                   if (data && Array.isArray(data.items) && data.items.length > 0) { //check if object is not empty
+                    // check that code exests (for any reason?)
                     if (data.items[0]?.additionalFields?.mapTarget) {
+                      // create and fill $codeSystemResult object on each of 10 items in Snomed term search result
                       el.$codeSystemResult = {
                         codeSystem: selectedCodeSystem.id,
                         code: data.items[0]?.additionalFields?.mapTarget || 'None'
@@ -95,7 +101,8 @@ export default class DisordersAutosuggest extends React.Component {
             
             Promise.all(promises).then(() => {
               // Need to be sure that entered word is the word in the current function call
-              if(this.state.value.trim().toLowerCase() === inputValue.trim().toLowerCase()) {
+              if(this.state.value.trim().toLowerCase() === inputValue) {
+                // set filled items as suggestions
                 this.setState({
                     suggestions: items
                 });

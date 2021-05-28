@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import DisordersAutosuggest from "../components/DisordersAutosuggest";
 import { IFrame } from "./IFrameCompoment.jsx";
+import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params } from "../config.ts";
 
 export const Record = class Record extends React.Component {
@@ -11,7 +12,8 @@ export const Record = class Record extends React.Component {
 
     this.state = {
       content: '',
-      env: ''
+      env: '',
+      data: ''
     };
   }
 
@@ -34,7 +36,7 @@ export const Record = class Record extends React.Component {
     .then(data => {
       console.log("Content for " + codeSystem + ":", data);
       if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
-        this.setState({content: data[0].tekst});
+        this.setState({content: data[0].tekst, data: JSON.stringify(data)});
       }
     });
   };
@@ -229,14 +231,6 @@ export const Record = class Record extends React.Component {
           </div>
         </div>
 
-        {/*
-                    <div>
-                        <button onClick={this.fetchContent}>
-                            Click me
-                        </button>
-                    </div>
-                    */}
-
         {/* rendering the thml-response */}
         <div>
           <h2>Content</h2>
@@ -249,6 +243,7 @@ export const Record = class Record extends React.Component {
           ) : (
             <div>None</div>
           )}
+          <HTMLRender data={this.state.data}/>
         </div>
       </div>
     );
