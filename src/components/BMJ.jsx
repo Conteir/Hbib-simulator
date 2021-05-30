@@ -144,6 +144,22 @@ export const BMJ = class BMJ extends React.Component {
   render() {
     return (
       <div>
+      <div className="row, top">
+      <div className="col-sm-2">
+           
+            <div className="form-group">
+              <select name="codeSystemEnv" id="codeSystemEnv"
+                onChange={evt => this.setState({env: evt.target.value})}
+              >
+                <option value="" select="default">Velg kontekst for kode</option>
+                  {/* Render options dynamically from codeSystemEnv */}
+                  {codeSystemEnv.map((codeSystem, key) => 
+                    <option key={key} value={codeSystem.id}>{codeSystem.title}</option>) }
+              </select>
+
+            </div>
+          </div>
+      </div>
         <div className="row">
           <div className="col-sm-6">
             <div className="form-group">
@@ -161,29 +177,23 @@ export const BMJ = class BMJ extends React.Component {
           <div className="col-sm-offset-1 col-sm-4">
             <p>Årsak (symptom, plage eller tentativ diagnose):</p>
             <div className="form-group">
-
               {/* Pass this.state.env as codeSystem to DisordersAutosuggest
                 in order to get the correct code system url inside DisordersAutosuggest
               */}
               <DisordersAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env}/>
             </div>
+            <div>
+            
+            <p>
+                 <a className="btn, btn-info" href="https://bestpractice.bmj.com/infobutton?knowledgeResponseType=text/html&mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c=840539006" target="_blank">
+                     BMJ Infobutton
+                 </a>
+            </p>
+          
+         </div>
           </div>
 
-          <div className="col-sm-2">
-            <p>Target code system</p>
-            <div className="form-group">
-
-              <select name="codeSystemEnv" id="codeSystemEnv"
-                onChange={evt => this.setState({env: evt.target.value})}
-              >
-                <option value="" select="default">Choose target code system</option>
-                  {/* Render options dynamically from codeSystemEnv */}
-                  {codeSystemEnv.map((codeSystem, key) => 
-                    <option key={key} value={codeSystem.id}>{codeSystem.title}</option>) }
-              </select>
-
-            </div>
-          </div>
+      
         </div>
 
         {/* the third*/}
@@ -195,7 +205,7 @@ export const BMJ = class BMJ extends React.Component {
                 id="funn"
                 type="text"
                 autoComplete="off"
-                placeholder="funn"
+                placeholder=""
                 />
             </div>
           </div>
@@ -210,7 +220,7 @@ export const BMJ = class BMJ extends React.Component {
                 id="vurdering"
                 type="text"
                 autoComplete="off"
-                placeholder="vurdering"
+                placeholder=""
               />
             </div>
           </div>
@@ -225,22 +235,13 @@ export const BMJ = class BMJ extends React.Component {
                 id="tiltak"
                 type="text"
                 autoComplete="off"
-                placeholder="tiltak"
+                placeholder=""
               />
             </div>
           </div>
         </div>
 
         {/* rendering the thml-response */}
-        <div>
-            
-           <p>
-                <a href="https://bestpractice.bmj.com/infobutton?knowledgeResponseType=text/html&mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c=840539006" target="_blank">
-                    BMJ Infobutton
-                </a>
-           </p>
-         
-        </div>
         
       </div>
     );
