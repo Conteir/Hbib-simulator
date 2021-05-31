@@ -191,11 +191,10 @@ export const BMJ = class BMJ extends React.Component {
                 <div className="form-group">
                 {/* Pass this.state.env as codeSystem to DisordersAutosuggest
                     in order to get the correct code system url inside DisordersAutosuggest
-                */}
-                </div>
-                
-                <div>
+                */}               
                     <BMJAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env} setSCTID={this.setSCTID}/>
+                    </div>
+                    <div>
                     <p>
                         <a className="btn, btn-info"
                             href={"https://bestpractice.bmj.com/infobutton?knowledgeResponseType=text/html&mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c="
