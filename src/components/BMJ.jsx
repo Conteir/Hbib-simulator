@@ -34,7 +34,6 @@ export const BMJ = class BMJ extends React.Component {
     const codeSystem = codeSystemResult.codeSystem;
     const code = codeSystemResult.code;
     const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";
-    //const bmjURL = "https://bestpractice.bmj.com/infobutton?knowledgeResponseType=text/html&mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c";
     const url = hdBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
 
     fetch(url, params)

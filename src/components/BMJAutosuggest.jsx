@@ -22,7 +22,7 @@ export default class BMJAutosuggest extends React.Component {
   // based on the clicked suggestion. Teach Autosuggest how to calculate the
   // input value for every given suggestion.
     getSuggestionValue = (suggestion) => {
-        this.props.setSCTID(suggestion.concept.conceptId);
+      this.props.setSCTID(suggestion.concept.conceptId);
 
       return suggestion.term + ' (SCTID: ' + suggestion.concept.conceptId
         + ', ' + suggestion?.$codeSystemResult?.codeSystem

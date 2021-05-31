@@ -23,7 +23,7 @@ export default class AutosuggestForSemantic extends React.Component {
   // input value for every given suggestion.
     getSuggestionValue = (suggestion) => {
       if(suggestion.$codeSystemResult) { // using a new $field with the code system
-        this.props.suggestCallback(suggestion.$codeSystemResult);
+        this.props.ICPC2code(suggestion.$codeSystemResult.code);
       }
 
       return suggestion.term + ' (SCTID: ' + suggestion.concept.conceptId
@@ -66,7 +66,7 @@ export default class AutosuggestForSemantic extends React.Component {
             let promises = []; // promises with code system
 
             // let setEnviroments = enviroments.find(o => o.id === enviroment);
-            const selectedCodeSystem = codeSystemEnv.find(o => o.id === this.props.codeSystem); // using codeSystem prop from Record
+            const selectedCodeSystem = codeSystemEnv.find(o => o.id === "ICPC-2"); // using codeSystem prop from Record
 
             //for eavh suggestion
             data.items.forEach(el => {
