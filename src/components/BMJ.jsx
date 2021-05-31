@@ -1,9 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
-import DisordersAutosuggest from "./DisordersAutosuggest";
-import { IFrame } from "./IFrameCompoment.jsx";
-import { HTMLRender } from "./htmlRenderComponent";
+import BMJAutosuggest from "./BMJAutosuggest.jsx";
 import { codeSystemEnv, params } from "../config.ts";
 
 export const BMJ = class BMJ extends React.Component {
@@ -15,6 +13,7 @@ export const BMJ = class BMJ extends React.Component {
       env: '',
       data: '',
       url: '',
+      SCTID: ''
     };
   }
 
@@ -25,11 +24,17 @@ export const BMJ = class BMJ extends React.Component {
     return promise;
   };
 
+  //setID to SCTID
+  setSCTID = (sctid) => {
+    this.setState({SCTID: sctid});
+  };
+
   fetchContent = (codeSystemResult) => {
     // API key depends on environment: current -> Production
     const codeSystem = codeSystemResult.codeSystem;
     const code = codeSystemResult.code;
     const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";
+    //const bmjURL = "https://bestpractice.bmj.com/infobutton?knowledgeResponseType=text/html&mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c";
     const url = hdBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
 
     fetch(url, params)
@@ -143,107 +148,113 @@ export const BMJ = class BMJ extends React.Component {
 
   render() {
     return (
-      <div>
-      <div className="row, top">
-      <div className="col-sm-2">
-           
-            <div className="form-group">
-              <select name="codeSystemEnv" id="codeSystemEnv"
-                onChange={evt => this.setState({env: evt.target.value})}
-              >
-                <option value="" select="default">Velg kontekst for kode</option>
-                  {/* Render options dynamically from codeSystemEnv */}
-                  {codeSystemEnv.map((codeSystem, key) => 
-                    <option key={key} value={codeSystem.id}>{codeSystem.title}</option>) }
-              </select>
+    <div>
+        <div className="row, top">
 
+            <div className="col-sm-2">
+                <div className="form-group">
+                    <select
+                        name="codeSystemEnv"
+                        id="codeSystemEnv"
+                        onChange={evt => this.setState({env: evt.target.value})}
+                    >
+                        <option value="" 
+                                select="default">
+                                Velg kontekst for kode
+                        </option>
+                        {/* Render options dynamically from codeSystemEnv */}
+                        {codeSystemEnv.map((codeSystem, key) => 
+                        <option key={key} value={codeSystem.id}>{codeSystem.title}</option>) }
+                    </select>
+                </div>
             </div>
-          </div>
-      </div>
+
+        </div>
+
         <div className="row">
-          <div className="col-sm-6">
-            <div className="form-group">
-              <label htmlFor="notat">Notat:</label>
-              <textarea
-                aria-label="Notat"
-                id="notat"
-                type="text"
-                autoComplete="off"
-                placeholder=""
-              />
-            </div>
-          </div>
 
-          <div className="col-sm-offset-1 col-sm-4">
-            <p>Årsak (symptom, plage eller tentativ diagnose):</p>
-            <div className="form-group">
-              {/* Pass this.state.env as codeSystem to DisordersAutosuggest
-                in order to get the correct code system url inside DisordersAutosuggest
-              */}
-              <DisordersAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env}/>
+            <div className="col-sm-6">
+                <div className="form-group">
+                    <label htmlFor="notat">Notat:</label>
+                    <textarea
+                        aria-label="Notat"
+                        id="notat"
+                        type="text"
+                        autoComplete="off"
+                        placeholder=""
+                    />
+                </div>
             </div>
-            <div>
-            
-            <p>
-                 <a className="btn, btn-info" href="https://bestpractice.bmj.com/infobutton?knowledgeResponseType=text/html&mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c=840539006" target="_blank">
-                     BMJ Infobutton
-                 </a>
-            </p>
-          
-         </div>
-          </div>
 
-      
+            <div className="col-sm-offset-1 col-sm-4">
+                <label htmlFor="vurdering">Årsak (symptom, plage eller tentativ diagnose):</label>
+                <div className="form-group">
+                {/* Pass this.state.env as codeSystem to DisordersAutosuggest
+                    in order to get the correct code system url inside DisordersAutosuggest
+                */}
+                </div>
+                
+                <div>
+                    <BMJAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env} setSCTID={this.setSCTID}/>
+                    <p>
+                        <a className="btn, btn-info"
+                            href={"https://bestpractice.bmj.com/infobutton?knowledgeResponseType=text/html&mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c="
+                            + this.state.SCTID}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            BMJ Infobutton
+                        </a>
+                    </p>
+                </div>
+            </div>
         </div>
 
         {/* the third*/}
         <div className="row">
-          <div className="col-sm-6">
-            <div className="form-group">
-            <label htmlFor="funn">Funn:</label>
-              <textarea
-                id="funn"
-                type="text"
-                autoComplete="off"
-                placeholder=""
-                />
+            <div className="col-sm-6">
+                <div className="form-group">
+                    <label htmlFor="funn">Funn:</label>
+                    <textarea
+                        id="funn"
+                        type="text"
+                        autoComplete="off"
+                        placeholder=""
+                        />
+                </div>
             </div>
-          </div>
         </div>
 
         {/* the fourth*/}
         <div className="row">
-          <div className="col-sm-6">
-            <div className="form-group">
-              <label htmlFor="vurdering">Vurdering:</label>
-              <textarea
-                id="vurdering"
-                type="text"
-                autoComplete="off"
-                placeholder=""
-              />
+            <div className="col-sm-6">
+                <div className="form-group">
+                    <label htmlFor="vurdering">Vurdering:</label>
+                    <textarea
+                        id="vurdering"
+                        type="text"
+                        autoComplete="off"
+                        placeholder=""
+                    />
+                </div>
             </div>
-          </div>
         </div>
 
         {/* the fifth*/}
         <div className="row">
-          <div className="col col-sm-6">
-            <div className="form-group">
-              <label htmlFor="tiltak">Tiltak:</label>
-              <textarea
-                id="tiltak"
-                type="text"
-                autoComplete="off"
-                placeholder=""
-              />
+            <div className="col col-sm-6">
+                <div className="form-group">
+                    <label htmlFor="tiltak">Tiltak:</label>
+                    <textarea
+                        id="tiltak"
+                        type="text"
+                        autoComplete="off"
+                        placeholder=""
+                    />
+                </div>
             </div>
-          </div>
         </div>
-
-        {/* rendering the thml-response */}
         
-      </div>
+    </div>
     );
   }
 };

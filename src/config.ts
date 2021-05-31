@@ -59,9 +59,9 @@ export const codeSystems = [
     getTerms: terminlogyServer + '/browser/' + branchHelsedir + '/descriptions' + urlParameters + '&term=',
   }
 
-  export const termsForSemantic = 
+  export const semanticURL = 
   {
-    semanticTerms: terminlogyServer + '/browser/' + branchICD10 + '/descriptions' + urlParameters + '&term=',
+    getSemanticTerms: 'https://semantic.dev.minus-data.no/pasientsky/?icpc-2='
   }
 
   export const codeSystemEnv = [

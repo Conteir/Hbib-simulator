@@ -3,7 +3,7 @@ import Autosuggest from 'react-autosuggest';
 import { snomedURLs, codeSystemEnv } from '../config.ts';
 import './DisordersAutoSuggest.css';
 
-export default class AutosuggestForSemantic extends React.Component {
+export default class BMJAutosuggest extends React.Component {
   constructor() {
     super();
 
@@ -22,9 +22,7 @@ export default class AutosuggestForSemantic extends React.Component {
   // based on the clicked suggestion. Teach Autosuggest how to calculate the
   // input value for every given suggestion.
     getSuggestionValue = (suggestion) => {
-      if(suggestion.$codeSystemResult) { // using a new $field with the code system
-        this.props.suggestCallback(suggestion.$codeSystemResult);
-      }
+        this.props.setSCTID(suggestion.concept.conceptId);
 
       return suggestion.term + ' (SCTID: ' + suggestion.concept.conceptId
         + ', ' + suggestion?.$codeSystemResult?.codeSystem
@@ -152,6 +150,7 @@ export default class AutosuggestForSemantic extends React.Component {
                 renderSuggestion={this.renderSuggestion}
                 inputProps={inputProps}
             />
+    
         </div>
     );
   }

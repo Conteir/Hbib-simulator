@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../index.css';
 import AutosuggestForSemantic from '../components/AutosuggestForSemantic.jsx';
 import { IFrame } from './IFrameCompoment.jsx';
+import { semanticURL } from "../config.ts";
 
 export const Semantic = class Semantic extends React.Component {
     constructor(props) {
@@ -11,32 +12,33 @@ export const Semantic = class Semantic extends React.Component {
         this.state = {
             response: '',
             icpc2Content: '',
-            icd10Content: ''
+            icd10Content: '',
+            semanticURL: '',
+            ICPC2code: ''  
         };
       }
 
-      codeSystemPromise = (url) => {
-        let promise = fetch(url,
-          {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json'
-            }
-          }
-        ).then(response => response.json());
+      /*
+        codeSystemPromise = (semanticURL) => {
+        let promise = fetch(semanticURL, ICPC2code)
+        .then(response => response.json());
         return promise;
       };
+      */
     
     // Getting a content from autosuggest
-    fetchContent = (usersInput) => {
+
+     //setID to SCTID
+    setSCTID = (sctid) => {
+        this.setState({SCTID: sctid});
+    };
+
+    fetchContent = (conceptId) => {
         let promises = [];
         let content = {};
+        let semanticURLaddress = semanticURL.getSemanticTerms + conceptId;
 
-          // ICPC2
-        let semanticURL = 
-        "https://semantic.dev.minus-data.no/pasientsky/?icpc-2=" + usersInput;
-
-        let promiseICPC2 = fetch(semanticURL)
+        let promiseICPC2 = fetch(semanticURLaddress)
             .then(response => response.json())
             .then(data => {
                 console.log('ICPC-2', data);
@@ -50,7 +52,6 @@ export const Semantic = class Semantic extends React.Component {
             });
         promises.push(promiseICPC2);
             
-
         Promise.all(promises).then(() => {
             let contentPromises = [];
             // Fetch by ICPC2 if available
@@ -77,10 +78,6 @@ export const Semantic = class Semantic extends React.Component {
                     
                 }
 
-                //making render for icd
-                if(content?.icd10?.text) {
-                    this.setState({icd10Content: content.icd10.text});
-                }
             });
         });
     }
@@ -114,7 +111,7 @@ export const Semantic = class Semantic extends React.Component {
                         {/* Pass this.state.env as codeSystem to AutosuggestForSemantic
                             in order to get the correct code system url inside AutosuggestForSemantic
                         */}
-                        <AutosuggestForSemantic suggestCallback={this.fetchContent}/>
+                        <AutosuggestForSemantic suggestCallback={this.fetchContent} ICPC2code={this.state.ICPC2code}/>
                         </div>
                     </div>
 
