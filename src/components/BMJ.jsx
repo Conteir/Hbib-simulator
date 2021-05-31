@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import BMJAutosuggest from "./BMJAutosuggest.jsx";
 import { codeSystemEnv, params } from "../config.ts";
+import DisordersAutosuggest from './DisordersAutosuggest';
 
 export const BMJ = class BMJ extends React.Component {
   constructor(props) {
@@ -25,8 +26,8 @@ export const BMJ = class BMJ extends React.Component {
   };
 
   //setID to SCTID
-  setSCTID = (sctid) => {
-    this.setState({SCTID: sctid});
+  setSCTID = (suggestion) => {
+    this.setState({SCTID: suggestion.concept.conceptId});
   };
 
   fetchContent = (codeSystemResult) => {
@@ -191,7 +192,7 @@ export const BMJ = class BMJ extends React.Component {
                 {/* Pass this.state.env as codeSystem to DisordersAutosuggest
                     in order to get the correct code system url inside DisordersAutosuggest
                 */}               
-                    <BMJAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env} setSCTID={this.setSCTID}/>
+                    <DisordersAutosuggest suggestCallback={this.setSCTID} codeSystem={this.state.env}/>
                     </div>
                     <div>
                     <p>

@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../index.css';
 import AutosuggestForSemantic from '../components/AutosuggestForSemantic.jsx';
 import { IFrame } from './IFrameCompoment.jsx';
+import DisordersAutosuggest from './DisordersAutosuggest';
 
 export const Semantic = class Semantic extends React.Component {
     constructor(props) {
@@ -13,8 +14,9 @@ export const Semantic = class Semantic extends React.Component {
         };
       }
 
-    setICPC2code = (code) => {
-        this.setState({ICPC2code: code});
+    setICPC2code = (suggestion) => {
+        if(!suggestion.$codeSystemResult) return;
+        this.setState({ICPC2code: suggestion.$codeSystemResult.code});
     };
 
     render() {
@@ -38,7 +40,7 @@ export const Semantic = class Semantic extends React.Component {
                     <div className="col-sm-offset-1 col-sm-4">
                         <p>Årsak (symptom, plage eller tentativ diagnose):</p>
                         <div className="form-group">
-                            <AutosuggestForSemantic ICPC2code={this.setICPC2code} />
+                            <DisordersAutosuggest suggestCallback={this.setICPC2code} codeSystem="ICPC-2"/>
                         </div>
                     </div>
 

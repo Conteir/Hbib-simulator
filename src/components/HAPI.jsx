@@ -24,8 +24,11 @@ export const HAPI = class Record extends React.Component {
     return promise;
   };
 
-  fetchContent = (codeSystemResult) => {
+  fetchContent = (suggestion) => {
     // API key depends on environment: current -> Production
+    if(!suggestion.$codeSystemResult) return;
+
+    const codeSystemResult = suggestion.$codeSystemResult;
     const codeSystem = codeSystemResult.codeSystem;
     const code = codeSystemResult.code;
     const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";

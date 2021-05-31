@@ -22,9 +22,7 @@ export default class DisordersAutosuggest extends React.Component {
   // based on the clicked suggestion. Teach Autosuggest how to calculate the
   // input value for every given suggestion.
     getSuggestionValue = (suggestion) => {
-      if(suggestion.$codeSystemResult) { // using a new $field with the code system
-        this.props.suggestCallback(suggestion.$codeSystemResult);
-      }
+      this.props.suggestCallback(suggestion);
 
       return suggestion.term + ' (SCTID: ' + suggestion.concept.conceptId
         + ', ' + suggestion?.$codeSystemResult?.codeSystem
