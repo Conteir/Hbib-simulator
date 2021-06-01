@@ -69,63 +69,74 @@ export const GetIDPage = class GetIDPage extends React.Component {
   }
   render() {
     return (
-      <div className="getidpage">
-        <div className="container">
-          <h1 className="font-weight-light">Get ID</h1>
-          <p>Get API ID for contenttypes Retningslinjer, Pakkeforløp, Veiledere etc</p>
+      <div>
+          <div className="jumbotron text-center">
+              <h1>Get ID</h1>
+              <p>Get API ID for contenttypes Retningslinjer, Pakkeforløp, Veiledere etc</p>
+          </div>
 
-          <form onSubmit={this.mySubmitHandler}>
+          <div className="getidpage">
+              <div className="container">
 
-            <div className="form-group">
-              <select name="enviroment" id="enviroment"
-                onChange={evt => this.ChangeHandlerEnviroment(evt)}
-              >
+                  <form onSubmit={this.mySubmitHandler}>
 
-                <option value="prod">Production</option>
-                <option value="test-bt">Test BT</option>
-                <option value="test-st">Test ST</option>
-                <option value="qa">QA</option>
+                    <div className="form-group">
+                      <select name="enviroment" id="enviroment"
+                        onChange={evt => this.ChangeHandlerEnviroment(evt)}
+                      >
 
-              </select>
-            </div>
+                        <option value="prod">Production</option>
+                        <option value="test-bt">Test BT</option>
+                        <option value="test-st">Test ST</option>
+                        <option value="qa">QA</option>
 
-            <div className="row">
-              <div className="col">
-                <p>Please provide content type for the API ID search</p>
+                      </select>
+                    </div>
+
+                    <div className="row">
+                      <div className="col">
+                        <p>Please provide content type for the API ID search</p>
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <select name="id" id="id"
+                        onChange={evt => this.ChangeHandlerId(evt)}
+                      >
+                        <option value="" select="default">Choose content type</option>
+                        <option value="retningslinjer">Retningslinjer</option>
+                        <option value="pakkeforlop">Pakkerforløp (feil i innholdstype)</option>
+                        <option value="nasjonal-veileder">Veiledere</option>
+                        <option value="artikler">Artikler</option>
+                      </select>
+                    </div>
+
+
+                    <div className="form-group">
+                      <input
+                        type='submit'
+                        value="Search"
+                        disabled={!(this.state.id)}
+                      />
+                    </div>
+                    {this.state.showSpinner ? <Spinner color="success" /> : null}
+
+                  </form>
               </div>
-            </div>
 
-            <div className="form-group">
-              <select name="id" id="id"
-                onChange={evt => this.ChangeHandlerId(evt)}
-              >
-                <option value="" select="default">Choose content type</option>
-                <option value="retningslinjer">Retningslinjer</option>
-                <option value="pakkeforlop">Pakkerforløp (feil i innholdstype)</option>
-                <option value="nasjonal-veileder">Veiledere</option>
-                <option value="artikler">Artikler</option>
-              </select>
-            </div>
+              <div>
+                <HTMLRender data={this.state.response} />
+              </div>
 
-
-            <div className="form-group">
-              <input
-                type='submit'
-                value="Search"
-                disabled={!(this.state.id)}
-              />
-            </div>
-            {this.state.showSpinner ? <Spinner color="success" /> : null}
-
-
-          </form>
-        </div>
-        <div>
-          <HTMLRender data={this.state.response} />
-        </div>
-        <div><pre><h4>{this.state.url}</h4></pre></div>
-      </div>
-
+              <div>
+                <pre>
+                  <h4>
+                    {this.state.url}
+                  </h4>
+                </pre>
+              </div>
+         </div>
+    </div>
     )
 
   }

@@ -148,6 +148,11 @@ export const BMJ = class BMJ extends React.Component {
   render() {
     return (
     <div>
+        <div className="jumbotron text-center">
+          <h1>BMJ</h1>
+          <p>Discover the latest clinical knowledge, opinion and best practice</p>
+        </div>
+
         <div className="row, top">
 
             <div className="col-sm-2">

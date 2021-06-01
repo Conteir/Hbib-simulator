@@ -146,6 +146,32 @@ export const HAPI = class Record extends React.Component {
   render() {
     return (
       <div>
+          <div className="jumbotron text-center">
+              <h1>HAPI and patients record</h1>
+              <p>Choose the code system and make a search throught SNOMED</p>
+          </div>
+
+          <div className="row, top">
+            <div className="col-sm-2">
+              <div className="form-group">
+                <select
+                    name="codeSystemEnv"
+                    id="codeSystemEnv"
+                    onChange={evt => this.setState({env: evt.target.value})}
+                >
+                  <option value=""
+                          select="default">
+                            Choose target code system
+                  </option>
+                    {/* Render options dynamically from codeSystemEnv */}
+                    {codeSystemEnv.map((codeSystem, key) => 
+                      <option key={key} value={codeSystem.id}>{codeSystem.title}</option>) }
+                </select>
+
+              </div>
+            </div>
+          </div>
+
         <div className="row">
 
           <div className="col-sm-6">
@@ -172,21 +198,7 @@ export const HAPI = class Record extends React.Component {
             </div>
           </div>
 
-          <div className="col-sm-2">
-            <p>Target code system</p>
-            <div className="form-group">
-
-              <select name="codeSystemEnv" id="codeSystemEnv"
-                onChange={evt => this.setState({env: evt.target.value})}
-              >
-                <option value="" select="default">Choose target code system</option>
-                  {/* Render options dynamically from codeSystemEnv */}
-                  {codeSystemEnv.map((codeSystem, key) => 
-                    <option key={key} value={codeSystem.id}>{codeSystem.title}</option>) }
-              </select>
-
-            </div>
-          </div>
+          
           
         </div>
 
