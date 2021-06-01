@@ -1,7 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
-import BMJAutosuggest from "./BMJAutosuggest.jsx";
 import { codeSystemEnv, params } from "../config.ts";
 import DisordersAutosuggest from './DisordersAutosuggest';
 

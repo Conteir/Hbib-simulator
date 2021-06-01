@@ -40,8 +40,6 @@ export const Semantic = class Semantic extends React.Component {
             <p>Årsak (symptom, plage eller tentativ diagnose):</p>
             <div className="form-group">
             <DisordersAutosuggest suggestCallback={this.setICPC2code} codeSystem="ICPC-2"/>
-
-              {/* <AutosuggestForSemantic ICPC2code={this.setICPC2code} /> */}
             </div>
           </div>
         </div>
