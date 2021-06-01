@@ -147,6 +147,7 @@ export const HAPI = class Record extends React.Component {
     return (
       <div>
         <div className="row">
+
           <div className="col-sm-6">
             <div className="form-group">
               <label htmlFor="notat">Notat:</label>
@@ -186,6 +187,7 @@ export const HAPI = class Record extends React.Component {
 
             </div>
           </div>
+          
         </div>
 
         {/* the third*/}

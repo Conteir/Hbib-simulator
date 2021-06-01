@@ -2,6 +2,8 @@ import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import { snomedURLs, codeSystemEnv } from '../config.ts';
 import './DisordersAutoSuggest.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Spinner } from 'reactstrap';
 
 export default class DisordersAutosuggest extends React.Component {
   constructor() {
@@ -13,6 +15,7 @@ export default class DisordersAutosuggest extends React.Component {
     // Suggestions also need to be provided to the Autosuggest,
     // and they are initially empty because the Autosuggest is closed.
     this.state = {
+      showSpinner: false,
       value: '',
       suggestions: []
     };
@@ -22,6 +25,8 @@ export default class DisordersAutosuggest extends React.Component {
   // based on the clicked suggestion. Teach Autosuggest how to calculate the
   // input value for every given suggestion.
     getSuggestionValue = (suggestion) => {
+      
+
       this.props.suggestCallback(suggestion);
 
       return suggestion.term + ' (SCTID: ' + suggestion.concept.conceptId
@@ -43,6 +48,7 @@ export default class DisordersAutosuggest extends React.Component {
   // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested = ({ value }) => {
     const inputValue = value.trim().toLowerCase();
+    this.setState({ showSpinner: true });
 
     //snomedURLs.getTerms = URLaddress; value = a term from users input
     if( inputValue && inputValue.length >= 3) {
@@ -80,21 +86,27 @@ export default class DisordersAutosuggest extends React.Component {
                   console.log("Code system: " + selectedCodeSystem.id, data);
                   // Check if array is not empty (means that there is no info for this term, probably its children have)
                   if (data && Array.isArray(data.items) && data.items.length > 0) { //check if object is not empty
-                    // check that code exests (for any reason?)
-                    if (data.items[0]?.additionalFields?.mapTarget) {
+                    // 1. check that code exests (for any reason?) and 2. if it !== undefined to make a condition
+                    if (data.items[0]?.additionalFields?.mapTarget !== undefined) {
                       // create and fill $codeSystemResult object on each of 10 items in Snomed term search result
+
+                      // replace from internal loop data.items.forEach to the if(selectedCodeSystem) to make the pushing array depended on the code system:
+                      items.push(el); 
+
                       el.$codeSystemResult = {
                         codeSystem: selectedCodeSystem.id,
                         code: data.items[0]?.additionalFields?.mapTarget || 'None'
                       }
                     }
                   }
+                
+
                 });
 
                 promises.push(codeSystemPromise);
               }
               
-              items.push(el);
+              
             });
             
             Promise.all(promises).then(() => {
@@ -102,7 +114,8 @@ export default class DisordersAutosuggest extends React.Component {
               if(this.state.value.trim().toLowerCase() === inputValue) {
                 // set filled items as suggestions
                 this.setState({
-                    suggestions: items
+                    suggestions: items,
+                    showSpinner: false
                 });
               }
             });
@@ -150,6 +163,7 @@ export default class DisordersAutosuggest extends React.Component {
                 renderSuggestion={this.renderSuggestion}
                 inputProps={inputProps}
             />
+             {this.state.showSpinner ? <Spinner color="success" /> : null}
         </div>
     );
   }
