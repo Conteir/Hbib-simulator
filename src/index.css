@@ -82,3 +82,29 @@ textarea {width: 100%;  height: 100px;}
 .top {padding: 20px 0 10px 0; border-bottom: solid 1px darkblue;
 margin-bottom: 10px;}
 
+/* popup */
+.content {
+  display: flex; align-items: center;
+  padding: 10px;
+  font-size: 20px;
+}
+
+#alert {
+  padding: 5px;
+}
+
+#popup {
+  position: absolute;
+  display: none;
+  padding: 5px;
+}
+
+.view {
+  background: lightblue;
+  border: 1px solid green;
+  padding: 10px;
+  font-size: 14px;
+  width: 150px;
+  height: 80px;
+  overflow: auto;
+}
