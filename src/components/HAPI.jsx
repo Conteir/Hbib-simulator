@@ -1,9 +1,7 @@
 import React from "react";
-import { Badge } from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import DisordersAutosuggest from "./DisordersAutosuggest";
-import { IFrame } from "./IFrameCompoment.jsx";
 import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params } from "../config.ts";
 
@@ -13,38 +11,11 @@ export const HAPI = class Record extends React.Component {
     super(props);
 
     this.state = {
-      content: '',
       env: '',
       data: '',
-      setNotification: false,
-      contentTest: '',
-      preventClose: false
+      matches: -1,
+      showContent: false
     };
-  }
-
-  showPopup = () => {
-    let reference = document.getElementById("alert").getBoundingClientRect();
-    let popup = document.getElementById("popup");
-
-    popup.style.top = (reference.top + 25) + 'px';
-    popup.style.right = (reference.right + 100) + 'px';
-    popup.style.display = 'block';
-
-  }
-
-  hidePopup = () => {
-    if (!this.state.preventClose) {
-    let popup = document.getElementById("popup");
-    popup.style.display = 'none';
-    } 
-  }
-
-  onMouseDown = () => {
-    this.state({preventClose: true});
-  }
-
-  onMouseUp = () => {
-    this.state({preventClose: false});
   }
 
   codeSystemPromise = (url) => {
@@ -54,14 +25,9 @@ export const HAPI = class Record extends React.Component {
     return promise;
   };
 
-
-  setNotification = () => {
-    this.setState({
-      setNotification: true
-    })
-  }
-
   fetchContent = (suggestion) => {
+    // reset state to clean results before new loading
+    this.setState({matches: -1, data: '', showContent: false});
     // API key depends on environment: current -> Production
     if(!suggestion.$codeSystemResult) return;
 
@@ -72,25 +38,21 @@ export const HAPI = class Record extends React.Component {
     const url = hdBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
 
     fetch(url, params)
-    .then(response => response.json())
-    .then(data => {
-     
-
-      if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
-        this.setState({setNotification: true});
-        this.setState({content: data[0].tekst, data: JSON.stringify(data)});
+      .then(response => response.json())
+      .then(data => {
       
-      console.log("Content for " + codeSystem + ":", data);
-      console.log("Content for " + codeSystem + ":", data.length);
-      }
-      if (Array.isArray(data) && data.length === 0) {
-        this.setState({setNotification: true});
-        console.log("NOTHING", data.length);
+        if(Array.isArray(data)) {
+          this.setState({matches: data.length});
+        }
 
-      }
-
-      
-    }, () => this.setState({ setNotification: true })  );
+        if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
+          this.setState({content: data[0].tekst, data: JSON.stringify(data)});
+        
+          console.log("Content for " + codeSystem + ":", data);
+          console.log("Content for " + codeSystem + ":", data.length);
+        }
+        
+      });
   };
 
   /*
@@ -243,11 +205,19 @@ export const HAPI = class Record extends React.Component {
               {/* Pass this.state.env as codeSystem to DisordersAutosuggest
                 in order to get the correct code system url inside DisordersAutosuggest
               */}
-              <DisordersAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env}/>
+              <div className="as-block">
+                <DisordersAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env}/>
+                {this.state.matches > 0 ?
+                  <span>
+                    <span onClick={() => {this.setState({showContent: true})}} className="badge badge-danger">Matched</span>
+                    <b>({this.state.matches})</b>
+                  </span>
+                  : (this.state.matches === 0 ? <span>No content matches this code</span> : null)
+                }
+              </div>
+              {this.state.showContent ? <HTMLRender data={this.state.data}/> : null}
             </div>
           </div>
-
-          
           
         </div>
 
@@ -294,64 +264,8 @@ export const HAPI = class Record extends React.Component {
               />
             </div>
           </div>
-        </div>
+        </div>      
 
-        {/* rendering the thml-response */}
-        <div>
-          <h2>Content</h2>
-
-
-          {this.state.content.length > 0 ? (
-            <IFrame>
-              <div
-                dangerouslySetInnerHTML={{ __html: this.state.content }}
-              ></div>
-            </IFrame>
-          ) : (
-            <div>No content matching this code</div>
-          )}
-           {this.state.setNotification ? <span className="badge badge-danger">Match!</span>
-             : null}
-          <HTMLRender data={this.state.data}/>
-        </div>
-
-        {/**testing popup */}
-        
-          <div className="content">
-            <span>
-              Content test
-            </span>
-            <span id="alert"
-                  onMouseEnter={this.showPopup}
-                  onMouseLeave={this.hidePopup}
-                  >
-                    <span className="badge badge-danger">Match!</span>
-
-                    <a href="https://www.freeiconspng.com/img/1562"
-                        title="Image from freeiconspng.com">
-                          <img src="https://www.freeiconspng.com/uploads/alert-icon-red-11.png"
-                                width="100" 
-                                alt="alert icon red"
-                          />
-                    </a>
-                    <div id="popup">
-                        <textarea 
-                        value="This is a description."
-                        readOnly /**only during the test time */
-                        className="view"
-                        onMouseDown={this.onMouseDown}
-                        onMouseUp={this.onMouseUp}
-                        >
-                          {this.state.contentTest}
-                          
-                        </textarea>
-
-                    </div>
-            </span>
-
-          </div>
-      
-        
       </div>
     );
   }

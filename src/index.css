@@ -108,3 +108,15 @@ margin-bottom: 10px;}
   height: 80px;
   overflow: auto;
 }
+
+/* autosuggest-match block*/
+.as-block {
+  display: flex; align-items: center;
+}
+.as-block > span { /* 1 span inside this class */
+  margin-left: 10px;
+  cursor: pointer;
+}
+.as-block > span > b {
+  margin-left: 5px;
+}
