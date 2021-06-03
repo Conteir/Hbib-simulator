@@ -4,12 +4,14 @@ import "../index.css";
 import DisordersAutosuggest from "../components/DisordersAutosuggest";
 import { IFrame } from "./IFrameCompoment.jsx";
 
+
 export const Semantic = class Semantic extends React.Component {
   constructor(props) {
     super(props);
     
     this.state = {
-        ICPC2: ""
+        ICPC2: "",
+        showSpinner: false,
     }
 
   }
@@ -17,6 +19,8 @@ export const Semantic = class Semantic extends React.Component {
   setICPC2code = (suggestion) => {
     if(!suggestion.$codeSystemResult) return;
     this.setState({ ICPC2code: suggestion.$codeSystemResult.code });
+    this.setState({showSpinner: true});
+
   };
 
   render() {
@@ -44,8 +48,24 @@ export const Semantic = class Semantic extends React.Component {
               <div className="col-sm-offset-1 col-sm-4">
                 <p>Årsak (symptom, plage eller tentativ diagnose):</p>
                 <div className="form-group">
-                <DisordersAutosuggest suggestCallback={this.setICPC2code} codeSystem="ICPC-2"/>
+                    <div className="as-block">
+                        <DisordersAutosuggest suggestCallback={this.setICPC2code} codeSystem="ICPC-2"/>
+                    </div>
+                 
                 </div>
+
+               <div>
+                    <IFrame
+                        className="responsive-iframe" //needs test
+                        frameBorder="0"
+                        src={
+                        "https://semantic.dev.minus-data.no/pasientsky/?icpc-2=" +
+                        this.state.ICPC2code
+                        }
+                        title="semanticData"
+                    ></IFrame>
+                </div>
+
               </div>
           </div>
 
@@ -61,16 +81,7 @@ export const Semantic = class Semantic extends React.Component {
                       />
                   </div>
               </div>
-              <div>
-                  <IFrame
-                    frameBorder="0"
-                    src={
-                      "https://semantic.dev.minus-data.no/pasientsky/?icpc-2=" +
-                      this.state.ICPC2code
-                    }
-                    title="semanticData"
-                  ></IFrame>
-              </div>
+              
           </div>
 
           {/* the fourth*/}

@@ -14,7 +14,8 @@ export const HAPI = class Record extends React.Component {
       env: '',
       data: '',
       matches: -1,
-      showContent: false
+      showContent: false,
+      showSpinner: false,
     };
   }
 
@@ -26,6 +27,7 @@ export const HAPI = class Record extends React.Component {
   };
 
   fetchContent = (suggestion) => {
+    this.setState({showSpinner: true});
     // reset state to clean results before new loading
     this.setState({matches: -1, data: '', showContent: false});
     // API key depends on environment: current -> Production
@@ -215,6 +217,7 @@ export const HAPI = class Record extends React.Component {
                   : (this.state.matches === 0 ? <span>No content matches this code</span> : null)
                 }
               </div>
+
               {this.state.showContent ? <HTMLRender data={this.state.data}/> : null}
             </div>
           </div>
