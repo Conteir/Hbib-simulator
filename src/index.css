@@ -110,13 +110,9 @@ margin-bottom: 10px;}
 }
 
 /* autosuggest-match block*/
-.as-block {
-  display: flex; align-items: center;
+.match-block {
+  display: flex; align-items: center; cursor: pointer;
 }
-.as-block > span { /* 1 span inside this class */
-  margin-left: 10px;
-  cursor: pointer;
-}
-.as-block > span > b {
+.match-block > span > b {
   margin-left: 5px;
 }

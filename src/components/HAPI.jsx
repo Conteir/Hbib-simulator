@@ -176,7 +176,7 @@ export const HAPI = class Record extends React.Component {
                           select="default">
                             Choose target code system
                   </option>
-                    {/* Render options dynamically from codeSystemEnv */}
+                    {/* Rend  er options dynamically from codeSystemEnv */}
                     {codeSystemEnv.map((codeSystem, key) => 
                       <option key={key} value={codeSystem.id}>{codeSystem.title}</option>) }
                 </select>
@@ -185,90 +185,92 @@ export const HAPI = class Record extends React.Component {
             </div>
           </div>
 
-        <div className="row">
 
+        <div className="row">
           <div className="col-sm-6">
-            <div className="form-group">
-              <label htmlFor="notat">Notat:</label>
-              <textarea
-                aria-label="Notat"
-                id="notat"
-                type="text"
-                autoComplete="off"
-                placeholder=""
-              />
+
+            <div className="row">
+              <div className="form-group">
+                <label htmlFor="notat">Notat:</label>
+                <textarea
+                  aria-label="Notat"
+                  id="notat"
+                  type="text"
+                  autoComplete="off"
+                  placeholder=""
+                />
+              </div>
             </div>
+
+            <div className="row">
+              <div className="form-group">
+                <label htmlFor="funn">Funn:</label>
+                <textarea
+                  id="funn"
+                  type="text"
+                  autoComplete="off"
+                  placeholder="funn"
+                  />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="form-group">
+                <label htmlFor="vurdering">Vurdering:</label>
+                <textarea
+                  id="vurdering"
+                  type="text"
+                  autoComplete="off"
+                  placeholder="vurdering"
+                />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="form-group">
+                <label htmlFor="tiltak">Tiltak:</label>
+                <textarea
+                  id="tiltak"
+                  type="text"
+                  autoComplete="off"
+                  placeholder="tiltak"
+                />
+              </div>
+            </div>
+
           </div>
 
-          <div className="col-sm-offset-1 col-sm-4">
-            <p>Årsak (symptom, plage eller tentativ diagnose):</p>
-            <div className="form-group">
+          <div className="col-sm-6">
+            <div className="row">
+              <p>Årsak (symptom, plage eller tentativ diagnose):</p>
+            </div>
+       
+            <div className="row">
+              <div className="col-sm-9">
+                <DisordersAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env}/>
+              </div>
+              <div className="col-sm-3 match-block">
+                {this.state.matches > 0 ?
+                    <span>
+                      <span onClick={() => {this.setState({showContent: true})}} className="badge badge-danger">Matched</span>
+                      <b>({this.state.matches})</b>
+                    </span>
+                    : (this.state.matches === 0 ? <span>No content matches this code</span> : null)
+                  }
+              </div>
+            </div>
 
               {/* Pass this.state.env as codeSystem to DisordersAutosuggest
                 in order to get the correct code system url inside DisordersAutosuggest
               */}
-              <div className="as-block">
-                <DisordersAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env}/>
-                {this.state.matches > 0 ?
-                  <span>
-                    <span onClick={() => {this.setState({showContent: true})}} className="badge badge-danger">Matched</span>
-                    <b>({this.state.matches})</b>
-                  </span>
-                  : (this.state.matches === 0 ? <span>No content matches this code</span> : null)
-                }
+              
+              <div className="row">
+                {this.state.showContent ? <HTMLRender data={this.state.data}/> : null}
               </div>
-
-              {this.state.showContent ? <HTMLRender data={this.state.data}/> : null}
-            </div>
-          </div>
-          
-        </div>
-
-        {/* the third*/}
-        <div className="row">
-          <div className="col-sm-6">
-            <div className="form-group">
-            <label htmlFor="funn">Funn:</label>
-              <textarea
-                id="funn"
-                type="text"
-                autoComplete="off"
-                placeholder="funn"
-                />
-            </div>
+     
+              
           </div>
         </div>
-
-        {/* the fourth*/}
-        <div className="row">
-          <div className="col-sm-6">
-            <div className="form-group">
-              <label htmlFor="vurdering">Vurdering:</label>
-              <textarea
-                id="vurdering"
-                type="text"
-                autoComplete="off"
-                placeholder="vurdering"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* the fifth*/}
-        <div className="row">
-          <div className="col col-sm-6">
-            <div className="form-group">
-              <label htmlFor="tiltak">Tiltak:</label>
-              <textarea
-                id="tiltak"
-                type="text"
-                autoComplete="off"
-                placeholder="tiltak"
-              />
-            </div>
-          </div>
-        </div>      
-
       </div>
     );
   }
