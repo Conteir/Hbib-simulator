@@ -248,6 +248,17 @@ export const HAPI = class Record extends React.Component {
             <div className="row">
               <div className="col-sm-9">
                 <DisordersAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env}/>
+                  {this.state.showContent ? 
+                    <div id="popup-hapi" className="popup">
+                      <div className="header">
+                        <span>Innhold</span>
+                        <span className="popup-close" onClick={() => this.setState({showContent: false})}>X</span>
+                      </div>
+                      <div className="content">
+                        <HTMLRender data={this.state.data}/> 
+                      </div>
+                    </div>
+                  : null}
               </div>
               <div className="col-sm-3 match-block">
                 {this.state.matches > 0 ?
@@ -267,8 +278,6 @@ export const HAPI = class Record extends React.Component {
               <div className="row">
                 {this.state.showContent ? <HTMLRender data={this.state.data}/> : null}
               </div>
-     
-              
           </div>
         </div>
       </div>
