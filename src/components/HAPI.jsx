@@ -26,6 +26,71 @@ export const HAPI = class Record extends React.Component {
     return promise;
   };
 
+  getLinkData = (link) => {
+      let promise = fetch(link.href, params
+    ).then(response => response.json())
+    .then(data => {
+      link.$title = data.tittel;
+    });
+    return promise;
+  }
+
+  processResponse = (data) => {
+    console.log("Processing response:", data);
+    if(!data) return;
+    
+    let promises = [];
+
+    //Preprocess -> get barn and forelder links titles
+    if (Array.isArray(data)) {
+      data.forEach(item => {
+        if (Array.isArray(item.links)) {
+          // object, going through all links
+          item.links.forEach(link => {
+            if (link.rel === 'barn' || link.rel === 'forelder') {
+              promises.push(
+                  // will be pushed after getLinkData finished
+                  this.getLinkData(link)
+                );
+            }
+          });
+        }
+      });
+      
+      // Text render demo (commented out now) START
+      if(data[0].tekst) {
+        this.setState({content: data[0].tekst});
+      }
+      // Text render demo (commented out now) END
+    
+    } else {
+      if (Array.isArray(data.links)) {
+        // object, going through all links
+        data.links.forEach(link => {
+          if (link.rel === 'barn' || link.rel === 'forelder') {
+            promises.push(
+                // will be pushed after getLinkData finished
+                this.getLinkData(link)
+              );
+          }
+        });
+      }
+    }
+
+    Promise.all(promises).then(() => {
+      this.setState({data: JSON.stringify(data)});
+    });
+  }
+
+  linkCallback = (url) => {
+    this.setState({ data: '', showSpinner: true });
+    fetch(url, params)
+    .then(response => response.json())
+    .then(data => {
+      this.processResponse(data);
+    }, () => this.setState({ showSpinner: false }));
+  }
+
   fetchContent = (suggestion) => {
     this.setState({showSpinner: true});
     // reset state to clean results before new loading
@@ -42,18 +107,12 @@ export const HAPI = class Record extends React.Component {
     fetch(url, params)
       .then(response => response.json())
       .then(data => {
-      
+        console.log("Content for " + codeSystem + ":", data);
         if(Array.isArray(data)) {
           this.setState({matches: data.length});
         }
 
-        if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
-          this.setState({content: data[0].tekst, data: JSON.stringify(data)});
-        
-          console.log("Content for " + codeSystem + ":", data);
-          console.log("Content for " + codeSystem + ":", data.length);
-        }
-        
+        this.processResponse(data);
       });
   };
 
@@ -255,7 +314,7 @@ export const HAPI = class Record extends React.Component {
                         <span className="popup-close" onClick={() => this.setState({showContent: false})}>X</span>
                       </div>
                       <div className="content">
-                        <HTMLRender data={this.state.data}/> 
+                        <HTMLRender data={this.state.data} linkCallback={this.linkCallback} /> 
                       </div>
                     </div>
                   : null}
@@ -276,7 +335,7 @@ export const HAPI = class Record extends React.Component {
               */}
               
               <div className="row">
-                {this.state.showContent ? <HTMLRender data={this.state.data}/> : null}
+                {/* this.state.showContent ? <HTMLRender data={this.state.data} linkCallback={this.linkCallback} /> : null */}
               </div>
           </div>
         </div>
