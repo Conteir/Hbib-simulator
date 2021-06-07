@@ -6,7 +6,7 @@ import { Documentation } from './components/Documentation.jsx';
 import { HAPI } from './components/HAPI.jsx';
 import { Semantic } from './components/Semantic.jsx';
 import { BMJ } from './components/BMJ.jsx';
-import Nav from 'react-bootstrap/Nav'
+import Nav from 'react-bootstrap/Nav';
 
 
 export const App = class App extends React.Component {
