@@ -32,21 +32,64 @@ export const Semantic = class Semantic extends React.Component {
           </div>
 
           <div className="row">
-              <div className="col-sm-6">
-                  <div className="form-group">
-                      <label htmlFor="notat">Notat:</label>
-                      <textarea
-                          aria-label="Notat"
-                          id="notat"
-                          type="text"
-                          autoComplete="off"
-                          placeholder=""
-                      />
-                  </div>
-              </div>
+            <div className="col-sm-6">
 
-              <div className="col-sm-offset-1 col-sm-4">
-                <p>Årsak (symptom, plage eller tentativ diagnose):</p>
+                <div className="row">
+                    <div className="form-group">
+                        <label htmlFor="notat">Notat:</label>
+                        <textarea
+                            aria-label="Notat"
+                            id="notat"
+                            type="text"
+                            autoComplete="off"
+                            placeholder=""
+                        />
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="form-group">
+                        <label htmlFor="funn">Funn:</label>
+                        <textarea
+                            id="funn"
+                            type="text"
+                            autoComplete="off"
+                            placeholder="funn"
+                        />
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="form-group">
+                        <label htmlFor="vurdering">Vurdering:</label>
+                        <textarea
+                            id="vurdering"
+                            type="text"
+                            autoComplete="off"
+                            placeholder="vurdering"
+                        />
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="form-group">
+                        <label htmlFor="tiltak">Tiltak:</label>
+                        <textarea
+                            id="tiltak"
+                            type="text"
+                            autoComplete="off"
+                            placeholder="tiltak"
+                        />
+                    </div>
+                </div>
+
+            </div>
+
+            <div className="col-sm-6">
+                <div className="row">
+                    <p>Årsak (symptom, plage eller tentativ diagnose):</p>
+                </div>
+
                 <div className="form-group">
                     <div className="as-block">
                         <DisordersAutosuggest suggestCallback={this.setICPC2code} codeSystem="ICPC-2"/>
@@ -69,50 +112,8 @@ export const Semantic = class Semantic extends React.Component {
               </div>
           </div>
 
-          <div className="row">
-              <div className="col-sm-6">
-                  <div className="form-group">
-                      <label htmlFor="funn">Funn:</label>
-                      <textarea
-                          id="funn"
-                          type="text"
-                          autoComplete="off"
-                          placeholder="funn"
-                      />
-                  </div>
-              </div>
-              
-          </div>
-
-          {/* the fourth*/}
-          <div className="row">
-              <div className="col-sm-6">
-                  <div className="form-group">
-                      <label htmlFor="vurdering">Vurdering:</label>
-                      <textarea
-                          id="vurdering"
-                          type="text"
-                          autoComplete="off"
-                          placeholder="vurdering"
-                      />
-                  </div>
-              </div>
-          </div>
-
-          {/* the fifth*/}
-          <div className="row">
-              <div className="col col-sm-6">
-                  <div className="form-group">
-                      <label htmlFor="tiltak">Tiltak:</label>
-                      <textarea
-                        id="tiltak"
-                        type="text"
-                        autoComplete="off"
-                        placeholder="tiltak"
-                      />
-                  </div>
-              </div>
-          </div>
+       
+          
       </div>
     );
   }
