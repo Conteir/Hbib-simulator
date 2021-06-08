@@ -4,6 +4,8 @@ import "../index.css";
 import DisordersAutosuggest from "./DisordersAutosuggest";
 import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params } from "../config.ts";
+import { Spinner } from 'reactstrap';
+
 
 
 export const HAPI = class Record extends React.Component {
@@ -81,7 +83,9 @@ export const HAPI = class Record extends React.Component {
     }
 
     Promise.all(promises).then(() => {
-      this.setState({data: JSON.stringify(data)});
+      this.setState({data: JSON.stringify(data),
+        showSpinner: false
+      });
     });
   }
 
@@ -113,10 +117,10 @@ export const HAPI = class Record extends React.Component {
       .then(data => {
         console.log("Content for " + codeSystem + ":", data);
         if(Array.isArray(data)) {
-          this.setState({matches: data.length});
+          this.setState({matches: data.length, showSpinner: false});
         }
         if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
-          this.setState({content: data[0].tekst, data: JSON.stringify(data)});
+          this.setState({content: data[0].tekst, data: JSON.stringify(data), showSpinner: false});
 
           console.log("Content for " + codeSystem + ":", data);
           console.log("Content for " + codeSystem + ":", data.length);
@@ -313,6 +317,7 @@ export const HAPI = class Record extends React.Component {
             <div className="row">
               <p>Årsak (symptom, plage eller tentativ diagnose):</p>
             </div>
+            
        
             <div className="row">
               <div className="col-sm-9">
@@ -328,6 +333,9 @@ export const HAPI = class Record extends React.Component {
                       </div>
                     </div>
                   : null}
+              </div>
+              <div>
+                {this.state.showSpinner ? <Spinner color="success" /> : null}
               </div>
               <div className="col-sm-3 match-block">
                 {this.state.matches > 0 ?
