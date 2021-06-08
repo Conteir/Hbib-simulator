@@ -122,7 +122,7 @@ margin-bottom: 10px;}
 }
 
 .popup {
-  position: absolute;
+  /* position: absolute; */
   top: 60px;
   left: 13px;
   width: 480px;

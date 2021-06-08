@@ -18,6 +18,7 @@ export const HAPI = class Record extends React.Component {
       matches: -1,
       showContent: false,
       showSpinner: false,
+      showMetadata: false
     };
   }
 
@@ -334,19 +335,21 @@ export const HAPI = class Record extends React.Component {
                     </div>
                   : null}
               </div>
-              <div>
-                {this.state.showSpinner ? <Spinner color="success" /> : null}
-              </div>
+              
               <div className="col-sm-3 match-block">
                 {this.state.matches > 0 ?
                     <span>
-                      <span onClick={() => {this.setState({showContent: true})}} className="badge badge-danger">Matched</span>
-                      <b>({this.state.matches})</b>
+                      <span onClick={() => {this.setState({showContent: true})}} className="badge badge-primary"> {this.state.matches} </span>
                     </span>
                     : (this.state.matches === 0 ? <span>No content matches this code</span> : null)
                   }
-              </div>
+                  
+                </div>
+                  
             </div>
+            <div>
+                    {this.state.showSpinner ? <Spinner color="success" /> : null}
+                  </div>
 
               {/* Pass this.state.env as codeSystem to DisordersAutosuggest
                 in order to get the correct code system url inside DisordersAutosuggest
