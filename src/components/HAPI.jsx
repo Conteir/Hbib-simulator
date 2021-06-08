@@ -26,6 +26,7 @@ export const HAPI = class Record extends React.Component {
     return promise;
   };
 
+  //getting forel and barn link data (h.p.)
   getLinkData = (link) => {
       let promise = fetch(link.href, params
     ).then(response => response.json())
@@ -35,13 +36,15 @@ export const HAPI = class Record extends React.Component {
     return promise;
   }
 
+  //response: handling and processing (h.p.)
   processResponse = (data) => {
     console.log("Processing response:", data);
     if(!data) return;
     
+    //for links
     let promises = [];
 
-    //Preprocess -> get barn and forelder links titles
+    //Preprocess -> get barn and forelder links titles (h.p)
     if (Array.isArray(data)) {
       data.forEach(item => {
         if (Array.isArray(item.links)) {
@@ -82,6 +85,7 @@ export const HAPI = class Record extends React.Component {
     });
   }
 
+  // callback to hdir
   linkCallback = (url) => {
     this.setState({ data: '', showSpinner: true });
     fetch(url, params)
@@ -111,8 +115,14 @@ export const HAPI = class Record extends React.Component {
         if(Array.isArray(data)) {
           this.setState({matches: data.length});
         }
+        if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
+          this.setState({content: data[0].tekst, data: JSON.stringify(data)});
 
-        this.processResponse(data);
+          console.log("Content for " + codeSystem + ":", data);
+          console.log("Content for " + codeSystem + ":", data.length);
+        }
+
+        // this.processResponse(data);
       });
   };
 

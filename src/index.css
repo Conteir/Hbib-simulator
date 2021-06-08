@@ -123,9 +123,9 @@ margin-bottom: 10px;}
 
 .popup {
   position: absolute;
-  top: 0px;
-  left: -500px;
-  width: 400px;
+  top: 60px;
+  left: 13px;
+  width: 480px;
   height: 500px;
   background: white;
   border: 4px solid #3275a8;
