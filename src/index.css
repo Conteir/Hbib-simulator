@@ -121,20 +121,17 @@ margin-bottom: 10px;}
   margin-left: 5px;
 }
 
-.popup {
-  /* position: absolute; */
-  top: 60px;
-  left: 13px;
-  width: 480px;
+.popupHAPI {
   height: 500px;
   background: white;
   border: 4px solid #3275a8;
   overflow: hidden;
   /* display over all other elements, z-index defines 'layer' position */
-  z-index: 100;
+  margin-top: 10px;
+  resize: vertical;
 }
 
-.popup > div.header {
+.popupHAPI > div.header {
   background: #3275a8;
   padding: 15px 10px;
   font-size: 18px;
@@ -143,10 +140,41 @@ margin-bottom: 10px;}
   display: flex;
   justify-content: space-between;
 }
-.popup > div.header > span.popup-close {
+.popupHAPI > div.header > span.popup-close {
   cursor: pointer;
 }
-.popup > div.content {
+.popupHAPI > div.content {
+  overflow-y: auto;
+  position: relative;
+  height: 90%;
+  display: block;
+}
+
+.popupSemantic {
+  /* width: 500px;
+  height: 300px; */
+  background: white;
+  border: 4px solid #3275a8;
+  overflow: hidden;
+  /* display over all other elements, z-index defines 'layer' position */
+  z-index: 100;
+  margin-top: 10px;
+  resize: vertical;
+}
+
+.popupSemantic > div.header {
+  background: #3275a8;
+  padding: 15px 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+.popupSemantic > div.header > span.popup-close {
+  cursor: pointer;
+}
+.popupSemantic > div.content {
   overflow-y: auto;
   position: relative;
   height: 90%;

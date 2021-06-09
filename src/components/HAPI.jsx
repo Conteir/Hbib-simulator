@@ -18,7 +18,6 @@ export const HAPI = class Record extends React.Component {
       matches: -1,
       showContent: false,
       showSpinner: false,
-      showMetadata: false
     };
   }
 
@@ -233,31 +232,31 @@ export const HAPI = class Record extends React.Component {
   render() {
     return (
       <div>
-          <div className="jumbotron text-center">
-              <h1>HAPI and patients record</h1>
-              <p>Choose the code system and make a search throught SNOMED</p>
-          </div>
+        <div className="jumbotron text-center">
+            <h1>HAPI and patients record</h1>
+            <p>Choose the code system and make a search throught SNOMED</p>
+        </div>
 
-          <div className="row, top">
-            <div className="col-sm-2">
-              <div className="form-group">
-                <select
-                    name="codeSystemEnv"
-                    id="codeSystemEnv"
-                    onChange={evt => this.setState({env: evt.target.value})}
-                >
-                  <option value=""
-                          select="default">
-                            Choose target code system
-                  </option>
-                    {/* Rend  er options dynamically from codeSystemEnv */}
-                    {codeSystemEnv.map((codeSystem, key) => 
-                      <option key={key} value={codeSystem.id}>{codeSystem.title}</option>) }
-                </select>
+        <div className="row, top">
+          <div className="col-sm-2">
+            <div className="form-group">
+              <select
+                  name="codeSystemEnv"
+                  id="codeSystemEnv"
+                  onChange={evt => this.setState({env: evt.target.value})}
+              >
+                <option value=""
+                        select="default">
+                          Choose target code system
+                </option>
+                  {/* Rend  er options dynamically from codeSystemEnv */}
+                  {codeSystemEnv.map((codeSystem, key) => 
+                    <option key={key} value={codeSystem.id}>{codeSystem.title}</option>) }
+              </select>
 
-              </div>
             </div>
           </div>
+        </div>
 
 
         <div className="row">
@@ -265,7 +264,7 @@ export const HAPI = class Record extends React.Component {
 
             <div className="row">
               <div className="form-group">
-                <label htmlFor="notat">Notat:</label>
+                <label htmlFor="notat"><b>Notat:</b></label>
                 <textarea
                   aria-label="Notat"
                   id="notat"
@@ -278,7 +277,7 @@ export const HAPI = class Record extends React.Component {
 
             <div className="row">
               <div className="form-group">
-                <label htmlFor="funn">Funn:</label>
+                <label htmlFor="funn"><b>Funn:</b></label>
                 <textarea
                   id="funn"
                   type="text"
@@ -290,7 +289,7 @@ export const HAPI = class Record extends React.Component {
 
             <div className="row">
               <div className="form-group">
-                <label htmlFor="vurdering">Vurdering:</label>
+                <label htmlFor="vurdering"><b>Vurdering:</b></label>
                 <textarea
                   id="vurdering"
                   type="text"
@@ -302,7 +301,7 @@ export const HAPI = class Record extends React.Component {
 
             <div className="row">
               <div className="form-group">
-                <label htmlFor="tiltak">Tiltak:</label>
+                <label htmlFor="tiltak"><b>Tiltak:</b></label>
                 <textarea
                   id="tiltak"
                   type="text"
@@ -316,48 +315,46 @@ export const HAPI = class Record extends React.Component {
 
           <div className="col-sm-6">
             <div className="row">
-              <p>Årsak (symptom, plage eller tentativ diagnose):</p>
+              <p><b>Årsak (symptom, plage eller tentativ diagnose):</b></p>
             </div>
             
        
             <div className="row">
-              <div className="col-sm-9">
+              <div className="col-sm-8">
                 <DisordersAutosuggest suggestCallback={this.fetchContent} codeSystem={this.state.env}/>
-                  {this.state.showContent ? 
-                    <div id="popup-hapi" className="popup">
-                      <div className="header">
-                        <span>Innhold</span>
-                        <span className="popup-close" onClick={() => this.setState({showContent: false})}>X</span>
-                      </div>
-                      <div className="content">
-                        <HTMLRender data={this.state.data} linkCallback={this.linkCallback} /> 
-                      </div>
-                    </div>
-                  : null}
               </div>
               
-              <div className="col-sm-3 match-block">
+              <div className="col-sm-4 match-block">
                 {this.state.matches > 0 ?
-                    <span>
+                    <div>
                       <span onClick={() => {this.setState({showContent: true})}} className="badge badge-primary"> {this.state.matches} </span>
-                    </span>
-                    : (this.state.matches === 0 ? <span>No content matches this code</span> : null)
-                  }
-                  
-                </div>
+                    </div>
+                    : (this.state.matches === 0 ? <div>No content matches this code</div> : null)
+                  } 
+              </div>
                   
             </div>
-            <div>
-                    {this.state.showSpinner ? <Spinner color="success" /> : null}
-                  </div>
 
-              {/* Pass this.state.env as codeSystem to DisordersAutosuggest
-                in order to get the correct code system url inside DisordersAutosuggest
-              */}
-              
-              <div className="row">
+            <div className="row">
+                {this.state.showSpinner ? <Spinner color="success" /> : null}
+            </div>
+            
+            <div className="row">
+              <div className="col-sm-8">
                 {/* this.state.showContent ? <HTMLRender data={this.state.data} linkCallback={this.linkCallback} /> : null */}
+                {this.state.showContent ? 
+                      <div id="popup-hapi" className="popupHAPI">
+                        <div className="header">
+                          <span>Innhold</span>
+                          <span className="popup-close" onClick={() => this.setState({showContent: false})}>X</span>
+                        </div>
+                        <div className="content">
+                          <HTMLRender data={this.state.data} linkCallback={this.linkCallback} hideMetadata={true} hideLinksNavigation={true} /> {/** --> hide metadata */}
+                        </div>
+                      </div>
+                    : null}
               </div>
+            </div>
           </div>
         </div>
       </div>

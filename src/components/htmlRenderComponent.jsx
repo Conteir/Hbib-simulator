@@ -11,26 +11,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
     );
   }
 
-  renderItem(item) {
+  renderItemMetadata(item) {
     return (
-  
-      <div className="infobit">
-    
-          <div><h1>{item.tittel}</h1></div>
-          {/* zacheeeem name=? */}
-          <div name={item.id}><h2>{item.kortTittel !== item.tittel ? item.kortTittel : ''}</h2></div>
-          <div name={item.id}>{item.intro ? item.intro : ''}</div>
-          <div name={item.id}>{item.forstPublisert ? item.forstPublisert.substring(0,11) : ''}</div>
-          <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
-          
-          <CollapsibleComponent name={item.id}>
-
-            {item?.data?.rasjonale ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
-            {item?.data?.rasjonale ? <CollapsibleContent><div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div></CollapsibleContent> : null}
-
-            <CollapsibleHead><h2>Metadata</h2></CollapsibleHead>
-            <CollapsibleContent>
-              <table><tbody>
+      <table><tbody>
                   <tr>
                     <td style={{fontWeight: "bold" }}>Id</td><td>{item.id ? item.id : null}</td>
                   </tr>
@@ -112,8 +95,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                     <td style={{ fontWeight: "bold" }}>Info type</td><td>{(item.tekniskeData && item.tekniskeData.infoType) ? item.tekniskeData.infoType : ''}</td>
                   </tr>
                   
-
-               
+              
                   {
                     (item.tekniskeData && item.tekniskeData.subType) ?
                       (<tr>
@@ -140,7 +122,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                   }
                 */}
 
-                  
+
                   { 
                     //rendering links for metadata
                     Array.isArray(item.links) ?
@@ -166,18 +148,53 @@ export const HTMLRender = class HTMLRender extends React.Component {
                     <td style={{ fontWeight: "bold" }}>Sist importert til Hapi</td><td>{item.sistImportertTilHapi ? item.sistImportertTilHapi : ''}</td>
                   </tr>
               </tbody></table>
-            </CollapsibleContent>
+    );
+  }
 
-            <CollapsibleHead><h2>Links navigation</h2></CollapsibleHead>
-            <CollapsibleContent>
-              <ol>
-                  {/* rendering links list for navigation block */}
-                  {this.renderLinksList(item.links)} 
-              </ol>
-            </CollapsibleContent>
+  renderItem(item) {
+    return (
+      <CollapsibleComponent name={item.id}>  {/** remember id - should be only 1! */}
+
+        <CollapsibleHead><h1>{item.tittel}</h1></CollapsibleHead>
+      
+        <CollapsibleContent>
+          <div className="infobit">
+        
+            {/* zacheeeem name=? */}
+            <div name={item.id}><h2>{item.kortTittel !== item.tittel ? item.kortTittel : ''}</h2></div>
+            <div name={item.id}>{item.intro ? item.intro : ''}</div>
+            <div name={item.id}>{item.forstPublisert ? item.forstPublisert.substring(0,11) : ''}</div>
+            <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
             
-          </CollapsibleComponent>
-      </div>
+
+            {item?.data?.rasjonale ? <CollapsibleHead><h2>Rasjonale</h2></CollapsibleHead> : null}
+            {item?.data?.rasjonale ? <CollapsibleContent><div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div></CollapsibleContent> : null}
+
+            {/**creating props to pass it to child component */}
+            {!this.props.hideMetadata ? 
+              <div>
+                <CollapsibleHead><h2>Metadata</h2></CollapsibleHead>
+                <CollapsibleContent>{this.renderItemMetadata(item)} </CollapsibleContent>
+              </div> 
+            : null }
+
+            {/**creating props to pass it to child component */}
+            {!this.props.hideLinksNavigation ? 
+              <div>
+                <CollapsibleHead><h2>Links navigation</h2></CollapsibleHead>
+                <CollapsibleContent>
+                  <ol>
+                      {/* rendering links list for navigation block */}
+                      {this.renderLinksList(item.links)} 
+                  </ol>
+                </CollapsibleContent>
+                </div> 
+            : null }
+                
+          </div>
+        </CollapsibleContent>
+
+      </CollapsibleComponent> // wrapped the content
     );
   }
 
