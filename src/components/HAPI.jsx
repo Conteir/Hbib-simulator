@@ -52,7 +52,7 @@ export const HAPI = class Record extends React.Component {
         if (Array.isArray(item.links)) {
           // object, going through all links
           item.links.forEach(link => {
-            if (link.rel === 'barn' || link.rel === 'forelder') {
+            if (link.rel === 'barn' || link.rel === 'forelder' || link.rel === 'root') {
               promises.push(
                   // will be pushed after getLinkData finished
                   this.getLinkData(link)
@@ -72,7 +72,7 @@ export const HAPI = class Record extends React.Component {
       if (Array.isArray(data.links)) {
         // object, going through all links
         data.links.forEach(link => {
-          if (link.rel === 'barn' || link.rel === 'forelder') {
+          if (link.rel === 'barn' || link.rel === 'forelder' || link.rel === 'root') {
             promises.push(
                 // will be pushed after getLinkData finished
                 this.getLinkData(link)
@@ -126,7 +126,7 @@ export const HAPI = class Record extends React.Component {
           console.log("Content for " + codeSystem + ":", data.length);
         }
 
-        // this.processResponse(data);
+         this.processResponse(data);
       });
   };
 

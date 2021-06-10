@@ -180,3 +180,7 @@ margin-bottom: 10px;}
   height: 90%;
   display: block;
 }
+
+div.rendered > ul > li {
+  font-size: 24px;
+}

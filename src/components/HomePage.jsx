@@ -88,7 +88,7 @@ export const HomePage = class HomePage extends React.Component {
           if (Array.isArray(el.links)) {
             el.links.forEach(link => {
               //retrieving
-              if (link.rel === 'barn' || link.rel === 'forelder') {
+              if (link.rel === 'barn' || link.rel === 'forelder' || link.rel === 'root') {
 
                 promises.push(
                   // will be pushed after getLinkData finished
@@ -102,7 +102,7 @@ export const HomePage = class HomePage extends React.Component {
         if (Array.isArray(data.links)) {
           // object, going through all links
           data.links.forEach(link => {
-            if (link.rel === 'barn' || link.rel === 'forelder') {
+            if (link.rel === 'barn' || link.rel === 'forelder' && link.rel === 'root') {
               promises.push(
                 // will be pushed after getLinkData finished
                 this.getLinkData(link)

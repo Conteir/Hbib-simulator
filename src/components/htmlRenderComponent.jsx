@@ -1,5 +1,6 @@
 import React from 'react';
 import { CollapsibleComponent, CollapsibleHead, CollapsibleContent } from "react-collapsible-component";
+import { findAncestor } from 'typescript';
 
 export const HTMLRender = class HTMLRender extends React.Component {
 
@@ -151,11 +152,36 @@ export const HTMLRender = class HTMLRender extends React.Component {
     );
   }
 
+  renderTitle = (item) => {
+    let rootLink = undefined;
+
+    if (Array.isArray(item.links) ) {
+      /*
+        item.links.forEach(link => {
+          if (link.rel==='root') {
+            rootLink = link;
+          }
+        });
+      */
+
+      rootLink = item.links.find(link => link.rel === 'root');
+    }
+    return <h6>{rootLink ? rootLink.$title : ''}</h6>;
+  };
+
   renderItem(item) {
     return (
       <CollapsibleComponent name={item.id}>  {/** remember id - should be only 1! */}
 
-        <CollapsibleHead><h1>{item.tittel}</h1></CollapsibleHead>
+
+        <CollapsibleHead>
+
+        {/** render rooto title */}
+        {this.renderTitle(item)}
+
+        <h2>{item.tittel}</h2>
+        
+        </CollapsibleHead>
       
         <CollapsibleContent>
           <div className="infobit">
@@ -211,10 +237,13 @@ export const HTMLRender = class HTMLRender extends React.Component {
         return barn.map((item, index) => 
           <li key={index}>
             <div>
-              {item.rel==='barn' ? <span><b>Barn:&nbsp;</b></span> : <span><b>Forelder:&nbsp;</b></span>}
+              {item.rel==='barn' ? <span><b>Barn:&nbsp;</b></span> : null} 
+              {item.rel==='forelder' ? <span><b>Forelder:&nbsp;</b></span> : null}
+              {item.rel==='root' ? <span><b>Root:&nbsp;</b></span> : null}
               {/*onClick making linkCallback: call the function from HomePage : */}
               <span className="link" onClick={() => this.props.linkCallback(item.href)}>{item.$title}</span>
             </div>
+           
           </li>
         );
       }
