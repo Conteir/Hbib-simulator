@@ -22,8 +22,7 @@ export const Semantic = class Semantic extends React.Component {
   setICPC2code = (suggestion) => {
     if(!suggestion.$codeSystemResult) return;
     this.setState({ ICPC2code: suggestion.$codeSystemResult.code });
-    this.setState({showSpinner: true});
-
+    //this.setState({showSpinner: true});
   };
 
   render() {
@@ -116,14 +115,14 @@ export const Semantic = class Semantic extends React.Component {
                                     
                             <div>
                                 <IFrame
-                                    className="responsive-iframe" //needs test
-                                    frameBorder="0"
-                                    width="100%" height="300px"
-                                    src={
-                                    "https://semantic.dev.minus-data.no/pasientsky/?icpc-2=" +
-                                    this.state.ICPC2code
-                                    }
-                                    title="semanticData"
+                                className="responsive-iframe" //needs test
+                                frameBorder="0"
+                                width="100%" height="300px"
+                                src={
+                                "https://semantic.dev.minus-data.no/pasientsky/?icpc-2=" +
+                                this.state.ICPC2code
+                                }
+                                title="semanticData"
                                 >   
                                 </IFrame>
                             </div>
