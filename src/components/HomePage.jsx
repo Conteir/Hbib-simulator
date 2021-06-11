@@ -102,7 +102,7 @@ export const HomePage = class HomePage extends React.Component {
         if (Array.isArray(data.links)) {
           // object, going through all links
           data.links.forEach(link => {
-            if (link.rel === 'barn' || link.rel === 'forelder' && link.rel === 'root') {
+            if (link.rel === 'barn' || link.rel === 'forelder' || link.rel === 'root') {
               promises.push(
                 // will be pushed after getLinkData finished
                 this.getLinkData(link)

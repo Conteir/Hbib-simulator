@@ -1,6 +1,5 @@
 import React from 'react';
 import { CollapsibleComponent, CollapsibleHead, CollapsibleContent } from "react-collapsible-component";
-import { findAncestor } from 'typescript';
 
 export const HTMLRender = class HTMLRender extends React.Component {
 
