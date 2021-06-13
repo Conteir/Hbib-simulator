@@ -1,28 +1,29 @@
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
 body {
+  margin-right: auto; /* 1 */
+  margin-left: auto; /* 1 */
 
-    margin-right: auto; /* 1 */
-    margin-left:  auto; /* 1 */
-  
-    padding-right: 20px; /* 3 */
-    padding-left:  20px; /* 3 */
+  padding-right: 20px; /* 3 */
+  padding-left: 20px; /* 3 */
 
-    
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-input, select {
+input,
+select {
   margin-right: 20px;
 }
 
@@ -30,14 +31,20 @@ input, select {
   margin-right: 20px;
 }
 
-table, th, td {
+table,
+th,
+td {
   border: 1px solid lightgrey;
   border-collapse: collapse;
   margin: 10px 0;
 }
 
-table > tbody > tr > td {padding: 5px;}
-table > tbody > tr > td:first-child {font-weight: bold;}
+table > tbody > tr > td {
+  padding: 5px;
+}
+table > tbody > tr > td:first-child {
+  font-weight: bold;
+}
 
 div.content {
   margin-top: 10px;
@@ -47,7 +54,7 @@ div.content {
   padding: 0;
 }
 
-.accordion-head  {
+.accordion-head {
   background-color: #f0eeef !important;
   color: rgb(0, 0, 0) !important;
   padding: 0 0 0 20px !important;
@@ -55,7 +62,7 @@ div.content {
 }
 
 h2 {
-  padding:10px 0 10px 0;
+  padding: 10px 0 10px 0;
   margin: 0px;
 }
 
@@ -65,7 +72,7 @@ h2 {
   cursor: pointer;
 }
 div.infobit {
-  background-color: gainsboro;
+  background-color: #f0eeef;
   margin-bottom: 20px;
   padding: 20px;
 }
@@ -80,15 +87,27 @@ div.infobit {
   cursor: pointer;
 }
 
-.main-term {font-weight: bold; font-size: 20px;}
-.code-caption {font-weight: bold;}
-textarea {width: 100%;  height: 100px;}
-.top {padding: 20px 0 10px 0; border-bottom: solid 1px darkblue;
-margin-bottom: 10px;}
+.main-term {
+  font-weight: bold;
+  font-size: 20px;
+}
+.code-caption {
+  font-weight: bold;
+}
+textarea {
+  width: 100%;
+  height: 100px;
+}
+.top {
+  padding: 20px 0 10px 0;
+  border-bottom: solid 1px darkblue;
+  margin-bottom: 10px;
+}
 
 /* popup */
 .content {
-  display: flex; align-items: center;
+  display: flex;
+  align-items: center;
   padding: 10px;
   font-size: 20px;
 }
@@ -115,7 +134,9 @@ margin-bottom: 10px;}
 
 /* autosuggest-match block*/
 .match-block {
-  display: flex; align-items: center; cursor: pointer;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 .match-block > span > b {
   margin-left: 5px;
@@ -183,4 +204,29 @@ margin-bottom: 10px;}
 
 div.rendered > ul > li {
   font-size: 24px;
+}
+
+/*hapi cds modul*/
+#popup-hapi div.panel-accordion {
+  margin: 0px !important;
+  padding: 0px !important;
+}
+#popup-hapi h2.product-context {
+  font-size: 12px;
+  font-style: italic;
+  padding-bottom: 5px;
+  color: rgb(83, 82, 82);
+}
+#popup-hapi h1 {
+  font-size: 18px;
+  font-style: normal;
+}
+#popup-hapi h2 {
+  font-size: 15px;
+  font-style: normal;
+}
+#popup-hapi div.infobit {
+  font-size: 12px;
+  padding: 0px !important;
+  padding-left: 20px !important;
 }
