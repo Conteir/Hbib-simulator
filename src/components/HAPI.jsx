@@ -5,7 +5,7 @@ import DisordersAutosuggest from "./DisordersAutosuggest";
 import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
-import GetParamComponent from "./GetParamComponent.jsx";
+// import GetParamComponent from "./GetParamComponent.jsx";
 // import History from "./HistoryComponent";
 
 export const HAPI = class Record extends React.Component {
