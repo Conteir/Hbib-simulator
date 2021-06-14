@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import DisordersAutosuggest from "./DisordersAutosuggest";
 import { HTMLRender } from "./htmlRenderComponent";
-import { codeSystemEnv, params } from "../config.ts";
+import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 import GetParamComponent from "./GetParamComponent.jsx";
 
@@ -19,6 +19,16 @@ export const HAPI = class Record extends React.Component {
       showContent: false,
       showSpinner: false,
     };
+  }
+
+  componentDidMount() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const valueHapiId = urlParams.get('hapiId');
+    if(valueHapiId) {
+      const url = helsedirBaseUrl + valueHapiId;
+      this.fetchContent(url);
+      this.setState({ showContent: true });
+    }
   }
 
   codeSystemPromise = (url) => {
@@ -105,23 +115,28 @@ export const HAPI = class Record extends React.Component {
       );
   };
 
-  fetchContent = (suggestion) => {
-    this.setState({ showSpinner: true });
-    // reset state to clean results before new loading
-    this.setState({ matches: -1, data: "", showContent: false });
-    // API key depends on environment: current -> Production
+  suggestCallback = (suggestion) => {
     if (!suggestion.$codeSystemResult) return;
 
     const codeSystemResult = suggestion.$codeSystemResult;
     const codeSystem = codeSystemResult.codeSystem;
     const code = codeSystemResult.code;
-    const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";
-    const url = hdBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
+
+    const url = helsedirBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
+    this.fetchContent(url);
+  }
+
+  fetchContent = (url) => {
+    this.setState({ showSpinner: true });
+    // reset state to clean results before new loading
+    this.setState({ matches: -1, data: "", showContent: false });
+    // API key depends on environment: current -> Production
+    
 
     fetch(url, params)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Content for " + codeSystem + ":", data);
+        //console.log("Content for " + codeSystem + ":", data);
         if (Array.isArray(data)) {
           this.setState({ matches: data.length, showSpinner: false });
         }
@@ -132,8 +147,8 @@ export const HAPI = class Record extends React.Component {
             showSpinner: false,
           });
 
-          console.log("Content for " + codeSystem + ":", data);
-          console.log("Content for " + codeSystem + ":", data.length);
+          //console.log("Content for " + codeSystem + ":", data);
+          //console.log("Content for " + codeSystem + ":", data.length);
         }
 
         this.processResponse(data);
@@ -339,7 +354,7 @@ export const HAPI = class Record extends React.Component {
             <div className="row">
               <div className="col-sm-8">
                 <DisordersAutosuggest
-                  suggestCallback={this.fetchContent}
+                  suggestCallback={this.suggestCallback}
                   codeSystem={this.state.env}
                 />
               </div>

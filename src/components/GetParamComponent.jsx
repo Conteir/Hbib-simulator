@@ -1,6 +1,6 @@
 import React from "react";
 // Importing Module
-import queryString from 'query-string'
+
   
 export const GetParamComponent = class GetParamComponent extends React.Component {
   
@@ -8,7 +8,9 @@ export const GetParamComponent = class GetParamComponent extends React.Component
     super(props);
 
     this.state = {
-      value : ""
+      value : "",
+      url: "",
+      data: ""
 
     };
 
@@ -28,57 +30,66 @@ export const GetParamComponent = class GetParamComponent extends React.Component
 
     return this.setState({ value: hapiId });
    
-    
     // version +:  console.log(queryString)
 
     //console.log(queries)
     //this.setState(queries)
   }
 
-  /*fetchContentByHapiId = (value) => {
-    this.setState({ showSpinner: true });
-    // reset state to clean results before new loading
-    this.setState({ matches: -1, data: "", showContent: false });
-    // API key depends on environment: current -> Production
-    if (!value) return;
+  urlParser = () => {
+    const url = new URL(
+      ''
+    );
+    
+    url.search(); // => '?message=hello&who=world'
+  }
 
+  fetchContentByHapiId = () => {
+    let queryString = window.location.search;
+
+    const urlParams = new URLSearchParams(queryString);
+    const valueHapiId = urlParams.get('hapiId');
    
-    const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";
-    const url = hdBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
+    const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold/";
+    //const valueHapiId = this.handleQueryString();
+    const address = hdBaseUrl + valueHapiId;
 
-    fetch(url, params)
+    fetch(address, 
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Ocp-Apim-Subscription-Key': "89b72a3ad5cf4723b3f489c3eb4d82a1"
+        }
+      }
+      )
       .then((response) => response.json())
       .then((data) => {
-        console.log("Content for " + codeSystem + ":", data);
-        if (Array.isArray(data)) {
-          this.setState({ matches: data.length, showSpinner: false });
-        }
-        if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
-          this.setState({
-            content: data[0].tekst,
-            data: JSON.stringify(data),
-            showSpinner: false,
-          });
-
-          console.log("Content for " + codeSystem + ":", data);
-          console.log("Content for " + codeSystem + ":", data.length);
-        }
-
-        this.processResponse(data);
+        console.log("Processing response:", data);
+        this.setState({ data: JSON.stringify(data), showSpinner: false });
       });
-  };*/
+  };
   
   render() {
     return  (
       <div style={{ margin: 200 }}>
 
     <span>test print</span><span>{this.state.value}</span> <span>test print 2</span>
-  
+       {/** {this.urlParser} */} 
+
         <button
           onClick={this.handleQueryString}
           className='btn btn-primary'>
           click me 
         </button>
+
+        <button 
+          onClick={this.fetchContentByHapiId}
+          className='btn btn-primary'>
+          next step
+        </button>
+
+
       </div>
     );
   }

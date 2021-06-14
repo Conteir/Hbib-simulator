@@ -82,4 +82,6 @@ export const codeSystems = [
     },
   };
 
+  export const helsedirBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold/";
+
   
