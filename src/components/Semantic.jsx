@@ -119,7 +119,8 @@ export const Semantic = class Semantic extends React.Component {
                                 frameBorder="0"
                                 width="100%" height="300px"
                                 src={
-                                "https://semantic.dev.minus-data.no/pasientsky/?icpc-2=" +
+                                //"https://semantic.dev.minus-data.no/pasientsky/?icpc-2=" +
+                                "https://cds-simulator.minus-data.no/pasientsky/?icpc-2=" +
                                 this.state.ICPC2code
                                 }
                                 title="semanticData"

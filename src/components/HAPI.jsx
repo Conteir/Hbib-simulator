@@ -5,6 +5,8 @@ import DisordersAutosuggest from "./DisordersAutosuggest";
 import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params } from "../config.ts";
 import { Spinner } from "reactstrap";
+import GetParamComponent from "./GetParamComponent.jsx";
+
 
 export const HAPI = class Record extends React.Component {
   constructor(props) {
@@ -392,6 +394,10 @@ export const HAPI = class Record extends React.Component {
                 ) : null}
               </div>
             </div>
+          </div>
+          <div>
+            <h1>test</h1>
+            <GetParamComponent/>
           </div>
         </div>
       </div>
