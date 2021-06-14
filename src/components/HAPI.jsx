@@ -6,7 +6,7 @@ import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 import GetParamComponent from "./GetParamComponent.jsx";
-
+// import History from "./HistoryComponent";
 
 export const HAPI = class Record extends React.Component {
   constructor(props) {
@@ -17,7 +17,7 @@ export const HAPI = class Record extends React.Component {
       data: "",
       matches: -1,
       showContent: false,
-      showSpinner: false,
+      showSpinner: false
     };
   }
 
@@ -408,12 +408,17 @@ export const HAPI = class Record extends React.Component {
                   </div>
                 ) : null}
               </div>
+              {/*<div>
+              <History/>
+              </div>*/}
             </div>
           </div>
+          {/*
           <div>
             <h1>test</h1>
             <GetParamComponent/>
           </div>
+          */}
         </div>
       </div>
     );

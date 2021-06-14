@@ -25,8 +25,6 @@ export default class DisordersAutosuggest extends React.Component {
   // based on the clicked suggestion. Teach Autosuggest how to calculate the
   // input value for every given suggestion.
     getSuggestionValue = (suggestion) => {
-      
-
       this.props.suggestCallback(suggestion);
 
       return suggestion.term + ' (SCTID: ' + suggestion.concept.conceptId
@@ -164,6 +162,21 @@ export default class DisordersAutosuggest extends React.Component {
                 inputProps={inputProps}
             />
              {this.state.showSpinner ? <Spinner color="success" /> : null}
+
+             {/*<button onClick={() => {
+                let last = 'Depressed';
+                if(last) {
+                    // Sets input value
+                    this.onChange(null, {newValue: last});
+                                  
+                    // Fetches suggestions
+                    this.onSuggestionsFetchRequested({value: last});
+
+                    // Focus input to show suggestions list
+                    let elements = document.getElementsByClassName('react-autosuggest__input');
+                    elements[0].focus();
+                }
+               }}>get last</button>*/}
         </div>
     );
   }
