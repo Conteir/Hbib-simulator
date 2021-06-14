@@ -23,12 +23,10 @@ export const GetParamComponent = class GetParamComponent extends React.Component
     let queryString = window.location.search;
 
     const urlParams = new URLSearchParams(queryString);
+    const hapiId = urlParams.get('hapiId')
+    console.log(hapiId);
 
-    const pageType = urlParams.get('hapiId')
-
-    console.log(pageType);
-
-    return this.setState({ value: pageType });
+    return this.setState({ value: hapiId });
    
     
     // version +:  console.log(queryString)
@@ -36,6 +34,39 @@ export const GetParamComponent = class GetParamComponent extends React.Component
     //console.log(queries)
     //this.setState(queries)
   }
+
+  /*fetchContentByHapiId = (value) => {
+    this.setState({ showSpinner: true });
+    // reset state to clean results before new loading
+    this.setState({ matches: -1, data: "", showContent: false });
+    // API key depends on environment: current -> Production
+    if (!value) return;
+
+   
+    const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";
+    const url = hdBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
+
+    fetch(url, params)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Content for " + codeSystem + ":", data);
+        if (Array.isArray(data)) {
+          this.setState({ matches: data.length, showSpinner: false });
+        }
+        if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
+          this.setState({
+            content: data[0].tekst,
+            data: JSON.stringify(data),
+            showSpinner: false,
+          });
+
+          console.log("Content for " + codeSystem + ":", data);
+          console.log("Content for " + codeSystem + ":", data.length);
+        }
+
+        this.processResponse(data);
+      });
+  };*/
   
   render() {
     return  (
