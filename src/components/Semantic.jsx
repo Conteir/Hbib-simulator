@@ -107,11 +107,8 @@ export const Semantic = class Semantic extends React.Component {
                     <div className="col-sm-8">
 
 
-                        <div id="popup-hapi" className="popupSemantic">
-                            <div className="header">
-                                <span>Beslutningsstøtte:</span>
-                                    <span className="popup-close" onClick={() => this.setState({showContent: false})}>X</span>
-                            </div>
+                        
+                            
                                     
                             <div>
                                 <IFrame
@@ -120,13 +117,14 @@ export const Semantic = class Semantic extends React.Component {
                                 width="100%" height="300px"
                                 src={
                                 "https://semantic.dev.minus-data.no/pasientsky/?icpc-2=" +
+                                //"https://cds-simulator.minus-data.no/pasientsky/?icpc-2=" +
                                 this.state.ICPC2code
                                 }
                                 title="semanticData"
                                 >   
                                 </IFrame>
                             </div>
-                        </div>
+                       
 
                     </div>
                     </div>
