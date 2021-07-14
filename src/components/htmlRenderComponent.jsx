@@ -196,57 +196,58 @@ export const HTMLRender = class HTMLRender extends React.Component {
           <h1>{item.tittel}</h1>
         </CollapsibleHead>
         <CollapsibleContent>
-          <div className="infobit">
-            {/* zacheeeem name=? */}
+          {/* zacheeeem name=? 
             <div name={item.id}>
-              <h2>{item.kortTittel !== item.tittel ? item.kortTittel : ""}</h2>
+              <h2>
+                {item.kortTittel !== item.tittel ? item.kortTittel : null}
+              </h2>
             </div>
-            <div name={item.id}>{item.intro ? item.intro : ""}</div>
-            <div name={item.id}>
+            */}
+          <div name={item.id}>{item.intro ? item.intro : ""}</div>
+          {/*<div name={item.id}>
               {item.forstPublisert ? item.forstPublisert.substring(0, 11) : ""}
-            </div>
-            <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
+    </div>*/}
+          <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
 
-            {item?.data?.rasjonale ? (
+          {item?.data?.rasjonale ? (
+            <CollapsibleHead>
+              <h2>Rasjonale</h2>
+            </CollapsibleHead>
+          ) : null}
+          {item?.data?.rasjonale ? (
+            <CollapsibleContent>
+              <div
+                dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}
+              ></div>
+            </CollapsibleContent>
+          ) : null}
+
+          {/**creating props to pass it to child component */}
+          {!this.props.hideMetadata ? (
+            <div>
               <CollapsibleHead>
-                <h2>Rasjonale</h2>
+                <h2>Metadata</h2>
               </CollapsibleHead>
-            ) : null}
-            {item?.data?.rasjonale ? (
               <CollapsibleContent>
-                <div
-                  dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}
-                ></div>
+                {this.renderItemMetadata(item)}{" "}
               </CollapsibleContent>
-            ) : null}
+            </div>
+          ) : null}
 
-            {/**creating props to pass it to child component */}
-            {!this.props.hideMetadata ? (
-              <div>
-                <CollapsibleHead>
-                  <h2>Metadata</h2>
-                </CollapsibleHead>
-                <CollapsibleContent>
-                  {this.renderItemMetadata(item)}{" "}
-                </CollapsibleContent>
-              </div>
-            ) : null}
-
-            {/**creating props to pass it to child component */}
-            {!this.props.hideLinksNavigation ? (
-              <div>
-                <CollapsibleHead>
-                  <h2>Links navigation</h2>
-                </CollapsibleHead>
-                <CollapsibleContent>
-                  <ol>
-                    {/* rendering links list for navigation block */}
-                    {this.renderLinksList(item.links)}
-                  </ol>
-                </CollapsibleContent>
-              </div>
-            ) : null}
-          </div>
+          {/**creating props to pass it to child component */}
+          {!this.props.hideLinksNavigation ? (
+            <div>
+              <CollapsibleHead>
+                <h2>Links navigation</h2>
+              </CollapsibleHead>
+              <CollapsibleContent>
+                <ol>
+                  {/* rendering links list for navigation block */}
+                  {this.renderLinksList(item.links)}
+                </ol>
+              </CollapsibleContent>
+            </div>
+          ) : null}
         </CollapsibleContent>
       </CollapsibleComponent> // wrapped the content
     );

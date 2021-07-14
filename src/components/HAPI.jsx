@@ -254,7 +254,7 @@ export const HAPI = class Record extends React.Component {
                 onChange={(evt) => this.setState({ env: evt.target.value })}
               >
                 <option value="" select="default">
-                  Choose target code system
+                  Velg kontekst
                 </option>
                 {/* Rend  er options dynamically from codeSystemEnv */}
                 {codeSystemEnv.map((codeSystem, key) => (
@@ -293,7 +293,7 @@ export const HAPI = class Record extends React.Component {
                   id="funn"
                   type="text"
                   autoComplete="off"
-                  placeholder="funn"
+                  placeholder=""
                 />
               </div>
             </div>
@@ -307,7 +307,7 @@ export const HAPI = class Record extends React.Component {
                   id="vurdering"
                   type="text"
                   autoComplete="off"
-                  placeholder="vurdering"
+                  placeholder=""
                 />
               </div>
             </div>
@@ -321,7 +321,7 @@ export const HAPI = class Record extends React.Component {
                   id="tiltak"
                   type="text"
                   autoComplete="off"
-                  placeholder="tiltak"
+                  placeholder=""
                 />
               </div>
             </div>

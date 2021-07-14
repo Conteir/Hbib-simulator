@@ -108,7 +108,7 @@ textarea {
 .content {
   display: flex;
   align-items: center;
-  padding: 10px;
+  padding: 5px;
   font-size: 20px;
 }
 
@@ -207,26 +207,51 @@ div.rendered > ul > li {
 }
 
 /*hapi cds modul*/
-#popup-hapi div.panel-accordion {
-  margin: 0px !important;
-  padding: 0px !important;
-}
 #popup-hapi h2.product-context {
-  font-size: 12px;
+  font-size: 14px;
   font-style: italic;
   padding-bottom: 5px;
-  color: rgb(83, 82, 82);
+  color: #757575;
 }
+
 #popup-hapi h1 {
-  font-size: 18px;
-  font-style: normal;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  color: black;
 }
+#popup-hapi .accordion-head {
+  background-color: white !important;
+  transition: 0.3s;
+  padding: 0px 10px !important;
+  margin-top: 0px !important;
+}
+#popup-hapi .accordion-head:hover {
+  background-color: #f1f1f1 !important;
+}
+#popup-hapi div.panel-accordion {
+  margin: 0px !important;
+  padding: 0 10px 0 10px !important;
+  font-size: 14px;
+}
+
 #popup-hapi h2 {
   font-size: 15px;
-  font-style: normal;
+  font-weight: bold;
 }
-#popup-hapi div.infobit {
-  font-size: 12px;
-  padding: 0px !important;
-  padding-left: 20px !important;
+
+#popup-hapi h3 {
+  font-size: 14px;
+  font-weight: bold;
 }
+
+#popup-hapi h4 {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#popup-hapi dl,
+ol,
+ul {
+  margin-bottom: 0.5rem !important;
+}
+/**/
