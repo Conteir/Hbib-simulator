@@ -206,8 +206,26 @@ export const HTMLRender = class HTMLRender extends React.Component {
           <div name={item.id}>{item.intro ? item.intro : ""}</div>
           {/*<div name={item.id}>
               {item.forstPublisert ? item.forstPublisert.substring(0, 11) : ""}
-    </div>*/}
+            </div>*/}
           <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
+
+
+          {/* behandlinger handler */}
+          {item?.data?.behandlinger ? (
+            <CollapsibleHead>
+              <h2>Behandlinger</h2>
+            </CollapsibleHead>
+          ) : null}
+          {item?.data?.behandlinger ? (
+            <CollapsibleContent>
+                {/* {this.renderItemBehandlinger(JSON.stringify(item.data.behandlinger))}{" "} */}
+                <div>test print</div>
+                <div
+                  dangerouslySetInnerHTML={{ __html: JSON.stringify(item.data) }}
+              ></div>
+            </CollapsibleContent>
+          ) : null}
+
 
           {item?.data?.rasjonale ? (
             <CollapsibleHead>
@@ -252,6 +270,24 @@ export const HTMLRender = class HTMLRender extends React.Component {
       </CollapsibleComponent> // wrapped the content
     );
   }
+
+  
+  /////////////////////////////////////////
+  // rendering behandlinger
+  renderItemBehandlinger(items) {
+    console.log(items);
+    console.log("Жопа!");
+      
+    if (items != null) {
+      return items.map((item, index) => (
+        <div key={index}>
+          {item.data ? item.data.behandlinger : ""}
+        </div>
+      ));
+    }
+  }
+  //////////////////////
+
 
   renderLinksList(links) {
     if (links != null) {

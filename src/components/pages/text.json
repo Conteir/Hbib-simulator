@@ -1,0 +1,1458 @@
+{
+  "id": "0006-0002-d37b0ba2-7627-4209-bac4-ea7511b78128",
+  "tittel": "Cystitt, akutt, komplisert - anbefaling eksempel med to behandlinger",
+  "kortTittel": "",
+  "tekst": "<p>Her kan det komme en tekst som er knyttet til hele anbefalingen.</p>",
+  
+  "data": {
+    "nokkelInfo": {
+      "fordelerogulemper": "<p>Her er tekst for fordeler og ulemper.</p>",
+      "kvalitetdokumentasjon": "<p>Her er tekst for kvalitet på dokumentasjon.</p>",
+      "verdierogpreferanser": "<p>Her er tekst for verdi og preferanser.</p>",
+      "ressurshensyn": "<p>Her er tekst for ressurshensyn.</p>"
+    },
+    "styrke": "Antimykotika sterk_svak",
+    "rasjonale": "<p>Her er tekst for begrunnelse.</p>",
+    "praktisk": "<ul>\t<li>Korrekt prøvetaking av urin er essensielt. Lenke til OUS metodebok: <a href=\"https://ehandboken.ous-hf.no/document/14090\">eHåndbok - Urinprøve til bakteriologisk undersøkelse (ous-hf.no)</a>.</li>\t<li>Sykdommer og tilstander som er assosiert med komplisert forløp av cystitt er:\t<ul>\t\t<li>Forhold som disponerer for obstruksjon, vesikoureteral refluks og resturin</li>\t\t<li>Fremmedlegeme, inkludert kateterassosiert cystitt og blærestein</li>\t\t<li>Helsetjenesteassosiert infeksjon, inkludert nylig urologisk instrumentering</li>\t\t<li>Cystitt hos menn</li>\t\t<li>Cystitt hos eldre kvinner (&gt; 65 år)</li>\t\t<li>Graviditet</li>\t\t<li>Nyretransplantasjon</li>\t\t<li>Sykdom med diabetes mellitus eller polycystisk nyresykdom</li>\t\t<li>Immunsuppresjon</li>\t\t<li>Nylig kur med bredspektret antibiotika, ESBL-mikrobe eller øvrig multiresistent mikrobe</li>\t</ul>\t</li>\t<li>Ta hensyn til dyrkning med resistensbestemmelse når denne foreligger.</li>\t<li>Behandlingsvarighet\t<ul>\t\t<li>Eldre kvinner &gt; 65 år: 3 døgn</li>\t\t<li>Gravide: 5 døgn</li>\t\t<li>Menn: 7 døgn</li>\t\t<li>Ved kateterassosiert cystitt hvor kateter er nylig fjernet: 3 døgn</li>\t\t<li>Ved kateterassosiert cystitt med bestående avløpshinder: Intermitterende kateter, og antibiotika i opptil 7 døgn.</li>\t\t<li>Ved øvrige forhold med faktorer som disponerer for mer komplisert forløp av cystitt: 3 døgn er ofte tilstrekkelig.</li>\t</ul>\t</li>\t<li>Forhold som disponerer for komplisert cystitt bør utredes og eventuelt korrigeres.</li>\t<li>\t<ul>\t</ul>\t</li>\t<li>Karnitinmangel:&nbsp;Behandler må være oppmerksom på utvikling av symptomgivende karnitinmangel hos utsatte pasienter.&nbsp;</li></ul>",
+    "behandlinger": [
+      {
+        "overskrift": "Behandling med legemidler",
+        "behandling": {
+          "id": "0006-0046-a0dca2f7-c479-47c0-a819-c5243227f5a4",
+          "tittel": "Cystitt, akutt, komplisert ",
+          "kortTittel": "Cystitt, akutt, komplisert ",
+          "tekst": "<p>Anbefalingen gjelder for&nbsp;pasienter med komplisert akutt bakteriell cystitt. Det vil si&nbsp;pasienter med forhold som kan disponere for terapisvikt, men uten systemiske infeksjonstegn.&nbsp;</p><p>Funn av bakterier i urinen uten ledsagende symptomer skal som hovedregel ikke behandles med antibiotika,&nbsp;<a href=\"https://www.helsedirektoratet.no/retningslinjer/antibiotika-i-sykehus/urinveisinfeksjoner/asymptomatisk-bakteriuri\">se Asymptomatisk bakteriuri</a>.</p><p>For behandlingsvarighet og kompliserende forhold se \"Praktisk\".</p>",
+          "koder": {
+            "SNOMED-CT": [
+              "69840006",
+              "363518003"
+            ],
+            "ICD-10": [
+              "C64"
+            ]
+          },
+          "data": {
+            "standardbehandlingsregimer": [
+              {
+                "overskrift": "Behandling med antibiotika for voksne",
+                "doseringregimer": [
+                  {
+                    "id": "0006-0047-72774f22-0363-4ae9-9ec1-f45066915d1f",
+                    "tittel": "Ciprofloksacin 250 mg x 1 oral - test",
+                    "kortTittel": "Ciprofloksacin 250 mg x 1 oral",
+                    "koder": {
+                      "SNOMED-CT": [
+                        "778777005"
+                      ]
+                    },
+                    "data": {
+                      "legemiddeldoseringsregime": {
+                        "koder": [
+                          {
+                            "system": "http://snomed.info/sct",
+                            "code": "778777005",
+                            "display": "Ciprofloksacin oral"
+                          }
+                        ]
+                      },
+                      "dosering": {
+                        "dose": "250",
+                        "styrkeEnhetDosering": [
+                          {
+                            "System": "http://snomed.info/sct",
+                            "Code": "258684004",
+                            "Display": "mg"
+                          }
+                        ],
+                        "eventuellLadningsdose": "1000",
+                        "mappedStyrkeenhetEventuellLadningsdose": [
+                          {
+                            "System": "http://snomed.info/sct",
+                            "Code": "396163008",
+                            "Display": "mg/kg"
+                          }
+                        ]
+                      },
+                      "kontraindikasjoner": [
+                        {
+                          "id": "0006-0048-ae3e0570-02b2-4d80-8480-6ea04167cdd7",
+                          "tittel": "Graviditet",
+                          "kortTittel": "Graviditet - Ciprofloksacin",
+                          "tekst": "<p>Andrehåndsvalg. Humandata tyder ikke på at kinoloner slik som ofloksacin eller ciprofloksacin er teratogene. Fordi dyrestudier har vist brusk- og skjelettskader etter eksponering for fluorokinoloner, anbefales fortrinnsvis et alternativt antibiotikum.</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "372840008",
+                              "77386006"
+                            ],
+                            "ICD-10": [
+                              "Z33"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372840008",
+                                  "display": "Ciprofloksacin"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "77386006",
+                                  "display": "Gravid"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "Z33"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-d5f21a1a-d300-44f3-a6e0-d6866d186053",
+                          "tittel": "Nedsatt nyrefunksjon",
+                          "kortTittel": "Nedsatt nyrefunksjon - ciprofloksacin",
+                          "tekst": "<p>Endret dosering, se&nbsp;<a href=\"https://www.helsedirektoratet.no/retningslinjer/antibiotika-i-sykehus/kontraindikasjoner/antibiotika-og-redusert-nyrefunksjon/1-Tabell%20Dosering%20redusert%20nyrefunksjon.pdf\">OUS tabell for dosering av antiinfektiva ved redusert nyrefunksjon</a>.</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "372840008",
+                              "76114004"
+                            ],
+                            "ICD-10": [
+                              "R94.4"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372840008",
+                                  "display": "Ciprofloksacin"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "76114004",
+                                  "display": "Nedsatt nyrefunksjon"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "R94.4"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-0ceb8084-9bd4-4662-aba4-76eeb17d5ca4",
+                          "tittel": "Amming",
+                          "kortTittel": "Amming - Ciprofloksacin",
+                          "tekst": "<p>Begrenset klinisk erfaring. Tredjehåndsvalg. Overgang til morsmelk er liten til moderat. Brysternærte barn bør observeres for diaré og andre gastrointestinale bivirkninger.</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "372840008",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372840008",
+                                  "display": "Ciprofloksacin"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-499f18af-9cc5-4733-a7f5-5cc92c22d517",
+                          "tittel": "Ciprofloksasin bivirkninger",
+                          "kortTittel": "Ciprofloksasin bivirkninger",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "372840008",
+                              "292949001"
+                            ],
+                            "ICD-10": [
+                              "T88.7"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372840008",
+                                  "display": "Ciprofloksacin"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "292949001",
+                                  "display": "Ciprofloksacin bivirkning"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "T88.7"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-5293e0e2-1b65-4fb1-a6dc-a4da7ec88ef8",
+                          "tittel": "Eldre kinoloner og graviditet",
+                          "kortTittel": "Eldre kinoloner og graviditet",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "372840008",
+                              "387551000",
+                              "77386006"
+                            ],
+                            "ICD-10": [
+                              "Z33"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372840008",
+                                  "display": "Ciprofloksacin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387551000",
+                                  "display": "Ofloksacin"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "77386006",
+                                  "display": "Gravid"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "Z33"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-628aa525-e8fe-45a8-93d1-482be27b1954",
+                          "tittel": "Kinoloner og amming",
+                          "kortTittel": "Kinoloner og amming",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "372840008",
+                              "387551000",
+                              "387552007",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372840008",
+                                  "display": "Ciprofloksacin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387551000",
+                                  "display": "Ofloksacin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387552007",
+                                  "display": "Levofloksacin"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-c978c7ff-88f8-4e6f-b07b-fc14769ae8e1",
+                          "tittel": "Nyere kinoloner og graviditet",
+                          "kortTittel": "Nyere kinoloner og graviditet",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "372840008",
+                              "387551000",
+                              "77386006"
+                            ],
+                            "ICD-10": [
+                              "Z33"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372840008",
+                                  "display": "Ciprofloksacin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387551000",
+                                  "display": "Ofloksacin"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "77386006",
+                                  "display": "Gravid"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "Z33"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "0006-0047-2f141711-73e0-43f3-b868-fc47464a503b",
+                    "tittel": "Dicloxacillin",
+                    "kortTittel": "Dicloxacillin",
+                    "tekst": "Her er et fritekstfelt.",
+                    "koder": {
+                      "SNOMED-CT": [
+                        "778992001",
+                        "72607000"
+                      ]
+                    },
+                    "data": {
+                      "legemiddeldoseringsregime": {
+                        "koder": [
+                          {
+                            "system": "http://snomed.info/sct",
+                            "code": "778992001",
+                            "display": "Dikloksacillin oral"
+                          }
+                        ]
+                      },
+                      "administrasjonsvei": {
+                        "koder": [
+                          {
+                            "system": "http://snomed.info/sct",
+                            "code": "72607000",
+                            "display": "Intratekalt"
+                          }
+                        ]
+                      },
+                      "kontraindikasjoner": [
+                        {
+                          "id": "0006-0048-c6c9de5a-cb96-416a-a7d3-b21659364baf",
+                          "tittel": "Penicilliner og graviditet",
+                          "kortTittel": "Penicilliner og graviditet",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "323389000",
+                              "387170002",
+                              "372725003",
+                              "372873001",
+                              "372687004",
+                              "372836004",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "323389000",
+                                  "display": "Benzylpenicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387170002",
+                                  "display": "Ampicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372725003",
+                                  "display": "Fenoksymetylpenicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372873001",
+                                  "display": "Dikloksacillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372687004",
+                                  "display": "Amoksicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372836004",
+                                  "display": "Piperacillin"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-6c4ec739-edf4-4506-bb4b-0a1b13d82343",
+                          "tittel": "Penicilliner og penicillin straksallergi",
+                          "kortTittel": "Penicilliner og penicillin straksallergi",
+                          "tekst": "<p>Pasienter som har hatt sikker straksallergisk reaksjon på penicillin skal ikke behandles med penicilliner. Kan eventuelt&nbsp;henvises allergolog for utredning av allergi mot betalaktam-antibiotika ved behov for behandling med penicilliner.<br><a href=\"https://helsedirektoratet-st.azure-api.net/innhold/kapitler/0006-0041-2f6bbbd8-dd93-433c-bf6f-627ef666eb72\">Mer om penicillin straksallergi og annen reaksjon på penicillin</a>.</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "323389000",
+                              "387170002",
+                              "372725003",
+                              "372873001",
+                              "372687004",
+                              "372836004"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "323389000",
+                                  "display": "Benzylpenicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387170002",
+                                  "display": "Ampicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372725003",
+                                  "display": "Fenoksymetylpenicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372873001",
+                                  "display": "Dikloksacillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372687004",
+                                  "display": "Amoksicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372836004",
+                                  "display": "Piperacillin"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "absolutt"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-0b6156fc-4a88-4c79-9a5d-11547de0a5e7",
+                          "tittel": "Penicilliner og penicillinreaksjon, ikke straksallergi",
+                          "kortTittel": "Penicilliner og penicillinreaksjon, ikke straksallergi",
+                          "tekst": "<p>Reaksjonens type, alvorlighetsgrad, sikkert sammenfall i tid, nylig reaksjon, trekker i retning av at penicilliner bør unngås. Gastrointestinale bivirkninger av penicillin er vanlig, og utgjør ikke en kontraindikasjon. Kan eventuelt&nbsp;henvises allergolog for utredning av allergi mot betalaktam-antibiotika ved behov for behandling med penicilliner.<br><a href=\"https://helsedirektoratet-st.azure-api.net/innhold/kapitler/0006-0041-2f6bbbd8-dd93-433c-bf6f-627ef666eb72\">Mer om penicillin straksallergi og annen reaksjon på penicillin.</a></p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "323389000",
+                              "387170002",
+                              "372725003",
+                              "372873001",
+                              "372687004",
+                              "372836004"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "323389000",
+                                  "display": "Benzylpenicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387170002",
+                                  "display": "Ampicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372725003",
+                                  "display": "Fenoksymetylpenicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372873001",
+                                  "display": "Dikloksacillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372687004",
+                                  "display": "Amoksicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372836004",
+                                  "display": "Piperacillin"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-d43beea4-942a-40a0-90ad-b30858b7297b",
+                          "tittel": "Penicilliner og amming",
+                          "kortTittel": "Penicilliner og amming",
+                          "tekst": "<p>Her kommer en tekst om penicilliner og amming</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "323389000",
+                              "387170002",
+                              "372725003",
+                              "372873001",
+                              "372687004",
+                              "372836004",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "323389000",
+                                  "display": "Benzylpenicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387170002",
+                                  "display": "Ampicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372725003",
+                                  "display": "Fenoksymetylpenicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372873001",
+                                  "display": "Dikloksacillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372687004",
+                                  "display": "Amoksicillin"
+                                },
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "372836004",
+                                  "display": "Piperacillin"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "overskrift": "Behandling med antibiotika for barn",
+                "doseringregimer": [
+                  {
+                    "id": "0006-0047-567ebaed-bea1-45cd-ae98-063286c17828",
+                    "tittel": "Trimetoprim/sulfametoksasol 160/800 mg x 1 oral",
+                    "kortTittel": "Trimetoprim/sulfametoksasol 160/800 mg x 1 oral",
+                    "tekst": "Trimetoprim/sulfametoksasol 160/800 mg",
+                    "koder": {
+                      "SNOMED-CT": [
+                        "780537006"
+                      ]
+                    },
+                    "data": {
+                      "legemiddeldoseringsregime": {
+                        "koder": [
+                          {
+                            "system": "http://snomed.info/sct",
+                            "code": "780537006",
+                            "display": "Sulfametoksazol og trimetoprim oral"
+                          }
+                        ]
+                      },
+                      "kontraindikasjoner": [
+                        {
+                          "id": "0006-0048-bde1f23c-f10a-49f1-8258-40a21d0a46f6",
+                          "tittel": "Amming",
+                          "kortTittel": "Amming - sulfametoksasol",
+                          "tekst": "<p>Kan brukes. Overgang til morsmelk er liten.&nbsp;</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "363528007",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "363528007",
+                                  "display": "Sulfametoksazol"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "ingen"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-87f07e12-5af0-4549-a5c5-140b3a405ece",
+                          "tittel": "Graviditet",
+                          "kortTittel": "Graviditet - sulfametoksasol",
+                          "tekst": "<p>Det er ikke holdepunkter for&nbsp;teratogene effekter hos mennesker.&nbsp; Alternativt antibiotikum bør likevel benyttes i første trimester fordi trimetoprim er en folsyreantagonist. Mangel på folsyre kan øke&nbsp;risiko for nevralrørsdefekter. Alternativt antibiotikum bør brukes i tredje trimester fordi det er en teoretisk risiko for hyperbilirubinemi hos nyfødte ved bruk av sulfa-preparater.</p><p>&nbsp;</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "363528007",
+                              "77386006"
+                            ],
+                            "ICD-10": [
+                              "Z33"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "363528007",
+                                  "display": "Sulfametoksazol"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "77386006",
+                                  "display": "Gravid"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "Z33"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-54b6178a-9c22-4055-966b-285c10473791",
+                          "tittel": "Nedsatt nyrefunksjon",
+                          "kortTittel": "Nedsatt nyrefunksjon - sulfametoksasol",
+                          "tekst": "<p>Endret dosering, se&nbsp;<a href=\"https://www.helsedirektoratet.no/retningslinjer/antibiotika-i-sykehus/kontraindikasjoner/antibiotika-og-redusert-nyrefunksjon/1-Tabell%20Dosering%20redusert%20nyrefunksjon.pdf\">OUS tabell for dosering av antiinfektiva ved redusert nyrefunksjon</a>.</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "363528007",
+                              "76114004"
+                            ],
+                            "ICD-10": [
+                              "R94.4"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "363528007",
+                                  "display": "Sulfametoksazol"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "76114004",
+                                  "display": "Nedsatt nyrefunksjon"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "R94.4"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-d18f1184-8d87-4a54-bdd0-5e29c74a5fe8",
+                          "tittel": "sulfonamider og amming",
+                          "kortTittel": "sulfonamider og amming",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "363528007",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "363528007",
+                                  "display": "Sulfametoksazol"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-4412f71a-549d-4a70-8694-4ce9af2f3566",
+                          "tittel": "sulfonamider og graviditet",
+                          "kortTittel": "sulfonamider og graviditet",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "363528007",
+                              "77386006"
+                            ],
+                            "ICD-10": [
+                              "Z33"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "363528007",
+                                  "display": "Sulfametoksazol"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "77386006",
+                                  "display": "Gravid"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "Z33"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "absolutt"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-045dee0b-e577-41fd-bbbb-e97ea1092efc",
+                          "tittel": "Graviditet",
+                          "kortTittel": "Graviditet - Trimetoprim",
+                          "tekst": "<p>Det er ikke holdepunkter for&nbsp;teratogene effekter hos mennesker.&nbsp; Alternativt antibiotikum bør likevel benyttes i første trimester fordi trimetoprim er en folsyreantagonist. Mangel på folsyre kan øke&nbsp;risiko for nevralrørsdefekter. Alternativt antibiotikum bør brukes i tredje trimester fordi det er en teoretisk risiko for hyperbilirubinemi hos nyfødte ved bruk av sulfa-preparater.</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001",
+                              "77386006"
+                            ],
+                            "ICD-10": [
+                              "Z33"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "77386006",
+                                  "display": "Gravid"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "Z33"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-f7dfdc9c-e03b-4d1a-8b3d-d655db504183",
+                          "tittel": "Nedsatt nyrefunksjon",
+                          "kortTittel": "Nedsatt nyrefunksjon - Trimetoprim",
+                          "tekst": "<p>Endret dosering, se&nbsp;<a href=\"https://www.helsedirektoratet.no/retningslinjer/antibiotika-i-sykehus/kontraindikasjoner/antibiotika-og-redusert-nyrefunksjon/1-Tabell%20Dosering%20redusert%20nyrefunksjon.pdf\">OUS tabell for dosering av antiinfektiva ved redusert nyrefunksjon</a>.</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001",
+                              "76114004"
+                            ],
+                            "ICD-10": [
+                              "R94.4"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "76114004",
+                                  "display": "Nedsatt nyrefunksjon"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "R94.4"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-40e3194d-acce-4b95-a175-13a186152bfb",
+                          "tittel": "Amming",
+                          "kortTittel": "Amming - Trimetoprim",
+                          "tekst": "<p>Kan brukes. Overgang til morsmelk er liten.&nbsp;</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "ingen"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-8fd4edfd-7881-48e2-b9c0-e49ee8c084a4",
+                          "tittel": "test trimetoprim",
+                          "kortTittel": "test trimetoprim",
+                          "tekst": "<p>hvilken trimetoprim funker?</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "id": "0006-0048-218dd3a3-c2a3-4088-be38-3f3d3bcf08d8",
+                          "tittel": "Trimetoprim og amming",
+                          "kortTittel": "Trimetoprim og amming",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "id": "0006-0048-43603f39-c2ec-44a5-bc27-ba59999d8868",
+                          "tittel": "Trimetoprim og graviditet",
+                          "kortTittel": "Trimetoprim og graviditet",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001",
+                              "77386006"
+                            ],
+                            "ICD-10": [
+                              "Z33"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "77386006",
+                                  "display": "Gravid"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "Z33"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ],
+            "alternativebehandlingsregimer": [
+              {
+                "overskrift": "Likeverdig alternativ med nitrofurantoin ved amming",
+                "kodeForTilstand": {
+                  "koder": [
+                    {
+                      "system": "http://snomed.info/sct",
+                      "code": "69840006",
+                      "display": "Amming"
+                    }
+                  ]
+                },
+                "doseringregimer": [
+                  {
+                    "id": "0006-0047-fced0648-bc9c-4a24-bf79-272590fdc961",
+                    "tittel": "Nitrofurantoin 50 mg x 1 oral",
+                    "kortTittel": "Nitrofurantoin 50 mg x 1 oral",
+                    "koder": {
+                      "SNOMED-CT": [
+                        "780022001"
+                      ]
+                    },
+                    "data": {
+                      "legemiddeldoseringsregime": {
+                        "koder": [
+                          {
+                            "system": "http://snomed.info/sct",
+                            "code": "780022001",
+                            "display": "Nitrofurantoin oral"
+                          }
+                        ]
+                      },
+                      "dosering": {
+                        "dose": "50",
+                        "styrkeEnhetDosering": [
+                          {
+                            "System": "http://snomed.info/sct",
+                            "Code": "258684004",
+                            "Display": "mg"
+                          }
+                        ],
+                        "eventuellLadningsdose": {},
+                        "mappedStyrkeenhetEventuellLadningsdose": []
+                      },
+                      "kontraindikasjoner": [
+                        {
+                          "id": "0006-0048-53ce9548-b671-4491-8a34-5cae69d719d4",
+                          "tittel": "Nitrofurantoin og amming",
+                          "kortTittel": "Nitrofurantoin og amming",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "373543005",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "373543005",
+                                  "display": "Nitrofurantoin"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "overskrift": "Likeverdig alternativ med trimetoprim",
+                "doseringregimer": []
+              },
+              {
+                "overskrift": "Alternativ med trimetoprim-sulfametoksazol",
+                "doseringregimer": []
+              }
+            ],
+            "overgangtiloralbehandlingsregimer": [
+              {
+                "overskrift": "Overgang til oralt behandlingsregime",
+                "kodeForTilstand": {
+                  "koder": [
+                    {
+                      "system": "http://snomed.info/sct",
+                      "code": "363518003",
+                      "display": "Malignant tumor of kidney"
+                    },
+                    {
+                      "system": "ICD-10",
+                      "code": "C64"
+                    }
+                  ]
+                },
+                "doseringregimer": [
+                  {
+                    "id": "0006-0047-209fa75d-17ad-4a3a-89e4-a7e2cf53d9ed",
+                    "tittel": "Trimetoprim 300 mg x 1 oral",
+                    "kortTittel": "Trimetoprim 300 mg x 1 oral",
+                    "koder": {
+                      "SNOMED-CT": [
+                        "780716000"
+                      ]
+                    },
+                    "data": {
+                      "legemiddeldoseringsregime": {
+                        "koder": [
+                          {
+                            "system": "http://snomed.info/sct",
+                            "code": "780716000",
+                            "display": "Trimetoprim oral"
+                          }
+                        ]
+                      },
+                      "dosering": {
+                        "dose": "300",
+                        "styrkeEnhetDosering": [
+                          {
+                            "System": "http://snomed.info/sct",
+                            "Code": "258684004",
+                            "Display": "mg"
+                          }
+                        ],
+                        "eventuellLadningsdose": {},
+                        "mappedStyrkeenhetEventuellLadningsdose": []
+                      },
+                      "kontraindikasjoner": [
+                        {
+                          "id": "0006-0048-045dee0b-e577-41fd-bbbb-e97ea1092efc",
+                          "tittel": "Graviditet",
+                          "kortTittel": "Graviditet - Trimetoprim",
+                          "tekst": "<p>Det er ikke holdepunkter for&nbsp;teratogene effekter hos mennesker.&nbsp; Alternativt antibiotikum bør likevel benyttes i første trimester fordi trimetoprim er en folsyreantagonist. Mangel på folsyre kan øke&nbsp;risiko for nevralrørsdefekter. Alternativt antibiotikum bør brukes i tredje trimester fordi det er en teoretisk risiko for hyperbilirubinemi hos nyfødte ved bruk av sulfa-preparater.</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001",
+                              "77386006"
+                            ],
+                            "ICD-10": [
+                              "Z33"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "77386006",
+                                  "display": "Gravid"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "Z33"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-f7dfdc9c-e03b-4d1a-8b3d-d655db504183",
+                          "tittel": "Nedsatt nyrefunksjon",
+                          "kortTittel": "Nedsatt nyrefunksjon - Trimetoprim",
+                          "tekst": "<p>Endret dosering, se&nbsp;<a href=\"https://www.helsedirektoratet.no/retningslinjer/antibiotika-i-sykehus/kontraindikasjoner/antibiotika-og-redusert-nyrefunksjon/1-Tabell%20Dosering%20redusert%20nyrefunksjon.pdf\">OUS tabell for dosering av antiinfektiva ved redusert nyrefunksjon</a>.</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001",
+                              "76114004"
+                            ],
+                            "ICD-10": [
+                              "R94.4"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "76114004",
+                                  "display": "Nedsatt nyrefunksjon"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "R94.4"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "relativ"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-40e3194d-acce-4b95-a175-13a186152bfb",
+                          "tittel": "Amming",
+                          "kortTittel": "Amming - Trimetoprim",
+                          "tekst": "<p>Kan brukes. Overgang til morsmelk er liten.&nbsp;</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            },
+                            "alvorlighetsgrad": "ingen"
+                          }
+                        },
+                        {
+                          "id": "0006-0048-8fd4edfd-7881-48e2-b9c0-e49ee8c084a4",
+                          "tittel": "test trimetoprim",
+                          "kortTittel": "test trimetoprim",
+                          "tekst": "<p>hvilken trimetoprim funker?</p>",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            }
+                          },
+                          "tekniskeData": {
+                            "infoId": "8fd4edfd-7881-48e2-b9c0-e49ee8c084a4",
+                            "infoType": "kontraindikasjon"
+                          },
+                          "links": [],
+                          "dokumentType": "Infobit",
+                          "sistImportertTilHapi": "2021-08-10T12:35:16"
+                        },
+                        {
+                          "id": "0006-0048-218dd3a3-c2a3-4088-be38-3f3d3bcf08d8",
+                          "tittel": "Trimetoprim og amming",
+                          "kortTittel": "Trimetoprim og amming",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001",
+                              "69840006"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "69840006",
+                                  "display": "Amming"
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        {
+                          "id": "0006-0048-43603f39-c2ec-44a5-bc27-ba59999d8868",
+                          "tittel": "Trimetoprim og graviditet",
+                          "kortTittel": "Trimetoprim og graviditet",
+                          "koder": {
+                            "SNOMED-CT": [
+                              "387179001",
+                              "77386006"
+                            ],
+                            "ICD-10": [
+                              "Z33"
+                            ]
+                          },
+                          "data": {
+                            "virkestoff": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "387179001",
+                                  "display": "Trimetoprim"
+                                }
+                              ]
+                            },
+                            "tilstand": {
+                              "koder": [
+                                {
+                                  "system": "http://snomed.info/sct",
+                                  "code": "77386006",
+                                  "display": "Gravid"
+                                },
+                                {
+                                  "system": "ICD-10",
+                                  "code": "Z33"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "overskrift": "Ikke-medikamentell behandling",
+        "behandling": {
+          "id": "0006-0046-e46e80ae-655f-446c-b558-60ebfb78e97a",
+          "tittel": "Behandling uten legemiddel",
+          "kortTittel": "Behandling uten legemiddel",
+          "tekst": "<p>Det er et likeverdig alternativ å hvile og ikke bruke legemidler. Vurder legemidler på nytt etter 2 døgn.</p>",
+          "data": {}
+        }
+      }
+    ]
+  },
+  "links": [
+    {
+      "rel": "forelder",
+      "type": "kapittel",
+      "href": "https://helsedirektoratet-st.azure-api.net/innhold/kapitler/0006-0041-da51f612-8e83-40f1-9817-65dc403a7100",
+      "strukturId": "0006-7190eb85-9574-406f-9ed7-ba3396913536-structure",
+      "$title": "Kapittel - modell 3"
+    },
+    {
+      "rel": "barn",
+      "type": "pico",
+      "href": "https://helsedirektoratet-st.azure-api.net/innhold/picoer/0006-0004-7ae4bda8-f130-4bb0-aff8-5b9e1e96c1cc",
+      "strukturId": "0006-7190eb85-9574-406f-9ed7-ba3396913536-structure",
+      "$title": "Pasienter med akutt nektrotiserende pankretitt"
+    },
+    {
+      "rel": "barn",
+      "type": "referanse",
+      "href": "https://helsedirektoratet-st.azure-api.net/innhold/referanser/0006-0013-3c081ca1-3440-4ba0-9bd0-bdf51d069461",
+      "strukturId": "0006-7190eb85-9574-406f-9ed7-ba3396913536-structure",
+      "$title": "Antibiotics for preventing meningococcal infections."
+    },
+    {
+      "rel": "root",
+      "type": "retningslinje",
+      "href": "https://helsedirektoratet-st.azure-api.net/innhold/retningslinjer/0006-0001-7190eb85-9574-406f-9ed7-ba3396913536",
+      "strukturId": "0006-7190eb85-9574-406f-9ed7-ba3396913536-structure",
+      "$title": "Retningslinje - modell 3"
+    },
+    {
+      "rel": "publikasjon",
+      "type": "retningslinje",
+      "href": "https://helsedirektoratet-st.azure-api.net/innhold/publikasjoner/0006-7190eb85-9574-406f-9ed7-ba3396913536-structure",
+      "strukturId": "0006-7190eb85-9574-406f-9ed7-ba3396913536-structure"
+    }
+  ]
+}
