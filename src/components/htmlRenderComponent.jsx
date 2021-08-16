@@ -218,11 +218,14 @@ export const HTMLRender = class HTMLRender extends React.Component {
           ) : null}
           {item?.data?.behandlinger ? (
             <CollapsibleContent>
-                {/* {this.renderItemBehandlinger(JSON.stringify(item.data.behandlinger))}{" "} */}
-                <div>test print</div>
-                <div
-                  dangerouslySetInnerHTML={{ __html: JSON.stringify(item.data) }}
-              ></div>
+                {this.renderItemBehandlinger(item.data.behandlinger)}
+                {/* commented praktisk */}
+                {/* {item?.data?.praktisk ?
+                  <div>
+                    <b>Praktisk</b>
+                    <div dangerouslySetInnerHTML={{ __html: item.data.praktisk.replace(/\\t/g, "")}} ></div>
+                  </div> : null
+                } */}
             </CollapsibleContent>
           ) : null}
 
@@ -274,17 +277,65 @@ export const HTMLRender = class HTMLRender extends React.Component {
   
   /////////////////////////////////////////
   // rendering behandlinger
-  renderItemBehandlinger(items) {
-    console.log(items);
-    console.log("Жопа!");
+  renderItemBehandlinger(behandlinger) {
+    console.log(behandlinger);
+    console.log("Test!");
       
-    if (items != null) {
-      return items.map((item, index) => (
-        <div key={index}>
-          {item.data ? item.data.behandlinger : ""}
-        </div>
-      ));
+    if (behandlinger != null) {
+      return (
+        behandlinger.map((item, index) => (
+          <div key={index}>
+            <b>{item.overskrift ? item.overskrift : ""}</b>
+            <div dangerouslySetInnerHTML={{ __html: item.behandling.tekst}}></div>
+
+            <b>Standard behandlingsregimer med antibiotika</b>
+
+            {item?.behandling?.data?.standardbehandlingsregimer ?
+              item.behandling.data.standardbehandlingsregimer.map((regime, regIndex) => {
+                return (
+                  <div key={regIndex}>
+                    {/* standardbehandlingsregimer for voksne eller barn */}
+                    <b>{regime.overskrift}</b>
+
+                    {regime?.doseringregimer ? 
+                      regime.doseringregimer.map((doseregime, dosregindex) => {
+                        return (
+                          <div key={dosregindex}>
+                            <em>Dose regime marker (delete this string later) - {doseregime.kortTittel}</em>
+
+                            {doseregime?.data?.kontraindikasjoner ?
+                              doseregime.data.kontraindikasjoner.map((kont, kontindex) => {
+
+                                let kontKodeTitle = kont?.data?.tilstand?.koder.find(kode => kode.display !== undefined);
+                                let drugKodeTitle = kont?.data?.virkestoff?.koder.find(kode => kode.display !== undefined);
+                                let kontText = kont?.tekst || "Text field was not provided!";
+
+                                return (
+                                  <div key={kontindex}>
+                                    {kontKodeTitle ? <div>-Title: {kontKodeTitle.display}</div> : null}
+                                    {drugKodeTitle ? <div>=Drug: {drugKodeTitle.display}</div> : null}
+                                    {/* {kontText ? <div>=Tekst: {kontText}</div> : null} */}
+                                    <div dangerouslySetInnerHTML={{ __html: kontText}}></div>
+
+                                  </div>
+                                );
+                              })
+                            : null}
+                          </div>);
+                      })
+                    : null}
+                  </div>
+                );
+              })
+            : null}
+
+            
+
+          </div>
+        ))
+      );
     }
+
   }
   //////////////////////
 
