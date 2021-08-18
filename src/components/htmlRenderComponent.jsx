@@ -445,14 +445,15 @@ export const HTMLRender = class HTMLRender extends React.Component {
                         return (
                           <div key={dosregindex}>
                               
-                            {/* the whole name of the medication */}
+                            {/* the full name of the medication */}
                             <div className="form-group" style={{color: "blue"}}> 
 
-                              {/* legemiddeldoseringsregime (substance and form) */}
                               {doseregime?.data?.legemiddeldoseringsregime.koder ?
                                 doseregime?.data?.legemiddeldoseringsregime.koder.map((legemiddeldoseringsregime, legemindex) => {
                                   return (
                                     <div key={legemindex}>
+
+                                      {/* substance and form */}
                                       {legemiddeldoseringsregime.display}
                                       {" "}
 
@@ -468,8 +469,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                               {styrkeEnhetDosering.display}
                                             </span>
                                           );
-                                        }
-                                      )
+                                        })
                                       : null}
                                     
                                     </div>
@@ -479,45 +479,79 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
                             </div>
 
+                            {/* /////// DELETE ALL THIS PIECE OF SHIT IF IT WORKS */}
                             {/* here should be the state and the substance name */}
-                            {doseregime?.data?.kontraindikasjoner ?
-                              doseregime.data.kontraindikasjoner.map((kont, kontindex) => {
+                            {doseregime?.data?.kontraindikasjoner ? "test print!" : null 
+                              // doseregime.data.kontraindikasjoner.map((kont, kontindex) => {
+
+                                // let kontKodeTitle = kont?.data?.tilstand?.koder.find(kode => kode.display !== undefined);
+                                // // let drugKodeTitle = kont?.data?.virkestoff?.koder.find(kode => kode.display !== undefined);
+                                // // to list out all the virkestoff method map should be used instead of find, so:
+                                // let drugKodeTitle = kont?.data?.virkestoff?.koder.find((kode, kodindexstandard) => {
+                                //   return (
+                                //     <div key={kodindexstandard}>
+                                //       <p style={{color: "orange"}}>here is substance from virkestoff</p>
+                                //       <p>{kode.display}</p>
+                                //     </div>
+                                //   );
+                                // });
+                                // let kontText = kont?.tekst || "Text field in kontraindikasjoner.tekst was not provided!";
+
+                                // return (
+                                //   <div key={kontindex} style={{color: "orange"}}>
+                                //     {kontKodeTitle ? <div><b>-Title (overgangtiloralbehandlingsregimer): test{kontKodeTitle.display}</b></div> : null}
+                                //     {drugKodeTitle ? <div>=Drug (overgangtiloralbehandlingsregimer): {drugKodeTitle.display}</div> : null}
+                                //     {/* {kontText ? <div>=Tekst: {kontText}</div> : null}
+                                //     <h1>this place is about the text from overgangtiloralbehandlingsregimer</h1> */}
+                                //     <div dangerouslySetInnerHTML={{ __html: kontText}}></div>
+                                //   </div>
+                                // );
+                                // //////////
 
                                 // let stateName = kont?.data?.tilstand?.koder.find(kode => kode.display !== undefined);
                                 // in that case will be showed only those who is presented, but there should be all of them
-                                let tilstandkode = kont?.data?.tilstand?.koder.map((tilstandkode, kodindextilstandalter) => {
-                                  return (
-                                    <div key={kodindextilstandalter}>
-                                      <p style={{color: "red"}}>here is substance from virkestoff</p>
-                                      <p>{tilstandkode.display}</p>
-                                    </div>
-                                  );
-                                });
+                               
+                              //  <div key={kontindex}> 
+                              //   { 
+                              //     (kont?.data?.tilstand?.koder) ? 
+                              //       (
+                              //         kont?.data?.tilstand?.koder?.map((statecode, kodindextilstandalter) => {
+                              //           return (
+                              //             <div key={kodindextilstandalter}>
+                              //               <p style={{color: "red"}}>substance from virkestoff {statecode.display}</p>
+                              //             </div>
+                              //           );
+                              //         }) 
+                              //       ) 
+                              //     : null
+                              //   }
+                              //   </div>
 
-                                // let substanceName = kont?.data?.virkestoff?.koder.find(kode => kode.display !== undefined);
-                                let virkestoffkode = kont?.data?.virkestoff?.koder.map((virkestoffkode, kodindexvirkestoffalter) => {
-                                  return (
-                                    <div key={kodindexvirkestoffalter}>
-                                      <p style={{color: "red"}}>here is substance from virkestoff</p>
-                                      <p>{virkestoffkode.display}</p>
-                                    </div>
-                                  );
-                                });
+                                // // let substanceName = kont?.data?.virkestoff?.koder.find(kode => kode.display !== undefined);
+                                // let substancecodevar = kont?.data?.virkestoff?.koder.map((substancecode, kodindexvirkestoffalter) => {
+                                //   return (
+                                //     <div key={kodindexvirkestoffalter}>
+                                //       <p style={{color: "red"}}>here is substance from virkestoff</p>
+                                //       <p>{substancecode.display}</p>
+                                //     </div>
+                                //   );
+                                // });
+                                // let kontText = kont?.tekst || "Text field in kontraindikasjoner.tekst was not provided!";
 
-                                let kontText = kont?.tekst || "Text field in kontraindikasjoner.tekst was not provided!";
+                                // return (
+                                //   <div key={kontindex} style={{color: "orange"}}>
+                                //     {substancecode ? <div><b>-Title (alternativebehandlingsregimer): {substancecodevar.display}</b></div> : null}
+                                //     {statecodevar ? <div>=Drug (alternativebehandlingsregimer): {substancecode.display}</div> : null}
+                                //     {/* {kontText ? <div>=Tekst: {kontText}</div> : null}
+                                //     <h1>this place is about the text from alternativebehandlingsregimer</h1> */}
+                                //     <div dangerouslySetInnerHTML={{ __html: kontText}}></div>
 
-                                return (
-                                  <div key={kontindex} style={{color: "orange"}}>
-                                    {virkestoffkode ? <div><b>-Title (alternativebehandlingsregimer): {virkestoffkode.display}</b></div> : null}
-                                    {tilstandkode ? <div>=Drug (alternativebehandlingsregimer): {tilstandkode.display}</div> : null}
-                                    {/* {kontText ? <div>=Tekst: {kontText}</div> : null}
-                                    <h1>this place is about the text from alternativebehandlingsregimer</h1> */}
-                                    <div dangerouslySetInnerHTML={{ __html: kontText}}></div>
-
-                                  </div>
-                                );
+                                //   </div>
+                                // );
                               })
-                            : null}
+                            {/* : null} */}
+                            {/* ///////////////////// */}
+
                           </div>);
                       })
                     : null}
@@ -526,8 +560,42 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       regime.doseringregimer.map((doseregime, dosregindex) => {
                         return (
                           <div key={dosregindex}>
-                            <b><h2>here is the test of overskrift inside doseringregime: {doseregime?.overskrift}</h2></b>
-                            <b style={{color: "green"}}>{item?.behandling?.data?.alternativebehandlingsregimer.regime?.doseregime?.overskrift ? item?.behandling?.data?.alternativebehandlingsregimer.regime?.doseregime?.overskrift : "no dosering regime"}</b>
+                              {doseregime?.data.kontraindikasjoner ? 
+                                doseregime?.data.kontraindikasjoner.map((item, index)=>{
+                                  return (
+                                    <div key={index}>
+                                      {
+                                        item.data.tilstand.koder.map((inneritemt, innerindext)=> {
+                                          return (
+                                            <div key={innerindext}>
+                                              {
+                                                <b>Tilstand: {" "} {inneritemt.display}</b>
+                                              }
+                                            </div>
+                                          );
+
+                                        })
+                                      }
+                                      {
+                                        item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
+                                          return (
+                                            <div key={innerindexv}>
+                                              {
+                                                <b>Virkestoff: {" "} {inneritemv.display}</b>
+                                              }
+                                            </div>
+                                          );
+                                        })
+                                      }
+                                      {
+                                        item?.tekst ? item?.tekst : "No tekst for this kontraindikasjonen!"
+                                      }
+                                    </div>
+                                  );
+                                }
+                              )
+                              : null}
+
                           </div>);
                       })
                     : null}
@@ -550,16 +618,14 @@ export const HTMLRender = class HTMLRender extends React.Component {
                 return (
                   <div key={regIndex}>
                     {/* overgangtiloralbehandlingsregimer */}
-                    <b>{regime.overskrift}</b>
+                    {/* make it instead of the harcoded title?:  */}
+                    <b>{regime.overskrift}</b> 
 
                     {regime?.doseringregimer ? 
                       regime.doseringregimer.map((doseregimetiloral, dosregindex) => {
                         return (
                           <div key={dosregindex}>
-                            <em>Dose regime marker (delete this string later) - {doseregimetiloral.kortTittel}</em>
 
-
-                            <p> Will it work or wont? </p>
                             {/* the whole name of the medication */}
                             <div className="form-group" style={{color: "blue"}}> 
 
@@ -568,15 +634,18 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                 doseregimetiloral?.data?.legemiddeldoseringsregime.koder.map((legemiddeldosregimetiloral, legemindextiloral) => {
                                   return (
                                     <div key={legemindextiloral}>
+
+                                      {/* the drug name */}
                                       {legemiddeldosregimetiloral.display}
                                       {" "}
 
                                       {/* 50 */}
                                       {doseregimetiloral?.data?.dosering?.dose ?
                                         doseregimetiloral.data.dosering.dose 
-                                      : <div style={{color: "green"}}>
-                                          "ERROR: There is no dosering.dose field in one of the behandling. Please, check the way: item?.behandling?.data?.standardbehandlingsregimer.regime.doseringregimer.doseregimestand?.data?.dosering.dose!"
-                                        </div> 
+                                      : null
+                                        // <div style={{color: "green"}}>
+                                        //   "ERROR: There is no dosering.dose field in one of the behandling. Please, check the way: item?.behandling?.data?.standardbehandlingsregimer.regime.doseringregimer.doseregimestand?.data?.dosering.dose!"
+                                        // </div> 
                                       }
                                       {" "}
 
@@ -588,8 +657,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                               {styrkeEnhetDoseringstand.display}
                                             </span>
                                           );
-                                        }
-                                      )
+                                        })
                                       : null}
                                     </div>
                                   );
@@ -598,6 +666,8 @@ export const HTMLRender = class HTMLRender extends React.Component {
                             </div>
 
                             {/* here should be the substance name */}
+
+                            {/* WORKING VERSION */}
                             {doseregimetiloral?.data?.kontraindikasjoner ?
                               doseregimetiloral.data.kontraindikasjoner.map((kont, kontindex) => {
 
@@ -626,6 +696,53 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                 );
                               })
                             : null}
+
+                            {/* TEST VERION */}
+                            {/* {regime?.doseringregimer ? 
+                              regime.doseringregimer.map((doseregime, dosregindex) => {
+                                return (
+                                  <div key={dosregindex}>
+                                      {doseregime?.data.kontraindikasjoner ? 
+                                        doseregime?.data.kontraindikasjoner.map((item, index)=>{
+                                          return (
+                                            <div key={index}>
+                                              {
+                                                item.data.tilstand.koder.map((inneritemt, innerindext)=> {
+                                                  return (
+                                                    <div key={innerindext}>
+                                                      {
+                                                        <b>Tilstand: {" "} {inneritemt.display}</b>
+                                                      }
+                                                    </div>
+                                                  );
+
+                                                })
+                                              }
+                                              {
+                                                item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
+                                                  return (
+                                                    <div key={innerindexv}>
+                                                      {
+                                                        <b>Virkestoff: {" "} {inneritemv.display}</b>
+                                                      }
+                                                    </div>
+                                                  );
+                                                })
+                                              }
+                                              {
+                                                item?.tekst ? item?.tekst : "No tekst for this kontraindikasjonen!"
+                                              }
+                                            </div>
+                                          );
+                                        }
+                                      )
+                                      : null}
+
+                                  </div>);
+                              })
+                            : null} */}
+                            {/* ///////// */}
+                            
                           </div>);
                       })
                     : null}
