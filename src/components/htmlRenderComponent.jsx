@@ -565,7 +565,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                   return (
                                     <div key={index}>
                                       {
-                                        item.data.tilstand.koder.map((inneritemt, innerindext)=> {
+                                        item.data?.tilstand?.koder.map((inneritemt, innerindext)=> {
                                           return (
                                             <div key={innerindext}>
                                               {
@@ -588,6 +588,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                         })
                                       }
                                       {
+                                        // <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
                                         item?.tekst ? item?.tekst : "No tekst for this kontraindikasjonen!"
                                       }
                                     </div>
@@ -665,85 +666,52 @@ export const HTMLRender = class HTMLRender extends React.Component {
                               : null}
                             </div>
 
-                            {/* here should be the substance name */}
+                            {/* here should be the substance and the state name */}
 
-                            {/* WORKING VERSION */}
-                            {doseregimetiloral?.data?.kontraindikasjoner ?
-                              doseregimetiloral.data.kontraindikasjoner.map((kont, kontindex) => {
-
-                                let kontKodeTitle = kont?.data?.tilstand?.koder.find(kode => kode.display !== undefined);
-                                // let drugKodeTitle = kont?.data?.virkestoff?.koder.find(kode => kode.display !== undefined);
-                                // to list out all the virkestoff method map should be used instead of find, so:
-                                let drugKodeTitle = kont?.data?.virkestoff?.koder.find((kode, kodindexstandard) => {
-                                  return (
-                                    <div key={kodindexstandard}>
-                                      <p style={{color: "orange"}}>here is substance from virkestoff</p>
-                                      <p>{kode.display}</p>
-                                    </div>
-                                  );
-                                });
-                                let kontText = kont?.tekst || "Text field in kontraindikasjoner.tekst was not provided!";
-
-                                return (
-                                  <div key={kontindex}>
-                                    {kontKodeTitle ? <div><b>-Title (overgangtiloralbehandlingsregimer): {kontKodeTitle.display}</b></div> : null}
-                                    {drugKodeTitle ? <div>=Drug (overgangtiloralbehandlingsregimer): {drugKodeTitle.display}</div> : null}
-                                    {/* {kontText ? <div>=Tekst: {kontText}</div> : null}
-                                    <h1>this place is about the text from overgangtiloralbehandlingsregimer</h1> */}
-                                    <div dangerouslySetInnerHTML={{ __html: kontText}}></div>
-
-                                  </div>
-                                );
-                              })
-                            : null}
+                            
 
                             {/* TEST VERION */}
-                            {/* {regime?.doseringregimer ? 
-                              regime.doseringregimer.map((doseregime, dosregindex) => {
-                                return (
-                                  <div key={dosregindex}>
-                                      {doseregime?.data.kontraindikasjoner ? 
-                                        doseregime?.data.kontraindikasjoner.map((item, index)=>{
-                                          return (
-                                            <div key={index}>
-                                              {
-                                                item.data.tilstand.koder.map((inneritemt, innerindext)=> {
-                                                  return (
-                                                    <div key={innerindext}>
-                                                      {
-                                                        <b>Tilstand: {" "} {inneritemt.display}</b>
-                                                      }
-                                                    </div>
-                                                  );
+                            {
+                              doseregimetiloral ? 
+                                doseregimetiloral.data.kontraindikasjoner.map((item, index)=>{
+                                  return (
+                                      <div key={index}>
+                                        {
+                                          item.data.tilstand?.koder.map((inneritemt, innerindext)=> {
+                                            return (
+                                              <div key={innerindext}>
+                                                {
+                                                  <b>Tilstand (TEST VERSION): {" "} {inneritemt.display}</b>
+                                                }
+                                              </div>
+                                            );
 
-                                                })
-                                              }
-                                              {
-                                                item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
-                                                  return (
-                                                    <div key={innerindexv}>
-                                                      {
-                                                        <b>Virkestoff: {" "} {inneritemv.display}</b>
-                                                      }
-                                                    </div>
-                                                  );
-                                                })
-                                              }
-                                              {
-                                                item?.tekst ? item?.tekst : "No tekst for this kontraindikasjonen!"
-                                              }
-                                            </div>
-                                          );
+                                          })
                                         }
-                                      )
-                                      : null}
+                                        {
+                                          item.data.virkestoff?.koder.map((inneritemv, innerindexv)=> {
+                                            return (
+                                              <div key={innerindexv}>
+                                                {
+                                                  <b>Virkestoff: {" "} {inneritemv.display}</b>
+                                                }
+                                              </div>
+                                            );
+                                          })
+                                        }
+                                        {
+                                          item?.tekst ? item?.tekst : "No tekst for this kontraindikasjonen!"
+                                        }
+                                      </div>
+                                    );
+                                  })
+                              : null
+                            } 
 
-                                  </div>);
-                              })
-                            : null} */}
                             {/* ///////// */}
                             
-                          </div>);
+                          </div>
+                        );
                       })
                     : null}
                   </div>
