@@ -422,9 +422,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                               item.data?.tilstand?.koder.map((inneritemt, innerindext)=> {
                                                 return (
                                                   <div key={innerindext}>
-                                                    
+                                                    {/* Tilstand */}
                                                     {
-                                                      <b>Tilstand: {" "} {inneritemt?.display ? inneritemt.display : null}</b>
+                                                      <h6>{inneritemt?.display ? inneritemt.display : null}</h6>
                                                     }
 
                                                     {/* {
@@ -440,9 +440,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                               item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
                                                 return (
                                                   <div key={innerindexv}>
-                                                    <b>Virkestoff (new style): </b>
+                                                    {/* Virkestoff */}
                                                     {
-                                                      <p>{inneritemv?.display ? inneritemv.display : null}</p>
+                                                      <b>{inneritemv?.display ? inneritemv.display : null}</b>
                                                     }
                                                   </div>
                                                 );
@@ -559,8 +559,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                             item.data?.tilstand?.koder.map((inneritemt, innerindext)=> {
                                               return (
                                                 <div key={innerindext}>
+                                                  {/* Tilstand */}
                                                   {
-                                                    <b>Tilstand: {" "} {inneritemt?.display ? inneritemt.display : null}</b>
+                                                    <h6>{inneritemt?.display ? inneritemt.display : null}</h6>
                                                   }
                                                 </div>
                                               );
@@ -571,8 +572,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                             item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
                                               return (
                                                 <div key={innerindexv}>
+                                                  {/* Virkestoff */}
                                                   {
-                                                    <b>Virkestoff: {" "} {inneritemv?.display ? inneritemv.display : null}</b>
+                                                    <b>{inneritemv?.display ? inneritemv.display : null}</b>
                                                   }
                                                 </div>
                                               );
@@ -693,8 +695,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                             item.data.tilstand?.koder.map((inneritemt, innerindext)=> {
                                               return (
                                                 <div key={innerindext}>
+                                                  {/* Tilstand */}
                                                   {
-                                                    <b>Tilstand: {" "} {inneritemt.display}</b>
+                                                    <h6>{inneritemt?.display ? inneritemt.display : null}</h6>
                                                   }
                                                 </div>
                                               );
@@ -705,8 +708,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                             item.data.virkestoff?.koder.map((inneritemv, innerindexv)=> {
                                               return (
                                                 <div key={innerindexv}>
+                                                  {/* Virkestoff */}
                                                   {
-                                                    <b>Virkestoff: {" "} {inneritemv.display}</b>
+                                                    <b>{inneritemv?.display ? inneritemv.display : null}</b>
                                                   }
                                                 </div>
                                               );
