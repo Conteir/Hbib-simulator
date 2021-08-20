@@ -399,52 +399,66 @@ export const HTMLRender = class HTMLRender extends React.Component {
                               : null}
                             </div>
 
-                            {
-                              doseregime?.data.kontraindikasjoner ? 
-                                doseregime?.data.kontraindikasjoner.map((item, index)=>{
-                                  let itemText = item?.tekst || null;
-                                  return (
-                                    <div key={index}>
-                                      
-                                      {
-                                        item.data?.tilstand?.koder.map((inneritemt, innerindext)=> {
-                                          return (
-                                            <div key={innerindext}>
-                                               
-                                              {
-                                                <b>Tilstand: {" "} {inneritemt?.display ? inneritemt.display : null}</b>
-                                              }
 
-                                              {/* {
-                                                inneritemt?.display ? (<b>Tilstand: {" "}</b> + inneritemt.display ): null
-                                              } */}
+                          
+                                <CollapsibleHead>
+                                  {
+                                    doseregime?.data.kontraindikasjoner ? 
+                                      (<h4 style={{color: "green"}}>Spesielle hensyn: </h4>)
+                                    : null
 
-                                            </div>
-                                          );
+                                  }
+                                </CollapsibleHead>
 
-                                        })
+                                <CollapsibleContent>
+                                  {
+                                    doseregime?.data.kontraindikasjoner ? 
+                                      doseregime?.data.kontraindikasjoner.map((item, index)=>{
+                                        let itemText = item?.tekst || null;
+                                        return (
+                                          <div key={index}>
+                                            
+                                            {
+                                              item.data?.tilstand?.koder.map((inneritemt, innerindext)=> {
+                                                return (
+                                                  <div key={innerindext}>
+                                                    
+                                                    {
+                                                      <b>Tilstand: {" "} {inneritemt?.display ? inneritemt.display : null}</b>
+                                                    }
+
+                                                    {/* {
+                                                      inneritemt?.display ? (<b>Tilstand: {" "}</b> + inneritemt.display ): null
+                                                    } */}
+
+                                                  </div>
+                                                );
+
+                                              })
+                                            }
+                                            {
+                                              item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
+                                                return (
+                                                  <div key={innerindexv}>
+                                                    <b>Virkestoff (new style): </b>
+                                                    {
+                                                      <p>{inneritemv?.display ? inneritemv.display : null}</p>
+                                                    }
+                                                  </div>
+                                                );
+                                              })
+                                            }
+                                            {
+                                              <div dangerouslySetInnerHTML={{ __html: itemText }}></div>
+                                            }
+                                          </div>
+                                        );
                                       }
-                                      {
-                                        item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
-                                          return (
-                                            <div key={innerindexv}>
-                                              <b>Virkestoff (new style): </b>
-                                              {
-                                                <p>{inneritemv?.display ? inneritemv.display : null}</p>
-                                              }
-                                            </div>
-                                          );
-                                        })
-                                      }
-                                      {
-                                        <div dangerouslySetInnerHTML={{ __html: itemText }}></div>
-                                      }
-                                    </div>
-                                  );
-                                }
-                              )
-                              : null
-                            }
+                                    )
+                                    : null
+                                  }
+                                  </CollapsibleContent>
+                            
 
                           </div>
                         );
@@ -520,62 +534,74 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
                             </div>
 
-                          </div>);
-                      })
-                    : null}
+                          
+                      <CollapsibleHead>
+                        {
+                          doseregime?.data?.kontraindikasjoner ? 
+                            (<h4 style={{color: "green"}}>Spesielle hensyn: </h4>)
+                          : null
+                        }
+                      </CollapsibleHead>
 
-                    {/* Tilstand, Virkestoff, text */}
-                    {regime?.doseringregimer ? 
-                      regime.doseringregimer.map((doseregime, dosregindex) => {
-                        return (
-                          <div key={dosregindex}>
-                              {doseregime?.data.kontraindikasjoner ? 
-                                doseregime?.data.kontraindikasjoner.map((item, index)=>{
-                                  let itemText = item?.tekst || null;
-                                  return (
-                                    <div key={index}>
-                                      
-                                      {
-                                        item.data?.tilstand?.koder.map((inneritemt, innerindext)=> {
-                                          return (
-                                            <div key={innerindext}>
-                                              {
-                                                <b>Tilstand: {" "} {inneritemt?.display ? inneritemt.display : null}</b>
-                                              }
-                                            </div>
-                                          );
+                      <CollapsibleContent>
+                        {/* Tilstand, Virkestoff, text */}
+                        {regime?.doseringregimer ? 
+                          regime.doseringregimer.map((doseregime, dosregindex) => {
+                            return (
+                              <div key={dosregindex}>
+                                  {doseregime?.data.kontraindikasjoner ? 
+                                    doseregime?.data.kontraindikasjoner.map((item, index)=>{
+                                      let itemText = item?.tekst || null;
+                                      return (
+                                        <div key={index}>
+                                          
+                                          {
+                                            item.data?.tilstand?.koder.map((inneritemt, innerindext)=> {
+                                              return (
+                                                <div key={innerindext}>
+                                                  {
+                                                    <b>Tilstand: {" "} {inneritemt?.display ? inneritemt.display : null}</b>
+                                                  }
+                                                </div>
+                                              );
 
-                                        })
-                                      }
-                                      {
-                                        item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
-                                          return (
-                                            <div key={innerindexv}>
-                                              {
-                                                <b>Virkestoff: {" "} {inneritemv?.display ? inneritemv.display : null}</b>
-                                              }
-                                            </div>
-                                          );
-                                        })
-                                      }
-                                      {
-                                        <div dangerouslySetInnerHTML={{ __html: itemText }}></div>
-                                      }
-                                    </div>
-                                  );
-                                }
-                              )
-                              : null}
+                                            })
+                                          }
+                                          {
+                                            item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
+                                              return (
+                                                <div key={innerindexv}>
+                                                  {
+                                                    <b>Virkestoff: {" "} {inneritemv?.display ? inneritemv.display : null}</b>
+                                                  }
+                                                </div>
+                                              );
+                                            })
+                                          }
+                                          {
+                                            <div dangerouslySetInnerHTML={{ __html: itemText }}></div>
+                                          }
+                                        </div>
+                                      );
+                                    }
+                                  )
+                                  : null}
 
-                          </div>);
-                      })
-                    : null}
+                              </div>);
+                          })
+                        : null}
+                        </CollapsibleContent>
 
 
                   </div>
                 );
               })
             : null}
+
+          </div>
+        );
+    })
+  : null}
 
 
             {/* Overgang til oral behandling */}
@@ -647,43 +673,54 @@ export const HTMLRender = class HTMLRender extends React.Component {
                             </div>
 
                             {/* here should be the substance and the state name */}
-                            {
-                              doseregime ? 
-                                doseregime.data.kontraindikasjoner.map((item, index)=>{
-                                  let itemText = item?.tekst || null;
-                                  return (
-                                      <div key={index}>
-                                        {
-                                          item.data.tilstand?.koder.map((inneritemt, innerindext)=> {
-                                            return (
-                                              <div key={innerindext}>
-                                                {
-                                                  <b>Tilstand: {" "} {inneritemt.display}</b>
-                                                }
-                                              </div>
-                                            );
 
-                                          })
-                                        }
-                                        {
-                                          item.data.virkestoff?.koder.map((inneritemv, innerindexv)=> {
-                                            return (
-                                              <div key={innerindexv}>
-                                                {
-                                                  <b>Virkestoff: {" "} {inneritemv.display}</b>
-                                                }
-                                              </div>
-                                            );
-                                          })
-                                        }
-                                        {
-                                          <div dangerouslySetInnerHTML={{ __html: itemText }}></div>
-                                        }
-                                      </div>
-                                    );
-                                  })
-                              : null
-                            } 
+                            <CollapsibleHead>
+                              {
+                                doseregime?.data?.kontraindikasjoner ?
+                                  (<h4 style={{color: "green"}}>Spesielle hensyn: </h4>)
+                                : null
+                              }
+                            </CollapsibleHead>
+
+                            <CollapsibleContent>
+                              {
+                                doseregime?.data?.kontraindikasjoner ? 
+                                  doseregime.data.kontraindikasjoner.map((item, index)=>{
+                                    let itemText = item?.tekst || null;
+                                    return (
+                                        <div key={index}>
+                                          {
+                                            item.data.tilstand?.koder.map((inneritemt, innerindext)=> {
+                                              return (
+                                                <div key={innerindext}>
+                                                  {
+                                                    <b>Tilstand: {" "} {inneritemt.display}</b>
+                                                  }
+                                                </div>
+                                              );
+
+                                            })
+                                          }
+                                          {
+                                            item.data.virkestoff?.koder.map((inneritemv, innerindexv)=> {
+                                              return (
+                                                <div key={innerindexv}>
+                                                  {
+                                                    <b>Virkestoff: {" "} {inneritemv.display}</b>
+                                                  }
+                                                </div>
+                                              );
+                                            })
+                                          }
+                                          {
+                                            <div dangerouslySetInnerHTML={{ __html: itemText }}></div>
+                                          }
+                                        </div>
+                                      );
+                                    })
+                                : null
+                              } 
+                            </CollapsibleContent>
 
                             
                           </div>
