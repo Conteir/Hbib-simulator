@@ -222,7 +222,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                 {/* commented praktisk */}
                 {item?.data?.praktisk ?
                   <div>
-                    <b style={{color: "red"}}><h3>Praktisk</h3></b>
+                    <b style={{color: "red"}}><h1>Praktisk</h1></b>
                     <div dangerouslySetInnerHTML={{ __html: item.data.praktisk.replace(/\\t/g, "")}} ></div>
                   </div> : null
                 }
@@ -231,7 +231,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                 {
                   item.data.rasjonale ? 
                     <div>
-                      <b style={{color: "red"}}><h3>Begrunnelse – dette er anbefalingen basert på</h3></b>
+                      <b style={{color: "red"}}><h1>Begrunnelse – dette er anbefalingen basert på</h1></b>
                       <div dangerouslySetInnerHTML={{ __html: item?.data.rasjonale.replace(/\\t/g, "")}} ></div>
                       
                       { (
@@ -363,40 +363,96 @@ export const HTMLRender = class HTMLRender extends React.Component {
                             {/* the whole name of the medication */}
                             <div className="form-group" style={{color: "blue"}}> 
 
-                              {doseregime?.data?.legemiddeldoseringsregime?.koder ?
-                                doseregime?.data?.legemiddeldoseringsregime.koder.map((legemiddeldoseringsregime, legemindex) => {
-                                  return (
-                                    <div key={legemindex}>
+                              {
+                                doseregime?.data?.legemiddeldoseringsregime?.koder ?
+                                  doseregime?.data?.legemiddeldoseringsregime.koder.map((legemiddeldoseringsregime, legemindex) => {
+                                    return (
+                                      <div key={legemindex}>
 
-                                      {/* substance and form */}
-                                      {legemiddeldoseringsregime?.display ? legemiddeldoseringsregime?.display : null}
-                                      {" "}
+                                        {/* if there is landing dose: */}
+                                        { 
+                                          (doseregime?.data?.dosering?.eventuellLadningsdose &&
+                                            doseregime?.data?.dosering?.styrkeEnhetEventuellLadningsdose?.display &&
+                                              doseregime?.data?.frekvensEventuellladningsdosePerDogn &&
+                                              doseregime.data.varighetEventuellLadningsdoseAntallDogn) ? 
+                                              <div> 
+                                                {
+                                                  doseregime?.data?.dosering?.eventuellLadningsdose ? 
+                                                    (doseregime.data.legemiddeldoseringsregime?.koder.map((item, index) => {
+                                                      return (
+                                                        <div key={index}>
+                                                            {
+                                                              item.display
+                                                              + " " 
+                                                              + doseregime.data.dosering.eventuellLadningsdose 
+                                                              + " " 
+                                                              + doseregime.data.dosering.styrkeEnhetEventuellLadningsdose.display 
+                                                              + " x " 
+                                                              + doseregime.data.frekvensEventuellladningsdosePerDogn
+                                                              + " i "
+                                                              + doseregime.data.varighetEventuellLadningsdoseAntallDogn
+                                                              + " " 
+                                                              + "døgn ladningsdose etterfulgt av"
+                                                            }
+                                                        </div>
+                                                        );
+                                                      }))
+                                                  : null
+                                                }
+                                              </div>
+                                          : null
+                                        }
 
-                                      {/* 50 */}
-                                      {doseregime?.data?.dosering?.dose ? doseregime.data.dosering.dose : null}
-                                      {" "}
+                                        {/* allways: substance and form */}
+                                        {legemiddeldoseringsregime?.display ? legemiddeldoseringsregime?.display : null}
+                                        {" "}
 
-                                      {/* mg */}
-                                      {/* {doseregime?.data?.dosering?.styrkeEnhetDosering ? 
-                                        doseregime.data.dosering.styrkeEnhetDosering.map((styrkeEnhetDosering, styrkeindex) => {
-                                          return (
-                                            <span key={styrkeindex}>
-                                              {styrkeEnhetDosering?.display ? styrkeEnhetDosering.display : null}
-                                            </span>
-                                          );
-                                        })
-                                      : null} */}
+                                        {/* handle, if exists: administrasjonsvei */}
+                                        {
+                                          doseregime?.data?.administrasjonsvei?.koder ? 
+                                            doseregime.data.administrasjonsvei.koder.map((kode, index) => {
+                                              return (
+                                                <span key={index}>
+                                                  {kode.display}
+                                                </span>
+                                              );
+                                            })
+                                          : null
+                                        }
+                                        {" "}
 
-                                      {
-                                        doseregime?.data?.dosering?.styrkeEnhetDosering ? 
-                                          doseregime?.data?.dosering?.styrkeEnhetDosering?.display
-                                        : null
-                                      }
-                                    
-                                    </div>
-                                  );
-                                })
-                              : null}
+                                        {/* 50 */}
+                                        {doseregime?.data?.dosering?.dose ? doseregime.data.dosering.dose : null}
+                                        {" "}
+
+                                        {/* units */}
+                                        {
+                                          doseregime?.data?.dosering?.styrkeEnhetDosering ? 
+                                            doseregime?.data?.dosering?.styrkeEnhetDosering?.display
+                                          : null
+                                        }
+
+                                        {/* frequence */}
+                                        {
+                                          doseregime?.data?.frekvensdoseringsregimePerDogn ? 
+                                            (" x " + doseregime.data.frekvensdoseringsregimePerDogn)
+                                          : null
+                                        }
+
+                                        {
+                                          " i 5 døgn"
+                                        }
+
+                                      </div>
+                                    );
+                                  })
+                                : null
+                                }
+
+                                {
+                                  doseregime?.tekst ? doseregime.tekst : null
+                                } 
+
                             </div>
 
 
@@ -424,7 +480,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                                   <div key={innerindext}>
                                                     {/* Tilstand */}
                                                     {
-                                                      <h6>{inneritemt?.display ? inneritemt.display : null}</h6>
+                                                      <h5>{inneritemt?.display ? inneritemt.display : null}</h5>
                                                     }
 
                                                     {/* {
@@ -449,7 +505,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                               })
                                             }
                                             {
-                                              <div dangerouslySetInnerHTML={{ __html: itemText }}></div>
+                                              <div className="form-group" dangerouslySetInnerHTML={{ __html: itemText }}></div>
                                             }
                                           </div>
                                         );
@@ -472,7 +528,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
             : null}
 
 
-            {/* Behandlingsalternativer */}
+            {/* Behandlingsalternativer (hardcoded title) */}
             <div className="form-group">
               {
                 item?.behandling?.data?.alternativebehandlingsregimer ? 
@@ -486,7 +542,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                 return (
                   <div key={regIndex}>
                     {/* alternativebehandlingsregimer for voksne eller barn */}
-                    <div className="form-group"><h3>{regime.overskrift}</h3></div>
+                    <div className="form-group"><h3>{regime?.overskrift ? regime.overskrift : null}</h3></div>
 
                     {regime?.doseringregimer ? 
                       // handle the case when doseringregimer array is empty!!!
@@ -497,40 +553,90 @@ export const HTMLRender = class HTMLRender extends React.Component {
                             {/* the whole name of the medication */}
                             <div className="form-group" style={{color: "blue"}}> 
 
-                              {doseregime?.data?.legemiddeldoseringsregime.koder ?
-                                doseregime?.data?.legemiddeldoseringsregime.koder.map((legemiddeldoseringsregime, legemindex) => {
-                                  return (
-                                    <div key={legemindex}>
+                              {
+                                doseregime?.data?.legemiddeldoseringsregime.koder ?
+                                  doseregime?.data?.legemiddeldoseringsregime.koder.map((legemiddeldoseringsregime, legemindex) => {
+                                    return (
+                                      <div key={legemindex}>
 
-                                      {/* substance and form */}
-                                      {legemiddeldoseringsregime?.display ? legemiddeldoseringsregime?.display : null}
-                                      {" "}
+                                        {/* if there is landing dose: */}
+                                        { 
+                                          (doseregime?.data?.dosering?.eventuellLadningsdose &&
+                                            doseregime?.data?.dosering?.styrkeEnhetEventuellLadningsdose?.display &&
+                                              doseregime?.data?.frekvensEventuellladningsdosePerDogn &&
+                                              doseregime.data.varighetEventuellLadningsdoseAntallDogn) ? 
+                                              <div> 
+                                                {
+                                                  doseregime?.data?.dosering?.eventuellLadningsdose ? 
+                                                    (doseregime.data.legemiddeldoseringsregime?.koder.map((item, index) => {
+                                                      return (
+                                                        <div key={index}>
+                                                            {
+                                                              item.display
+                                                              + " " 
+                                                              + doseregime.data.dosering.eventuellLadningsdose 
+                                                              + " " 
+                                                              + doseregime.data.dosering.styrkeEnhetEventuellLadningsdose.display 
+                                                              + " x " 
+                                                              + doseregime.data.frekvensEventuellladningsdosePerDogn
+                                                              + " i "
+                                                              + doseregime.data.varighetEventuellLadningsdoseAntallDogn
+                                                              + " " 
+                                                              + "there is no hardcoded text for behandlingsalternative"
+                                                            }
+                                                        </div>
+                                                        );
+                                                      }))
+                                                  : null
+                                                }
+                                              </div>
+                                          : null
+                                        }
 
-                                      {/* 50 */}
-                                      {doseregime?.data?.dosering?.dose ? doseregime.data.dosering.dose : null}
-                                      {" "}
+                                        {/* substance and form */}
+                                        {legemiddeldoseringsregime?.display ? legemiddeldoseringsregime?.display : null}
+                                        {" "}
 
-                                      {/* mg */}
-                                      {/* {doseregime?.data?.dosering?.styrkeEnhetDosering ? 
-                                        doseregime.data.dosering.styrkeEnhetDosering.map((styrkeEnhetDosering, styrkeindex) => {
-                                          return (
-                                            <span key={styrkeindex}>
-                                              {styrkeEnhetDosering?.display ? styrkeEnhetDosering.display : null}
-                                            </span>
-                                          );
-                                        })
-                                      : null} */}
+                                        {/* 50 */}
+                                        {doseregime?.data?.dosering?.dose ? doseregime.data.dosering.dose : null}
+                                        {" "}
 
-                                      {
-                                        doseregime?.data?.dosering?.styrkeEnhetDosering ? 
-                                          doseregime?.data?.dosering?.styrkeEnhetDosering?.display
-                                        : null
-                                      }
-                                    
-                                    </div>
-                                  );
-                                })
-                              : null}
+                                        {/* mg */}
+                                        {/* {doseregime?.data?.dosering?.styrkeEnhetDosering ? 
+                                          doseregime.data.dosering.styrkeEnhetDosering.map((styrkeEnhetDosering, styrkeindex) => {
+                                            return (
+                                              <span key={styrkeindex}>
+                                                {styrkeEnhetDosering?.display ? styrkeEnhetDosering.display : null}
+                                              </span>
+                                            );
+                                          })
+                                        : null} */}
+
+                                        {
+                                          doseregime?.data?.dosering?.styrkeEnhetDosering ? 
+                                            doseregime?.data?.dosering?.styrkeEnhetDosering?.display
+                                          : null
+                                        }
+
+                                        {
+                                          " x "
+                                        }
+
+                                        {
+                                          doseregime?.data?.frekvensdoseringsregimePerDogn ? 
+                                            doseregime?.data?.frekvensdoseringsregimePerDogn
+                                          : null
+                                        }
+                                      
+                                      </div>
+                                    );
+                                  })
+                                : null
+                              }
+
+                              {
+                                doseregime?.tekst ? doseregime.tekst : null
+                              } 
 
                             </div>
 
@@ -561,7 +667,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                                 <div key={innerindext}>
                                                   {/* Tilstand */}
                                                   {
-                                                    <h6>{inneritemt?.display ? inneritemt.display : null}</h6>
+                                                    <h5>{inneritemt?.display ? inneritemt.display : null}</h5>
                                                   }
                                                 </div>
                                               );
@@ -581,7 +687,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                             })
                                           }
                                           {
-                                            <div dangerouslySetInnerHTML={{ __html: itemText }}></div>
+                                            <div className="form-group" dangerouslySetInnerHTML={{ __html: itemText }}></div>
                                           }
                                         </div>
                                       );
@@ -606,7 +712,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
   : null}
 
 
-            {/* Overgang til oral behandling */}
+            {/* Overgang til oral behandling (hardcoded title) */}
             <div className="form-group">
               {
                 item?.behandling?.data?.overgangtiloralbehandlingsregimer ? 
@@ -621,57 +727,116 @@ export const HTMLRender = class HTMLRender extends React.Component {
                   <div key={regIndex}>
                     {/* overgangtiloralbehandlingsregimer */}
                     {/* make it instead of the harcoded title?:  */}
-                    <div className="form-group"><h3>{regime.overskrift}</h3></div>
+                    <div className="form-group"><h2>{regime?.overskrift ? regime.overskrift : null}</h2></div>
+
+                    
 
                     {regime?.doseringregimer ? 
                       regime.doseringregimer.map((doseregime, dosregindex) => {
                         return (
-                          <div key={dosregindex}>
+                          <div key={dosregindex}>   
 
                             {/* the whole name of the medication */}
                             <div className="form-group" style={{color: "blue"}}> 
 
                               {/* legemiddeldoseringsregime (substance and form) */}
-                              {doseregime?.data?.legemiddeldoseringsregime?.koder ?
-                                doseregime?.data?.legemiddeldoseringsregime.koder.map((legemiddeldosregimetiloral, legemindextiloral) => {
-                                  return (
-                                    <div key={legemindextiloral}>
+                              {
+                                doseregime?.data?.legemiddeldoseringsregime?.koder ?
+                                  doseregime?.data?.legemiddeldoseringsregime.koder.map((legemiddeldosregimetiloral, legemindextiloral) => {
+                                    return (
+                                      <div key={legemindextiloral}>
 
-                                      {/* the drug name */}
-                                      {legemiddeldosregimetiloral?.display ? legemiddeldosregimetiloral?.display : null}
-                                      {" "}
+                                        {/* if there is landing dose: */}
+                                        { 
+                                          (doseregime?.data?.dosering?.eventuellLadningsdose &&
+                                            doseregime?.data?.dosering?.styrkeEnhetEventuellLadningsdose?.display &&
+                                              doseregime?.data?.frekvensEventuellladningsdosePerDogn &&
+                                              doseregime.data.varighetEventuellLadningsdoseAntallDogn) ? 
+                                              <div> 
+                                                {
+                                                  doseregime?.data?.dosering?.eventuellLadningsdose ? 
+                                                    (doseregime.data.legemiddeldoseringsregime?.koder.map((item, index) => {
+                                                      return (
+                                                        <div key={index}>
+                                                            {
+                                                              item.display
+                                                              + " " 
+                                                              + doseregime.data.dosering.eventuellLadningsdose 
+                                                              + " " 
+                                                              + doseregime.data.dosering.styrkeEnhetEventuellLadningsdose.display 
+                                                              + " x " 
+                                                              + doseregime.data.frekvensEventuellladningsdosePerDogn
+                                                              + " i "
+                                                              + doseregime.data.varighetEventuellLadningsdoseAntallDogn
+                                                              + " " 
+                                                              + "there is no hardcoded text for behandlingsalternative"
+                                                            }
+                                                        </div>
+                                                        );
+                                                      }))
+                                                  : null
+                                                }
+                                              </div>
+                                          : null
+                                        }
 
-                                      {/* 50 */}
-                                      {doseregime?.data?.dosering?.dose ?
-                                        doseregime.data.dosering.dose 
-                                      : null
-                                        // <div style={{color: "green"}}>
-                                        //   "ERROR: There is no dosering.dose field in one of the behandling. Please, check the way: item?.behandling?.data?.standardbehandlingsregimer.regime.doseringregimer.doseregimestand?.data?.dosering.dose!"
-                                        // </div> 
-                                      }
-                                      {" "}
+                                        
+                                          {/* the drug name */}
+                                          {legemiddeldosregimetiloral?.display ? legemiddeldosregimetiloral?.display : null}
+                                          {" "}
 
-                                      {/* mg or an other unit */}
-                                      {/* {doseregime?.data?.dosering?.styrkeEnhetDosering ? 
-                                        doseregime?.data?.dosering?.styrkeEnhetDosering.map((styrkeEnhetDosering, styrkeindex) => {
-                                          return (
-                                            <span key={styrkeindex}>
-                                              {styrkeEnhetDosering?.display ? styrkeEnhetDosering.display : null}
-                                            </span>
-                                          );
-                                        })
-                                      : null} */}
+                                          {/* handle, if exists: administrasjonsvei */}
+                                          {
+                                            doseregime?.data?.administrasjonsvei?.koder ? 
+                                              doseregime.data.administrasjonsvei.koder.map((kode, index) => {
+                                                return (
+                                                  <span key={index}>
+                                                    {kode.display}
+                                                  </span>
+                                                );
+                                              })
+                                            : null
+                                          }
+                                          {" "}
 
-                                      {
-                                        doseregime?.data?.dosering?.styrkeEnhetDosering ? 
-                                          doseregime?.data?.dosering?.styrkeEnhetDosering?.display
-                                        : null
-                                      }
+                                          {/* 50 */}
+                                          {doseregime?.data?.dosering?.dose ?
+                                            doseregime.data.dosering.dose 
+                                          : null
+                                          }
+                                          {" "}
 
-                                    </div>
-                                  );
-                                })
-                              : null}
+                                          {/* mg or an other unit */}
+                                          {
+                                            doseregime?.data?.dosering?.styrkeEnhetDosering ? 
+                                              doseregime?.data?.dosering?.styrkeEnhetDosering?.display
+                                            : null
+                                          }
+
+                                          {/* frequence */}
+                                          {
+                                            doseregime?.data?.frekvensdoseringsregimePerDogn ? 
+                                              (" x " + doseregime.data.frekvensdoseringsregimePerDogn)
+                                            : null
+                                          }
+
+                                          {
+                                            " i 2 døgn"
+                                          }
+
+
+
+                      
+                                      </div>
+                                    );
+                                  })
+                                : null
+                              }
+
+                              {
+                                doseregime?.tekst ? doseregime.tekst : null
+                              }  
+
                             </div>
 
                             {/* here should be the substance and the state name */}
@@ -697,7 +862,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                                 <div key={innerindext}>
                                                   {/* Tilstand */}
                                                   {
-                                                    <h6>{inneritemt?.display ? inneritemt.display : null}</h6>
+                                                    <h5>{inneritemt?.display ? inneritemt.display : null}</h5>
                                                   }
                                                 </div>
                                               );
@@ -717,7 +882,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                                             })
                                           }
                                           {
-                                            <div dangerouslySetInnerHTML={{ __html: itemText }}></div>
+                                            <div className="form-group" dangerouslySetInnerHTML={{ __html: itemText }}></div>
                                           }
                                         </div>
                                       );
