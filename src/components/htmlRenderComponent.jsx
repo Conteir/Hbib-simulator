@@ -342,7 +342,13 @@ export const HTMLRender = class HTMLRender extends React.Component {
             <div className="form-group">
               {
                 item?.behandling?.data?.standardbehandlingsregimer ? 
-                  <h2>{item?.behandling?.data?.overskriftBehandlingsregime}</h2>
+                  <h2>
+                    {
+                      (item?.behandling?.data?.overskriftBehandlingsregime === "") ?
+                        item?.behandling?.data?.overskriftBehandlingsregime 
+                      : "Hardcoded condition if overskrift =='' or does not presented: Standardbehandling" 
+                    }
+                    </h2>
                 : null
               }
             </div>
