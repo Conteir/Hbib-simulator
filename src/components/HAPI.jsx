@@ -75,7 +75,8 @@ export const HAPI = class Record extends React.Component {
       });
 
       // Text render demo (commented out now) START
-      if (data[0].tekst) {
+        // check if there is data with required field:
+      if (data[0]?.tekst !== undefined) {
         this.setState({ content: data[0].tekst });
       }
       // Text render demo (commented out now) END
@@ -150,7 +151,7 @@ export const HAPI = class Record extends React.Component {
           //console.log("Content for " + codeSystem + ":", data);
           //console.log("Content for " + codeSystem + ":", data.length);
         }
-
+        console.log("So, what is here..?", data);
         this.processResponse(data);
       });
   };
