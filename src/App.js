@@ -6,6 +6,7 @@ import { Documentation } from './components/Documentation.jsx';
 import { HAPI } from './components/HAPI.jsx';
 import { Semantic } from './components/Semantic.jsx';
 import { BMJ } from './components/BMJ.jsx';
+import { Helsebiblioteket } from './components/Helsebiblioteket.jsx';
 import Nav from 'react-bootstrap/Nav';
 
 
@@ -34,6 +35,8 @@ export const App = class App extends React.Component {
 
                 <Nav.Link href="/bmj">BMJ</Nav.Link>
 
+                <Nav.Link href="/helsebiblioteket">Helsebiblioteket</Nav.Link>
+
             </Nav>
 
             <Switch>
@@ -59,6 +62,10 @@ export const App = class App extends React.Component {
 
                 <Route path="/bmj" component={BMJ}>
                   <BMJ />
+                </Route>
+
+                <Route path="/helsebiblioteket" component={Helsebiblioteket}>
+                  <Helsebiblioteket />
                 </Route>
 
             </Switch>

@@ -54,6 +54,14 @@ export const GetIDPage = class GetIDPage extends React.Component {
       ;
   }
 
+  ChangeHandlerEnviroment = (event) => {
+    // sets 'this.state.environment' to the selected in the 'select' box environment as string
+    // (one of the 'prod', 'qa', ...)
+    this.setState({
+      enviroment: event.target.value
+    });
+  }
+
   responseHandler = (data) => {
     if (data) {
       this.setState({
