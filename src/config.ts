@@ -84,4 +84,6 @@ export const codeSystems = [
 
   export const helsedirBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold/";
 
+//// configurations for hbib
+export const hbibUrl = 'https://qa.hbib.ntf.seeds.no/_/service/com.enonic.app.guillotine/graphql';
   
