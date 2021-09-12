@@ -10,7 +10,9 @@ export const HbibRender = class HbibRender extends React.Component {
   }
 
   renderJson() {
-    if(!this.props.hbibData) return <span>Nothing to render</span>;
+    console.log("HBibRendering: ", this.props.hbibData);
+    
+    if(!this.props.hbibData) return <></>;
     let data = JSON.parse(this.props.hbibData);
 
     return (
@@ -23,7 +25,7 @@ export const HbibRender = class HbibRender extends React.Component {
                             <div dangerouslySetInnerHTML={{ __html: item.dataAsJson.text }}></div>
                         </div>
                     );
-                }) : <span>Shit</span>}
+                }) : null}
             </div>
       </div>
     );
