@@ -15,9 +15,7 @@ export const HbibRender = class HbibRender extends React.Component {
     if(!this.props.hbibData) return <></>;
     let data = JSON.parse(this.props.hbibData);
 
-    // let dataForXAsJson = this.props.hbibData;
-
-
+    let dataForXAsJson = this.props.hbibData;
     // console.log("what is inside xAsJson? ", data?.data?.guillotine?.query.xAsJson._id);
 
     return (
@@ -31,25 +29,47 @@ export const HbibRender = class HbibRender extends React.Component {
                             <div dangerouslySetInnerHTML={{ __html: item.dataAsJson.activeIngredient }}></div>
                             <b><div dangerouslySetInnerHTML={{ __html: item.dataAsJson.title }}></div></b>
                             <div dangerouslySetInnerHTML={{ __html: item.dataAsJson.text }}></div>
+                            <div>{"image: " + item.dataAsJson.image}</div>
+
 
                             <p><b>DATA FROM xAsJson</b></p>
-                            <div>{item.xAsJson._id}</div>
+                            <div>{item.xAsJson['no-seeds-hbib'].metadata['editorial-owner']}</div>
+                            <div>
+                              {item.xAsJson['no-seeds-hbib'].metadata.code.map((item, index) => {
+                                return (
+                                  <div key={index}>
+                                    {"code: " + item}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <div>
+                              {item.xAsJson['no-seeds-hbib'].metadata['target-group'].map((item, index) => {
+                                return (
+                                  <div key={index}>
+                                    {"target-group: " + item}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                            <div>{item._id}</div>
                         </div>
                     );
                 }) : null}
             </div>
 
-            {/* <div>
-                {Array.isArray(dataForXAsJson?.data?.guillotine?.query) ? dataForXAsJson.data.guillotine.query.map((item, index) => {
-                    console.log(item);
+            <div>
+                {Array.isArray(dataForXAsJson?.data?.guillotine?.query) 
+                  ? dataForXAsJson.data.guillotine.query.map((item, index) => {
                     return (
                         <div key={index}>
                             <p><b>DATA FROM xAsJson</b></p>
-                            <div>{item.xAsJson}</div>
+                            <div>{"image: " + item.dataAsJson.image}</div>
                         </div>
                     );
-                }) : null}
-            </div> */}
+                  }) 
+                : null}
+            </div>
             
             
       </div>

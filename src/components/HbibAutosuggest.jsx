@@ -1,6 +1,6 @@
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
-import { snomedURLs, codeSystemEnv } from '../config.ts';
+import { snomedURLs } from '../config.ts';
 import './DisordersAutoSuggest.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Spinner } from 'reactstrap';
