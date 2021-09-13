@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import HbibAutosuggest from "./HbibAutosuggest";
 import { HbibRender } from "./HbibRender";
-import { codeSystemEnv, params, hbibUrl } from "../config.ts";
+import { codeSystemEnv, hbibUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 
 // import GetParamComponent from "./GetParamComponent.jsx";
@@ -20,38 +20,6 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
         showSpinner: false
     };
   }
-  
-
-//   codeSystemPromise = (url) => {
-//     let promise = fetch(url, parameters).then((response) => response.json());
-//     return promise;
-//   };
-
-
-  //response: handling and processing (h.p.)
-//   processResponse = (data) => {
-//     console.log("Processing response:", data);
-//     if (!data) return;
-
-//     //for links
-//     let promises = [];
-
-//     Promise.all(promises).then(() => {
-//       this.setState({ data: JSON.stringify(data), showSpinner: false });
-//     });
-//   };
-
-    // callback to hdir
-    // linkCallback = (url) => {
-    //     this.setState({ data: "", showSpinner: true });
-    //     fetch(url, params)
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             this.processResponse(data);
-    //         },
-    //         () => this.setState({ showSpinner: false })
-    //     );
-    // };
 
     suggestCallback = (suggestion) => {
         console.log("Selected: ", suggestion);
@@ -61,35 +29,6 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
         this.callbackSnomedctHandler(snomedCt);
     }
 
-    // fetchContent = (url) => {
-    // this.setState({ showSpinner: true });
-    // // reset state to clean results before new loading
-    // this.setState({ matches: -1, data: "", showContent: false });
-    // // API key depends on environment: current -> Production
-
-
-    // fetch(url, params)
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //     //console.log("Content for " + codeSystem + ":", data);
-    //     if (Array.isArray(data)) {
-    //         this.setState({ matches: data.length, showSpinner: false });
-    //         console.log("how the data looks?...", data);
-    //     }
-    //     if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
-    //         this.setState({
-    //         content: data[0].tekst,
-    //         data: JSON.stringify(data),
-    //         showSpinner: false,
-    //         });
-
-        
-    //     }
-    //     console.log("So, what is here..?", data);
-        
-    //     this.processResponse(data);
-    //     });
-    // };
 
     callbackSnomedctHandler = (snomedct) => {
         let query = 
@@ -266,7 +205,6 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
               </div>
 
               <div className="row form-group">
-                {/* <SNOMEDCT snomedctFromChildToParent={this.callbackSnomedctHandler}/> */}
             </div>
 
             </div>
@@ -291,26 +229,13 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
                     <div className="content">
                         <HbibRender hbibData={this.state.data} />
                       {" "}
-                      {/** --> hide metadata */}
                     </div>
                   </div>
                 ) : null}
               </div>
             </div>
 
-            <div className="row">
-              <div className="col-sm-8">
-                {/* this.state.showContent ? <HTMLRender data={this.state.data} linkCallback={this.linkCallback} /> : null */}
-                    {/* <HbibRender hbibData={this.state.data} /> */}
-              </div>
-            </div>
           </div>
-          {/*
-          <div>
-            <h1>test</h1>
-            <GetParamComponent/>
-          </div>
-          */}
         </div>
       </div>
     );
