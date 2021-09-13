@@ -29,29 +29,29 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
 
 
   //response: handling and processing (h.p.)
-  processResponse = (data) => {
-    console.log("Processing response:", data);
-    if (!data) return;
+//   processResponse = (data) => {
+//     console.log("Processing response:", data);
+//     if (!data) return;
 
-    //for links
-    let promises = [];
+//     //for links
+//     let promises = [];
 
-    Promise.all(promises).then(() => {
-      this.setState({ data: JSON.stringify(data), showSpinner: false });
-    });
-  };
+//     Promise.all(promises).then(() => {
+//       this.setState({ data: JSON.stringify(data), showSpinner: false });
+//     });
+//   };
 
     // callback to hdir
-    linkCallback = (url) => {
-        this.setState({ data: "", showSpinner: true });
-        fetch(url, params)
-            .then((response) => response.json())
-            .then((data) => {
-                this.processResponse(data);
-            },
-            () => this.setState({ showSpinner: false })
-        );
-    };
+    // linkCallback = (url) => {
+    //     this.setState({ data: "", showSpinner: true });
+    //     fetch(url, params)
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             this.processResponse(data);
+    //         },
+    //         () => this.setState({ showSpinner: false })
+    //     );
+    // };
 
     suggestCallback = (suggestion) => {
         console.log("Selected: ", suggestion);
@@ -61,35 +61,35 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
         this.callbackSnomedctHandler(snomedCt);
     }
 
-    fetchContent = (url) => {
-    this.setState({ showSpinner: true });
-    // reset state to clean results before new loading
-    this.setState({ matches: -1, data: "", showContent: false });
-    // API key depends on environment: current -> Production
+    // fetchContent = (url) => {
+    // this.setState({ showSpinner: true });
+    // // reset state to clean results before new loading
+    // this.setState({ matches: -1, data: "", showContent: false });
+    // // API key depends on environment: current -> Production
 
 
-    fetch(url, params)
-        .then((response) => response.json())
-        .then((data) => {
-        //console.log("Content for " + codeSystem + ":", data);
-        if (Array.isArray(data)) {
-            this.setState({ matches: data.length, showSpinner: false });
-            console.log("how the data looks?...", data);
-        }
-        if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
-            this.setState({
-            content: data[0].tekst,
-            data: JSON.stringify(data),
-            showSpinner: false,
-            });
+    // fetch(url, params)
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //     //console.log("Content for " + codeSystem + ":", data);
+    //     if (Array.isArray(data)) {
+    //         this.setState({ matches: data.length, showSpinner: false });
+    //         console.log("how the data looks?...", data);
+    //     }
+    //     if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
+    //         this.setState({
+    //         content: data[0].tekst,
+    //         data: JSON.stringify(data),
+    //         showSpinner: false,
+    //         });
 
         
-        }
-        console.log("So, what is here..?", data);
+    //     }
+    //     console.log("So, what is here..?", data);
         
-        this.processResponse(data);
-        });
-    };
+    //     this.processResponse(data);
+    //     });
+    // };
 
     callbackSnomedctHandler = (snomedct) => {
         let query = 
@@ -277,8 +277,31 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
 
             <div className="row">
               <div className="col-sm-8">
+                {this.state.showContent ? (
+                  <div id="popup-hapi" className="popupHAPI">
+                    <div className="header">
+                      <span>Beslutningsstøtte</span>
+                      <span
+                        className="popup-close"
+                        onClick={() => this.setState({ showContent: false })}
+                      >
+                        X
+                      </span>
+                    </div>
+                    <div className="content">
+                        <HbibRender hbibData={this.state.data} />
+                      {" "}
+                      {/** --> hide metadata */}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-sm-8">
                 {/* this.state.showContent ? <HTMLRender data={this.state.data} linkCallback={this.linkCallback} /> : null */}
-                    <HbibRender hbibData={this.state.data} />
+                    {/* <HbibRender hbibData={this.state.data} /> */}
               </div>
             </div>
           </div>
