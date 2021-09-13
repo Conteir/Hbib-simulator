@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import HbibAutosuggest from "./HbibAutosuggest";
 import { HbibRender } from "./HbibRender";
-import { params, hbibUrl } from "../config.ts";
+import { codeSystemEnv, params, hbibUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 
 // import GetParamComponent from "./GetParamComponent.jsx";
@@ -74,6 +74,7 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
         //console.log("Content for " + codeSystem + ":", data);
         if (Array.isArray(data)) {
             this.setState({ matches: data.length, showSpinner: false });
+            console.log("how the data looks?...", data);
         }
         if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
             this.setState({
@@ -138,8 +139,8 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
         fetch(hbibUrl, parameters)
             .then(response => response.json())
             .then(data => {
-                console.log("data with the responce", data);
-                this.setState({data: JSON.stringify(data), showSpinner: false});
+                console.log("data with the responce... and here the length can be seen", data.data.guillotine.query.length);
+                this.setState({data: JSON.stringify(data), matches: data.data.guillotine.query.length, showSpinner: false});
             });
         });
 
@@ -150,6 +151,28 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
         <div className="jumbotron text-center">
           <h1>HELSEBIBLIOTEKET</h1>
           <p>Choose the code system and make a search throught SNOMED</p>
+        </div>
+
+        <div className="row, top">
+          <div className="col-sm-2">
+            <div className="form-group">
+              <select
+                name="codeSystemEnv"
+                id="codeSystemEnv"
+                onChange={(evt) => this.setState({ env: evt.target.value })}
+              >
+                <option value="" select="default">
+                  Velg kontekst
+                </option>
+                {/* Rend  er options dynamically from codeSystemEnv */}
+                {codeSystemEnv.map((codeSystem, key) => (
+                  <option key={key} value={codeSystem.id}>
+                    {codeSystem.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
 
         <div className="row">
