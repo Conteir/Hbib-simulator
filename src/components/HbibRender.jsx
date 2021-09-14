@@ -1,5 +1,12 @@
 import React from "react";
 
+import {
+  CollapsibleComponent,
+  CollapsibleHead,
+  CollapsibleContent,
+} from "react-collapsible-component";
+import "../index.css";
+
 export const HbibRender = class HbibRender extends React.Component {
   render() {
     return (
@@ -15,20 +22,30 @@ export const HbibRender = class HbibRender extends React.Component {
     if(!this.props.hbibData) return <></>;
     let data = JSON.parse(this.props.hbibData);
 
-    let dataForXAsJson = this.props.hbibData;
+    // let dataForXAsJson = this.props.hbibData;
     // console.log("what is inside xAsJson? ", data?.data?.guillotine?.query.xAsJson._id);
 
     return (
       <div>
+        <CollapsibleComponent className="Collapsible__trigger">
             <div>
                 {Array.isArray(data?.data?.guillotine?.query) ? data.data.guillotine.query.map((item, index) => {
                     console.log(item);
                     return (
+                      
                         <div key={index}>
                             {/* <p><b>DATA FROM dataAsJson</b></p> */}
                             {/* <div dangerouslySetInnerHTML={{ __html: item.dataAsJson.activeIngredient }}></div> */}
-                            <b><div dangerouslySetInnerHTML={{ __html: item.dataAsJson.title }}></div></b>
-                            <div dangerouslySetInnerHTML={{ __html: item.dataAsJson.text }}></div>
+                            <div className="Collapsible__trigger">
+                            <CollapsibleHead>
+                              <b><div dangerouslySetInnerHTML={{ __html: item.dataAsJson.title }}></div></b>
+                            </CollapsibleHead>
+                            <CollapsibleContent>
+                              {/* <b><div className="form-group" dangerouslySetInnerHTML={{ __html: item.dataAsJson.title }}></div></b> */}
+                              <div className="form-group" dangerouslySetInnerHTML={{ __html: item.dataAsJson.text }}></div>
+                            </CollapsibleContent>
+                            </div>
+                            
                             {/* <div>{"image: " + item.dataAsJson.image}</div> */}
 
 
@@ -62,24 +79,12 @@ export const HbibRender = class HbibRender extends React.Component {
                             </div> */}
                             {/* <div>{item._id}</div> */}
                         </div>
+                        
                     );
                 }) : null}
             </div>
 
-            <div>
-                {Array.isArray(dataForXAsJson?.data?.guillotine?.query) 
-                  ? dataForXAsJson.data.guillotine.query.map((item, index) => {
-                    return (
-                        <div key={index}>
-                            <p><b>DATA FROM xAsJson</b></p>
-                            <div>{"image: " + item.dataAsJson.image}</div>
-                        </div>
-                    );
-                  }) 
-                : null}
-            </div>
-            
-            
+      </CollapsibleComponent>
       </div>
     );
   }
