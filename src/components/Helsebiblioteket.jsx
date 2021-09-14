@@ -79,7 +79,7 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
         const parameters = {
             method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                // "Content-Type": "application/json",
                 "Origin": "https://qa.hbib.ntf.seeds.no"
             },
             body: JSON.stringify({
