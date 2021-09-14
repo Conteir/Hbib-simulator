@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import HbibAutosuggest from "./HbibAutosuggest";
 import { HbibRender } from "./HbibRender";
-import { codeSystemEnv, hbibUrl } from "../config.ts";
+import { codeSystemEnv, hbibUrl } from "../configHB.ts";
 import { Spinner } from "reactstrap";
 
 // import GetParamComponent from "./GetParamComponent.jsx";
@@ -22,9 +22,21 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
   }
 
     suggestCallback = (suggestion) => {
+
+      if (!suggestion.$codeSystemResult) return;
+
+      const codeSystemResult = suggestion.$codeSystemResult;
+      const codeSystem = codeSystemResult.codeSystem;
+      const code = codeSystemResult.code;
+
         console.log("Selected: ", suggestion);
         let snomedCt = suggestion.concept.conceptId;
         console.log("Selected snomedCt: ", snomedCt);
+
+        console.log("codeSystem: ", codeSystem);
+        console.log("code: ", code);
+
+
 
         this.callbackSnomedctHandler(snomedCt);
     }
@@ -183,7 +195,10 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
 
             <div className="row">
               <div className="col-sm-8">
-                <HbibAutosuggest suggestCallback={this.suggestCallback} />
+                <HbibAutosuggest 
+                  suggestCallback={this.suggestCallback} 
+                  codeSystem={this.state.env}
+                  />
               </div>
 
               <div className="col-sm-4 match-block">
