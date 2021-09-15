@@ -1,0 +1,253 @@
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+body {
+  margin-right: auto; /* 1 */
+  margin-left: auto; /* 1 */
+
+  padding-right: 20px; /* 3 */
+  padding-left: 20px; /* 3 */
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+input,
+select {
+  margin-right: 20px;
+}
+
+.marginRight {
+  margin-right: 20px;
+}
+
+table,
+th,
+td {
+  border: 1px solid lightgrey;
+  border-collapse: collapse;
+  margin: 10px 0;
+}
+
+table > tbody > tr > td {
+  padding: 5px;
+}
+table > tbody > tr > td:first-child {
+  font-weight: bold;
+}
+
+div.content {
+  margin-top: 10px;
+}
+
+.collapsibleHeading {
+  padding: 0;
+}
+
+.accordion-head {
+  background-color: #f0eeef !important;
+  color: rgb(0, 0, 0) !important;
+  padding: 0 0 0 20px !important;
+  margin-top: 10px;
+}
+
+h2 {
+  padding: 10px 0 10px 0;
+  margin: 0px;
+}
+
+.link {
+  text-decoration: underline;
+  color: darkblue;
+  cursor: pointer;
+}
+div.infobit {
+  background-color: #f0eeef;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.item-block {
+  border: 1px solid gainsboro;
+  margin: 10px 0;
+  padding: 15px;
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.main-term {
+  font-weight: bold;
+  font-size: 20px;
+}
+.code-caption {
+  font-weight: bold;
+}
+textarea {
+  width: 100%;
+  height: 100px;
+}
+.top {
+  padding: 20px 0 10px 0;
+  border-bottom: solid 1px darkblue;
+  margin-bottom: 10px;
+}
+
+/* popup */
+.content {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  font-size: 20px;
+}
+
+#alert {
+  padding: 5px;
+}
+
+#popup {
+  position: absolute;
+  display: none;
+  padding: 5px;
+}
+
+.view {
+  background: lightblue;
+  border: 1px solid green;
+  padding: 10px;
+  font-size: 14px;
+  width: 150px;
+  height: 80px;
+  overflow: auto;
+}
+
+/* autosuggest-match block*/
+.match-block {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.match-block > span > b {
+  margin-left: 5px;
+}
+
+.popupHAPI {
+  height: 500px;
+  background: white;
+  border: 4px solid #cd0064;
+  overflow: hidden;
+  /* display over all other elements, z-index defines 'layer' position */
+  margin-top: 10px;
+  resize: vertical;
+}
+
+.popupHAPI > div.header {
+  background: #cd0064;
+  padding: 15px 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+.popupHAPI > div.header > span.popup-close {
+  cursor: pointer;
+}
+.popupHAPI > div.content {
+  overflow-y: auto;
+  position: relative;
+  height: 90%;
+  display: block;
+}
+
+.popupSemantic {
+  /* width: 500px;
+  height: 300px; */
+  background: white;
+  border: 4px solid #3275a8;
+  overflow: hidden;
+  /* display over all other elements, z-index defines 'layer' position */
+  z-index: 100;
+  margin-top: 10px;
+  resize: vertical;
+}
+
+div.rendered > ul > li {
+  font-size: 24px;
+}
+
+/*hapi cds modul*/
+#popup-hapi h2.product-context {
+  font-size: 14px;
+  font-style: italic;
+  padding-bottom: 5px;
+  color: #757575;
+}
+
+#popup-hapi h1 {
+  font-size: 16px !important;
+  font-weight: bold !important;
+  color: black;
+}
+#popup-hapi .accordion-head {
+  background-color: white !important;
+  transition: 0.3s;
+  padding: 0px 10px !important;
+  margin-top: 0px !important;
+}
+#popup-hapi .accordion-head:hover {
+  background-color: #f1f1f1 !important;
+}
+#popup-hapi div.panel-accordion {
+  margin: 0px !important;
+  padding: 0 10px 0 10px !important;
+  font-size: 14px;
+}
+
+#popup-hapi h2 {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#popup-hapi h3 {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#popup-hapi h4 {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#popup-hapi dl,
+ol,
+ul {
+  margin-bottom: 0.5rem !important;
+}
+/**/
+
+
+.Collapsible__trigger {
+  display: block;
+  font-weight: 400;
+  text-decoration: none;
+  /* color: #333333; */
+  position: relative;
+  border: 5px solid white;
+  padding: 5px;
+  background: #cd0064;
+  color: white;
+
+}
+
