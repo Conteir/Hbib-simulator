@@ -237,7 +237,6 @@ ul {
 }
 /**/
 
-
 .Collapsible__trigger {
   display: block;
   font-weight: 400;
@@ -248,6 +247,16 @@ ul {
   padding: 5px;
   background: #cd0064;
   color: white;
-
 }
-
+.byLine {
+  font-size: 16px;
+  padding: 30px 10px;
+  float: left;
+  display: block;
+}
+.byLineLogo {
+  display: block;
+  float: left;
+  padding: 30px 0px;
+  width: 200px;
+}

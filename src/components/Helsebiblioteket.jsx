@@ -3,7 +3,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import HbibAutosuggest from "./HbibAutosuggest";
 import { HbibRender } from "./HbibRender";
-import { codeSystemEnv, hbibUrl } from "../configHB.ts";
+import {
+  codeSystemEnv,
+  hbibUrl,
+  contentType,
+  contentTypeCap,
+} from "../configHB.ts";
 import { Spinner } from "reactstrap";
 
 export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
@@ -11,78 +16,93 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
     super(props);
 
     this.state = {
-        env: "",
-        data: "",
-        matches: -1,
-        showContent: false,
-        showSpinner: false
+      env: "",
+      data: "",
+      matches: -1,
+      showContent: false,
+      showSpinner: false,
     };
   }
 
   suggestCallback = (suggestion) => {
-
     if (!suggestion.$codeSystemResult) return;
 
     let snomedCt = suggestion.concept.conceptId;
     this.callbackSnomedctHandler(snomedCt);
-  }
+  };
 
   callbackSnomedctHandler = (snomedct) => {
-    let query = 
-        '{' +
-            'guillotine {' +
-            'query('+
-                'query: "type=\'no.seeds.hbib:treatment_recommendation\'"'+
-                'filters: {'+
-                'hasValue: {'+
-                    'field: "x.no-seeds-hbib.metadata.code"'+
-                    ' stringValues: ["' + snomedct + '"]' +
-                '}'+
-                '}'+
-            ') {'+
-                '... on no_seeds_hbib_TreatmentRecommendation {'+
-                'xAsJson\n' +
-                'dataAsJson\n' +
-                '_id' +
-                '}'+
-            '}'+
-            '}'+
-        '}';
+    let query =
+      "{" +
+      "guillotine {" +
+      "query(" +
+      "query: \"type='no.seeds.hbib:" +
+      contentType +
+      "'\"" +
+      "filters: {" +
+      "hasValue: {" +
+      'field: "x.no-seeds-hbib.metadata.code"' +
+      ' stringValues: ["' +
+      snomedct +
+      '"]' +
+      "}" +
+      "}" +
+      ") {" +
+      //"... on no_seeds_hbib_TreatmentRecommendation {" +
+      "... on no_seeds_hbib_" +
+      contentTypeCap +
+      " {" +
+      "xAsJson\n" +
+      "dataAsJson\n" +
+      "_id" +
+      "}" +
+      "}" +
+      "}" +
+      "}";
 
     this.callPost(query);
-  }
+  };
 
-  callPost = ((query) => {
-          
+  callPost = (query) => {
     this.setState({ showSpinner: true });
 
     const parameters = {
-      method: 'POST',
+      method: "POST",
       headers: {
-          "Origin": "https://qa.hbib.ntf.seeds.no"
+        Origin: "https://qa.hbib.ntf.seeds.no",
       },
       body: JSON.stringify({
-          query: query
-      })
+        query: query,
+      }),
     };
 
     fetch(hbibUrl, parameters)
-      .then(response => response.json())
-      .then(data => {
-        console.log("data with the responce... and here the length can be seen", data.data.guillotine.query.length);
-        this.setState({data: JSON.stringify(data), matches: data.data.guillotine.query.length, showSpinner: false});
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(
+          "data with the responce... and here the length can be seen",
+          data.data.guillotine.query.length
+        );
+        this.setState({
+          data: JSON.stringify(data),
+          matches: data.data.guillotine.query.length,
+          showSpinner: false,
+        });
       });
-  });
+  };
 
-  
   render() {
     return (
       <div>
-        <div 
-          style={{backgroundColor: '#cd0064'}}
-          className="jumbotron text-center">
-          <h1 style={{color: '#fff'}}>HELSEBIBLIOTEKET</h1>
-          <h5 style={{color: '#fff'}}>Choose the code system and make a search throught SNOMED CT to get relevant content</h5>
+        <div
+          style={{ backgroundColor: "#cd0064" }}
+          className="jumbotron text-center"
+        >
+          <h1 style={{ color: "#fff" }}>HELSEBIBLIOTEKET</h1>
+          <h5 style={{ color: "#fff" }}>
+            Choose the code system and make a search throught SNOMED CT to get
+            relevant content
+          </h5>
         </div>
 
         <div className="row, top">
@@ -176,10 +196,10 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
 
             <div className="row">
               <div className="col-sm-8">
-                <HbibAutosuggest 
-                  suggestCallback={this.suggestCallback} 
+                <HbibAutosuggest
+                  suggestCallback={this.suggestCallback}
                   codeSystem={this.state.env}
-                  />
+                />
               </div>
 
               <div className="col-sm-4 match-block">
@@ -200,9 +220,7 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
                 ) : null}
               </div>
 
-              <div className="row form-group">
-            </div>
-
+              <div className="row form-group"></div>
             </div>
 
             <div className="row">
@@ -214,7 +232,9 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
                 {this.state.showContent ? (
                   <div id="popup-hapi" className="popupHAPI">
                     <div className="header">
-                      <span><b>Beslutningsstøtte</b></span>
+                      <span>
+                        <b>Beslutningsstøtte</b>
+                      </span>
                       <span
                         className="popup-close"
                         onClick={() => this.setState({ showContent: false })}
@@ -223,14 +243,18 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
                       </span>
                     </div>
                     <div className="content">
-                        <HbibRender hbibData={this.state.data} />
-                      {" "}
+                      <HbibRender hbibData={this.state.data} />{" "}
+                      <p className="byLine">Levert av</p>
+                      <img
+                        className="byLineLogo"
+                        src="assets/logo.png"
+                        alt="logo"
+                      />
                     </div>
                   </div>
                 ) : null}
               </div>
             </div>
-
           </div>
         </div>
       </div>
