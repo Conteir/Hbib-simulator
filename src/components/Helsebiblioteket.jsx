@@ -3,99 +3,104 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import HbibAutosuggest from "./HbibAutosuggest";
 import { HbibRender } from "./HbibRender";
-import { codeSystemEnv, hbibUrl } from "../configHB.ts";
+import { codeSystemEnv, hbibUrl, contentTypesMap } from "../configHB.ts";
 import { Spinner } from "reactstrap";
-
-// import GetParamComponent from "./GetParamComponent.jsx";
 
 export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-        env: "",
-        data: "",
-        matches: -1,
-        showContent: false,
-        showSpinner: false
+      contentType: {},
+      env: "",
+      data: "",
+      matches: -1,
+      showContent: false,
+      showSpinner: false
     };
-  }
+  };
 
-    suggestCallback = (suggestion) => {
+  suggestCallback = (suggestion) => {
 
-      if (!suggestion.$codeSystemResult) return;
+    if (!suggestion.$codeSystemResult) return;
 
-      const codeSystemResult = suggestion.$codeSystemResult;
-      const codeSystem = codeSystemResult.codeSystem;
-      const code = codeSystemResult.code;
+    const codeSystemResult = suggestion.$codeSystemResult;
+    const codeSystem = codeSystemResult.codeSystem;
+    const code = codeSystemResult.code;
 
-        console.log("Selected: ", suggestion);
-        let snomedCt = suggestion.concept.conceptId;
-        console.log("Selected snomedCt: ", snomedCt);
+    console.log("Selected: ", suggestion);
+    let snomedCt = suggestion.concept.conceptId;
+    console.log("Selected snomedCt: ", snomedCt);
 
-        console.log("codeSystem: ", codeSystem);
-        console.log("code: ", code);
+    console.log("codeSystem: ", codeSystem);
+    console.log("code: ", code);
 
+    this.callbackSnomedctHandler(snomedCt);
+  };
 
+  getContentType = (evt) => {
+    let contentTypeId = evt.target.value;
+    let contentType = contentTypesMap.find((c) => c.id === contentTypeId);
+    this.setState({ contentType: contentType});
 
-        this.callbackSnomedctHandler(snomedCt);
-    }
+    console.log("contentType", contentType);
+  };
 
+  callbackSnomedctHandler = (snomedct) => {
+    let contentType = this.state.contentType.id;
+    let location = this.state.contentType.location;
 
-    callbackSnomedctHandler = (snomedct) => {
-        let query = 
-            '{' +
-                'guillotine {' +
-                'query('+
-                    'query: "type=\'no.seeds.hbib:treatment_recommendation\'"'+
-                    'filters: {'+
-                    'hasValue: {'+
-                        'field: "x.no-seeds-hbib.metadata.code"'+
-                        ' stringValues: ["' + snomedct + '"]' +
-                    '}'+
-                    '}'+
-                ') {'+
-                    '... on no_seeds_hbib_TreatmentRecommendation {'+
-                    'xAsJson\n' +
-                    'dataAsJson\n' +
-                    '_id' +
-                    '}'+
-                '}'+
-                '}'+
-            '}';
+    let query =
+        '{' +
+          'guillotine {' +
+          'query('+
+              'query: "type=\'no.seeds.hbib:'+contentType+'\'"'+
+              'filters: {'+
+              'hasValue: {'+
+                  'field: "x.no-seeds-hbib.metadata.code"'+
+                  ' stringValues: ["' + snomedct + '"]' +
+              '}'+
+              '}'+
+          ') {'+
+              '... on no_seeds_hbib_' + location + ' {'+
+              'xAsJson\n' +
+              'dataAsJson\n' +
+              '_id' +
+              '}'+
+          '}'+
+          '}'+
+        '}';
 
+    console.log("contentType:", contentType);  
+    console.log("location:", location);  
+    console.log("snomedct:", snomedct);  
+    console.log("query:", query);
 
-        console.log("snomedct:", snomedct);  
-        console.log("query:", query);  
-        this.callPost(query);
+    this.callPost(query);
+  };
 
-    }
+  callPost = ((query) => {
+    this.setState({ showSpinner: true });
+    
+    const parameters = {
+        method: 'POST',
+        headers: {
+          // "Content-Type": "application/json",
+          "Origin": "https://qa.hbib.ntf.seeds.no"
+        },
+        body: JSON.stringify({
+          query: query
+        })
+    };
 
-    callPost = ((query) => {
-            
-        this.setState({ showSpinner: true });
+    fetch(hbibUrl, parameters)
+      .then(response => response.json())
+      .then(data => {
+        console.log("data with the responce... and here the length can be seen", data.data.guillotine.query.length);
+        this.setState({data: JSON.stringify(data), matches: data.data.guillotine.query.length, showSpinner: false});
+      });
+  });
 
-        
-        const parameters = {
-            method: 'POST',
-            headers: {
-                // "Content-Type": "application/json",
-                "Origin": "https://qa.hbib.ntf.seeds.no"
-            },
-            body: JSON.stringify({
-                query: query
-            })
-        };
-
-        fetch(hbibUrl, parameters)
-            .then(response => response.json())
-            .then(data => {
-                console.log("data with the responce... and here the length can be seen", data.data.guillotine.query.length);
-                this.setState({data: JSON.stringify(data), matches: data.data.guillotine.query.length, showSpinner: false});
-            });
-        });
-
-  
   render() {
     return (
       <div>
@@ -104,26 +109,49 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
           <p>Choose the code system and make a search throught SNOMED</p>
         </div>
 
-        <div className="row, top">
-          <div className="col-sm-2">
-            <div className="form-group">
-              <select
-                name="codeSystemEnv"
-                id="codeSystemEnv"
-                onChange={(evt) => this.setState({ env: evt.target.value })}
-              >
-                <option value="" select="default">
-                  Velg kontekst
-                </option>
-                {/* Rend  er options dynamically from codeSystemEnv */}
-                {codeSystemEnv.map((codeSystem, key) => (
-                  <option key={key} value={codeSystem.id}>
-                    {codeSystem.title}
+        <div className="row top">
+          <div className="row">
+            <div className="col-sm-4">
+              <div className="form-group">
+                <select
+                  name="codeSystemEnv"
+                  id="codeSystemEnv"
+                  onChange={(evt) => this.setState({ env: evt.target.value })}
+                >
+                  <option value="" select="default">
+                    Velg kontekst:
                   </option>
-                ))}
-              </select>
+                  {/* Rend  er options dynamically from codeSystemEnv */}
+                  {codeSystemEnv.map((codeSystem, key) => (
+                    <option key={key} value={codeSystem.id}>
+                      {codeSystem.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="col-sm-4">
+              <div className="form-group">
+                <select
+                  name="innholdstype"
+                  id="innholdstype"
+                  onChange={this.getContentType}
+                >
+                  <option value="" select="default">
+                    Velg innholdstype:
+                  </option>
+                  {/* Rend  er options dynamically from codeSystemEnv */}
+                  {contentTypesMap.map((contentType, key) => (
+                    <option key={key} value={contentType.id}>
+                      {contentType.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
+
         </div>
 
         <div className="row">

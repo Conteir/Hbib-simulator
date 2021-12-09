@@ -47,6 +47,24 @@ export const codeSystems = [
     }
   ]
 
+  export const contentTypesMap = [
+    {
+      title: "Behandlingsanbefaling",
+      id: "treatment_recommendation",
+      location: "TreatmentRecommendation",
+    },
+    {
+      title: "Kapittel",
+      id: "chapter",
+      location: "Chapter",
+    },
+    // {
+    //   title: "Antidote database (test)",
+    //   id: "antidote_database",
+    //   location: "AntidoteDatabase",
+    // }
+  ]
+
   export const params = {
     method: "GET",
     headers: {
