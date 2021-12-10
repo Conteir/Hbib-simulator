@@ -58,6 +58,11 @@ export const codeSystems = [
       id: "chapter",
       location: "Chapter",
     },
+    {
+      title: "Anbefaling",
+      id: "recommendation",
+      location: "Recommendation",
+    },
     // {
     //   title: "Antidote database (test)",
     //   id: "antidote_database",

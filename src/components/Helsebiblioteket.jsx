@@ -54,18 +54,18 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
         '{' +
           'guillotine {' +
           'query('+
-              'query: "type=\'no.seeds.hbib:'+contentType+'\'"'+
+              'query: "type=\'no.seeds.hbib:'+contentType+'\'",'+
               'filters: {'+
               'hasValue: {'+
-                  'field: "x.no-seeds-hbib.metadata.code"'+
+                  'field: "x.no-seeds-hbib.metadata.code",'+
                   ' stringValues: ["' + snomedct + '"]' +
               '}'+
               '}'+
-          ') {'+
-              '... on no_seeds_hbib_' + location + ' {'+
-              'xAsJson\n' +
-              'dataAsJson\n' +
-              '_id' +
+          ') {\n'+
+              '... on no_seeds_hbib_' + location + ' {\n'+
+              '   _id\n' +
+              '   dataAsJson\n' +
+              '   xAsJson\n' +
               '}'+
           '}'+
           '}'+
