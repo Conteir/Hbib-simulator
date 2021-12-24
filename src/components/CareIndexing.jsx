@@ -20,7 +20,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
       showContent: false,
       showSpinner: false,
       assessmentData: [],
-      testData: null
+      // testData: null
+      preferredTerms: []
     };
   }
 
@@ -35,46 +36,55 @@ export const CareIndexing = class CareIndexing extends React.Component {
   }
 
   getAssessment = (evt) => {
+
     let assessment = evt.target.value;
-    if (assessment && assessment.length > 0) { 
-      this.setState({ assessment: assessment });
-    }
-    console.log("assessment: ", assessment);
-    this.sendRequestToCareindexing(assessment);
+    
+      console.log("Timeout is set!");
+      if (assessment && assessment.length > 0) { 
+        this.setState({ assessment: assessment });
+      }
+      console.log("assessment: ", assessment);
+      this.sendRequestToCareindexing(assessment);
   };
 
   sendRequestToCareindexing (assessment) {
-    console.log("sent assessment:" , assessment);
 
-    const parameters = {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Token c576c9e9e556a4715a37d4702a659fca41ec6e9b",
-        "Accept": "application/json",
-        "Origin": "http://smpulse.careindexing.com"
-      },  
-      body: JSON.stringify({
-        payload: assessment
-      })
-    };
+    setTimeout( () => {
 
-    const careindexingURL = 'https://snowstorm.conteir.no/careindexing/api/v1/annotations/';
-   
-    fetch(careindexingURL, parameters)
-    .then(response => response.json())
-    .then(data => {
-      console.log("responce with array of objects with some data: ", data);
-    });
+        if (this.state.assessment === assessment) {
 
-    // axios.post(careindexingURL, payload, parameters)
-    //     .then(response => this.setState({ testData: JSON.stringify(response) }),
-    //     console.log("testData:" + this.state.testData)
-    //     );
+        console.log("sent assessment:" , assessment);
 
-   
+        const parameters = {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Token c576c9e9e556a4715a37d4702a659fca41ec6e9b",
+            "Accept": "application/json",
+            "Origin": "http://smpulse.careindexing.com"
+          },  
+          body: JSON.stringify({
+            payload: assessment
+          })
+        };
 
-  }
+        const careindexingURL = 'https://snowstorm.conteir.no/careindexing/api/v1/annotations/';
+    
+        fetch(careindexingURL, parameters)
+        .then(response => response.json())
+        .then(data => {
+          this.setState({ preferredTerms: data});
+          console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
+        });
+
+        // axios.post(careindexingURL, payload, parameters)
+        //     .then(response => this.setState({ testData: JSON.stringify(response) }),
+        //     console.log("testData:" + this.state.testData)
+        //     );
+        }
+    }, 3000);
+
+  };
 
   codeSystemPromise = (url) => {
     let promise = fetch(url, params).then((response) => response.json());
@@ -386,6 +396,22 @@ export const CareIndexing = class CareIndexing extends React.Component {
                   onFocus={this.onFocusOutFunction}
                   onChange={this.getAssessment}
                 />
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="form-group">
+                  <b>Preferred terms:</b>
+                    {this.state.preferredTerms.map( (obj, index) => {
+                      return (
+                        <ol key={index+1}>
+                          {/* <li> */}
+                          {/* TO SPLIT INPUT FROM TEXTAREA INTO SIMPLE WORDS, then use <li> */}
+                            {index+1}{". "}{obj.preferredTerm}
+                          {/* </li> */}
+                        </ol>
+                      );
+                    })}
               </div>
             </div>
 
