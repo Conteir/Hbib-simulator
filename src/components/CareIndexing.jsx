@@ -46,11 +46,11 @@ export const CareIndexing = class CareIndexing extends React.Component {
   };
 
   sendRequestToCareindexing = (assessment) => {
-    setTimeout(() => {
+    // setTimeout(() => {
       console.log("current: '" + assessment + "'");
       console.log("state: '" + this.state.assessment + "'");
 
-      if (this.state.assessment === assessment && assessment.length > 0) {
+      // if (this.state.assessment === assessment && assessment.length > 0) {
 
         console.log("sent assessment:" , assessment);
 
@@ -82,8 +82,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
         //     .then(response => this.setState({ testData: JSON.stringify(response) }),
         //     console.log("testData:" + this.state.testData)
         //     );
-      } else this.setState({ preferredTerms: []});
-    }, 350);
+      // } else this.setState({ preferredTerms: []});
+    // }, 350);
 
   };
 
@@ -394,8 +394,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
                   autoComplete="off"
                   placeholder=""
                   // onBlur={this.onBlurFunction}
-                  onFocus={this.onFocusOutFunction}
-                  onChange={this.getAssessment}
+                  onBlur={this.getAssessment}
+                  // onChange={this.getAssessment}
                 />
               </div>
             </div>
