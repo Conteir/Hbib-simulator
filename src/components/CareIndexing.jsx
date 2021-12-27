@@ -50,7 +50,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
       console.log("current: '" + assessment + "'");
       console.log("state: '" + this.state.assessment + "'");
 
-      if(this.state.assessment === assessment && assessment.length > 0) {
+      if (this.state.assessment === assessment && assessment.length > 0) {
 
         console.log("sent assessment:" , assessment);
 
