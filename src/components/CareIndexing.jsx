@@ -20,9 +20,9 @@ export const CareIndexing = class CareIndexing extends React.Component {
       showContent: false,
       showSpinner: false,
       assessmentData: [],
-      // testData: null
       preferredTerms: [],
-      assessment: ''
+      assessment: '',
+      termsWithSemanticTagDisorder: []
     };
   }
 
@@ -70,13 +70,15 @@ export const CareIndexing = class CareIndexing extends React.Component {
         const careindexingURL = 'https://snowstorm.conteir.no/careindexing/api/v1/annotations/';
     
         fetch(careindexingURL, parameters)
-        .then(response => response.json())
-        .then(data => {
-          if(this.state.assessment === assessment) {
-            this.setState({ preferredTerms: data});
-            console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
-          }
-        });
+          .then(response => response.json())
+          .then(data => {
+            if(this.state.assessment === assessment) {
+              this.setState({ preferredTerms: data});
+              console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
+
+              this.getDisorders(this.state.preferredTerms);
+            }
+          });
 
         // axios.post(careindexingURL, payload, parameters)
         //     .then(response => this.setState({ testData: JSON.stringify(response) }),
@@ -86,6 +88,55 @@ export const CareIndexing = class CareIndexing extends React.Component {
     // }, 350);
 
   };
+
+  getDisorders = (preferredTerms) => {
+
+    let branch =  "MAIN/SNOMEDCT-NO/";
+    let semanticTags =  "disorder";
+
+    if (Array.isArray(preferredTerms) && preferredTerms.length>0) {
+
+      let ptPromises = [];
+      let terms = [];
+
+      preferredTerms.forEach((term) => {
+        let code = term.code;
+
+        let url = 'https://snowstorm.conteir.no/browser/' +
+          branch + 'descriptions?term=' +
+          code +
+          '&active=true&semanticTags=' +
+          semanticTags +
+          '&groupByConcept=true&searchMode=STANDARD&offset=0&limit=50';  
+
+        let ptPromise = fetch(url, params)
+          .then((response) => response.json())
+          .then((data) => {
+
+            if (data.items.length !== 0) {
+              let pt = data.items.map((item) => {
+                return item.concept.pt.term; 
+              });
+
+              // this.setState({data: JSON.stringify(data)});
+              console.log("PT for each term from input where semanticTag = disorder: ",
+                pt);
+              // return requiredPT;
+              terms.push(pt);
+            }
+           
+          });
+          ptPromises.push(ptPromise);
+      });
+
+      Promise.all(ptPromises).then(() => {
+        // this.setState({ data: JSON.stringify(data), showSpinner: false });
+        this.setState({ termsWithSemanticTagDisorder: terms});
+        console.log("terms With SemanticTag 'Disorder': ", this.state.termsWithSemanticTagDisorder);
+      });
+
+    }
+  }
 
   codeSystemPromise = (url) => {
     let promise = fetch(url, params).then((response) => response.json());
@@ -212,18 +263,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
       });
   };
 
-  // onBlurFunction = () => {
-  //   document.getElementById("vurdering").style.background = "red";
-  // }
 
-  onFocusOutFunction = () => {
-    document.getElementById("vurdering").style.background = "yellow";
-  }
-
-  onFocusFunction (evt) {
-    let x = evt.target.value;
-    x.value = x.value.toUpperCase();
-  }
   /*
   // Getting a content from autosuggest
   fetchContentOld = (conceptId) => {
@@ -393,9 +433,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                   type="text"
                   autoComplete="off"
                   placeholder=""
-                  // onBlur={this.onBlurFunction}
                   onBlur={this.getAssessment}
-                  // onChange={this.getAssessment}
                 />
               </div>
             </div>
@@ -403,14 +441,11 @@ export const CareIndexing = class CareIndexing extends React.Component {
             <div className="row">
               <div className="form-group">
                   <b>Preferred terms:</b>
-                    {this.state.preferredTerms.map( (obj, index) => {
+                    {this.state.termsWithSemanticTagDisorder.map((term, index) => {
                       return (
-                        <ol key={index+1}>
-                          {/* <li> */}
-                          {/* TO SPLIT INPUT FROM TEXTAREA INTO SIMPLE WORDS, then use <li> */}
-                            {index+1}{". "}{obj.preferredTerm}
-                          {/* </li> */}
-                        </ol>
+                        <ul key={index+1}>
+                          {term}
+                        </ul>
                       );
                     })}
               </div>
