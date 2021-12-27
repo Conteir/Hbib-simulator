@@ -99,6 +99,16 @@ export const CareIndexing = class CareIndexing extends React.Component {
       let ptPromises = [];
       let terms = [];
 
+      let parameters = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Token c576c9e9e556a4715a37d4702a659fca41ec6e9b",
+          "Accept": "application/json",
+          "Origin": "http://smpulse.careindexing.com"
+        }
+      };
+
       preferredTerms.forEach((term) => {
         let code = term.code;
 
@@ -109,7 +119,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
           semanticTags +
           '&groupByConcept=true&searchMode=STANDARD&offset=0&limit=50';  
 
-        let ptPromise = fetch(url, params)
+        let ptPromise = fetch(url, parameters)
           .then((response) => response.json())
           .then((data) => {
 
