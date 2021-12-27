@@ -8,10 +8,11 @@ import { Spinner } from "reactstrap";
 // import GetParamComponent from "./GetParamComponent.jsx";
 // import axios from 'axios';
 
-const SEMATIC_TAGS_DISORDER = "disorder";
-const SEMATIC_TAGS_FINDING = "finding";
 
-// const INPUT_DISORDER = {sematicTag: "disorder", input: "VURDERING"};
+const INPUT_VURDERING = {semanticTag: "disorder", field: "VURDERING"};
+const INPUT_NOTAT = {semanticTag: "finding", field: "NOTAT"};
+const INPUT_FUNN = {semanticTag: "finding", field: "FUNN"};
+
 
 export const CareIndexing = class CareIndexing extends React.Component {
   constructor(props) {
@@ -26,8 +27,9 @@ export const CareIndexing = class CareIndexing extends React.Component {
       assessmentData: [],
       preferredTerms: [],
       assessment: '',
-      termsWithSemanticTagDisorder: [],
-      termsWithSemanticTagFinding: []
+      termsWithSemanticTagDisorderForVurdering: [],
+      termsWithSemanticTagFindingForNotat: [],
+      termsWithSemanticTagFindingForFunn: []
     };
   }
 
@@ -52,21 +54,20 @@ export const CareIndexing = class CareIndexing extends React.Component {
   //   return eventHandler;
   // }
 
-  getAssessment = (semanticTags) => (evt) => {
+  getAssessment = (input) => (evt) => {
     let assessment = evt.target.value;
     
     this.setState({ assessment: assessment });
 
     console.log("assessment: ", assessment);
-    console.log("semanticTags: ", semanticTags);
+    console.log("semanticTag: ", input.semanticTag);
 
-    this.sendRequestToCareindexing(assessment, semanticTags);
+    this.sendRequestToCareindexing(assessment, input);
   };
 
-  sendRequestToCareindexing = (assessment, semanticTags) => {
+  sendRequestToCareindexing = (assessment, input) => {
     // setTimeout(() => {
       console.log("current: '" + assessment + "'");
-      console.log("state: '" + this.state.assessment + "'");
 
       // if (this.state.assessment === assessment && assessment.length > 0) {
 
@@ -94,7 +95,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
               this.setState({ preferredTerms: data});
               console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
 
-              this.getDisordersTags(this.state.preferredTerms, semanticTags);
+              this.getDisordersTags(this.state.preferredTerms, input);
             }
           });
 
@@ -107,10 +108,14 @@ export const CareIndexing = class CareIndexing extends React.Component {
 
   };
 
-  getDisordersTags = (preferredTerms, semanticTags) => {
+  getDisordersTags = (preferredTerms, input) => {
 
     let branch =  "MAIN/SNOMEDCT-NO/";
     // let semanticTags =  "disorder";
+
+    console.log("input", input);
+    console.log("preferredTerms", preferredTerms);
+
 
     if (Array.isArray(preferredTerms) && preferredTerms.length>0) {
 
@@ -134,7 +139,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
           branch + 'descriptions?term=' +
           code +
           '&active=true&semanticTags=' +
-          semanticTags +
+          input.semanticTag +
           '&groupByConcept=true&searchMode=STANDARD&offset=0&limit=50';  
 
         let ptPromise = fetch(url, parameters)
@@ -146,15 +151,15 @@ export const CareIndexing = class CareIndexing extends React.Component {
                 return item.concept.pt.term; 
               });
 
-              if (semanticTags==="finding") {
-                console.log("PT for each term from input where semanticTag = finding: ",
-                  pt);
+              if (input.field === "NOTAT" && input.semanticTag === "finding") {
+                console.log("PT for each NOTAT from input where semanticTag = finding: ", pt);
                 terms.push(pt);
-              } else if (semanticTags==="disorder") {
-                // this.setState({data: JSON.stringify(data)});
-                console.log("PT for each term from input where semanticTag = disorder: ",
-                  pt);
-                // return requiredPT;
+              } else if (input.field ==="FUNN" && input.semanticTag === "finding") {
+                console.log("PT for each FUNN from input where semanticTag = finding: ", pt);
+                terms.push(pt);
+              }
+              else if (input.field ==="VURDERING" && input.semanticTag === "disorder") {
+                console.log("PT for each VURDERING from input where semanticTag = disorder: ", pt);
                 terms.push(pt);
               }
               
@@ -166,14 +171,15 @@ export const CareIndexing = class CareIndexing extends React.Component {
 
       Promise.all(ptPromises).then(() => {
         // this.setState({ data: JSON.stringify(data), showSpinner: false });
-        if(semanticTags === SEMATIC_TAGS_DISORDER) {
-          this.setState({ termsWithSemanticTagDisorder: terms});
-          console.log("terms With SemanticTag 'Disorder': ", this.state.termsWithSemanticTagDisorder);
-        }
-        else if (semanticTags === SEMATIC_TAGS_FINDING) {
-          this.setState({ termsWithSemanticTagFinding: terms});
-          console.log("termsWithSemanticTagFinding: ", this.state.termsWithSemanticTagFinding);
-
+        if(input.semanticTag === "disorder" && input.field === "VURDERING") {
+            this.setState({ termsWithSemanticTagDisorderForVurdering: terms});
+            console.log("terms With SemanticTag Disorder For Vurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);
+        } else if (input.semanticTag === "finding" && input.field === "NOTAT") {
+            this.setState({ termsWithSemanticTagFindingForNotat: terms});
+            console.log("terms With SemanticTag Finding For Notat: ", this.state.termsWithSemanticTagFindingForNotat);
+        } else if (input.semanticTag === "finding" && input.field === "FUNN") {
+            this.setState({ termsWithSemanticTagFindingForFunn: terms});
+            console.log("terms With SemanticTag Finding For funn: ", this.state.termsWithSemanticTagFindingForFunn);
         }
       });
 
@@ -448,7 +454,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                   type="text"
                   autoComplete="off"
                   placeholder=""
-                  onBlur={this.getAssessment(SEMATIC_TAGS_FINDING)}
+                  onBlur={this.getAssessment(INPUT_NOTAT)}
                 />
               </div>
             </div>
@@ -456,7 +462,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
             <div className="row">
               <div className="form-group">
                   <b>Preferred terms (findings):</b>
-                    {this.state.termsWithSemanticTagFinding.map((term, index) => {
+                    {this.state.termsWithSemanticTagFindingForNotat.map((term, index) => {
                       return (
                         <ul key={index+1}>
                           {term}
@@ -476,7 +482,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                   type="text"
                   autoComplete="off"
                   placeholder=""
-                  onBlur={this.getAssessment(SEMATIC_TAGS_FINDING)}
+                  onBlur={this.getAssessment(INPUT_FUNN)}
                 />
               </div>
             </div>
@@ -484,7 +490,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
             <div className="row">
               <div className="form-group">
                   <b>Preferred terms (findings):</b>
-                    {this.state.termsWithSemanticTagFinding.map((term, index) => {
+                    {this.state.termsWithSemanticTagFindingForFunn.map((term, index) => {
                       return (
                         <ul key={index+1}>
                           {term}
@@ -504,7 +510,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                   type="text"
                   autoComplete="off"
                   placeholder=""
-                  onBlur={this.getAssessment(SEMATIC_TAGS_DISORDER)}
+                  onBlur={this.getAssessment(INPUT_VURDERING)}
                 />
               </div>
             </div>
@@ -512,7 +518,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
             <div className="row">
               <div className="form-group">
                   <b>Preferred terms (disorders):</b>
-                    {this.state.termsWithSemanticTagDisorder.map((term, index) => {
+                    {this.state.termsWithSemanticTagDisorderForVurdering.map((term, index) => {
                       return (
                         <ul key={index+1}>
                           {term}
