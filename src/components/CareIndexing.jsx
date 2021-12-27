@@ -21,7 +21,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
       showSpinner: false,
       assessmentData: [],
       // testData: null
-      preferredTerms: []
+      preferredTerms: [],
+      assessment: ''
     };
   }
 
@@ -36,22 +37,20 @@ export const CareIndexing = class CareIndexing extends React.Component {
   }
 
   getAssessment = (evt) => {
-
     let assessment = evt.target.value;
     
-      console.log("Timeout is set!");
-      if (assessment && assessment.length > 0) { 
-        this.setState({ assessment: assessment });
-      }
-      console.log("assessment: ", assessment);
-      this.sendRequestToCareindexing(assessment);
+    this.setState({ assessment: assessment });
+
+    console.log("assessment: ", assessment);
+    this.sendRequestToCareindexing(assessment);
   };
 
-  sendRequestToCareindexing (assessment) {
+  sendRequestToCareindexing = (assessment) => {
+    setTimeout(() => {
+      console.log("current: '" + assessment + "'");
+      console.log("state: '" + this.state.assessment + "'");
 
-    setTimeout( () => {
-
-        if (this.state.assessment === assessment) {
+      if(this.state.assessment === assessment && assessment.length > 0) {
 
         console.log("sent assessment:" , assessment);
 
@@ -73,16 +72,18 @@ export const CareIndexing = class CareIndexing extends React.Component {
         fetch(careindexingURL, parameters)
         .then(response => response.json())
         .then(data => {
-          this.setState({ preferredTerms: data});
-          console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
+          if(this.state.assessment === assessment) {
+            this.setState({ preferredTerms: data});
+            console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
+          }
         });
 
         // axios.post(careindexingURL, payload, parameters)
         //     .then(response => this.setState({ testData: JSON.stringify(response) }),
         //     console.log("testData:" + this.state.testData)
         //     );
-        }
-    }, 3000);
+      } else this.setState({ preferredTerms: []});
+    }, 350);
 
   };
 
