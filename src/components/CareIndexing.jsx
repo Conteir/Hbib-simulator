@@ -8,11 +8,9 @@ import { Spinner } from "reactstrap";
 // import GetParamComponent from "./GetParamComponent.jsx";
 // import axios from 'axios';
 
-
 const INPUT_VURDERING = {semanticTag: "disorder", field: "VURDERING"};
 const INPUT_NOTAT = {semanticTag: "finding", field: "NOTAT"};
 const INPUT_FUNN = {semanticTag: "finding", field: "FUNN"};
-
 
 export const CareIndexing = class CareIndexing extends React.Component {
   constructor(props) {
@@ -29,7 +27,10 @@ export const CareIndexing = class CareIndexing extends React.Component {
       assessment: '',
       termsWithSemanticTagDisorderForVurdering: [],
       termsWithSemanticTagFindingForNotat: [],
-      termsWithSemanticTagFindingForFunn: []
+      termsWithSemanticTagFindingForFunn: [],
+      datasForRenderNotat: [],
+      datasForRenderFunn: [],
+      datasForRenderVurdering: [],
     };
   }
 
@@ -95,7 +96,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
               this.setState({ preferredTerms: data});
               console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
 
-              this.getDisordersTags(this.state.preferredTerms, input);
+              this.useSemanticTags(this.state.preferredTerms, input);
             }
           });
 
@@ -105,17 +106,14 @@ export const CareIndexing = class CareIndexing extends React.Component {
         //     );
       // } else this.setState({ preferredTerms: []});
     // }, 350);
-
   };
 
-  getDisordersTags = (preferredTerms, input) => {
+  useSemanticTags = (preferredTerms, input) => {
 
-    let branch =  "MAIN/SNOMEDCT-NO/";
-    // let semanticTags =  "disorder";
+    let branch = "MAIN/SNOMEDCT-NO/";
 
     console.log("input", input);
-    console.log("preferredTerms", preferredTerms);
-
+    console.log("preferredTerms without sorting: ", preferredTerms);
 
     if (Array.isArray(preferredTerms) && preferredTerms.length>0) {
 
@@ -133,36 +131,24 @@ export const CareIndexing = class CareIndexing extends React.Component {
       };
 
       preferredTerms.forEach((term) => {
-        let code = term.code;
+        let sctid = term.code;
 
-        let url = 'https://snowstorm.conteir.no/browser/' +
-          branch + 'descriptions?term=' +
-          code +
-          '&active=true&semanticTags=' +
-          input.semanticTag +
+        let url = 'https://snowstorm.conteir.no/browser/' + branch +
+          'descriptions?term=' + sctid +
+          '&active=true&semanticTags=' + input.semanticTag +
           '&groupByConcept=true&searchMode=STANDARD&offset=0&limit=50';  
 
+        // get terms according to semanticTags:
         let ptPromise = fetch(url, parameters)
           .then((response) => response.json())
           .then((data) => {
 
             if (data.items.length !== 0) {
-              let pt = data.items.map((item) => {
-                return item.concept.pt.term; 
+              data.items.forEach((item) => {
+                let sortedPTterm = item.concept.pt.term; 
+                terms.push({term: sortedPTterm, conceptId: item.concept.conceptId});
               });
-
-              if (input.field === "NOTAT" && input.semanticTag === "finding") {
-                console.log("PT for each NOTAT from input where semanticTag = finding: ", pt);
-                terms.push(pt);
-              } else if (input.field ==="FUNN" && input.semanticTag === "finding") {
-                console.log("PT for each FUNN from input where semanticTag = finding: ", pt);
-                terms.push(pt);
-              }
-              else if (input.field ==="VURDERING" && input.semanticTag === "disorder") {
-                console.log("PT for each VURDERING from input where semanticTag = disorder: ", pt);
-                terms.push(pt);
-              }
-              
+              console.log("terms during useSemanticTags function: ", terms);
             }
            
           });
@@ -170,27 +156,74 @@ export const CareIndexing = class CareIndexing extends React.Component {
       });
 
       Promise.all(ptPromises).then(() => {
-        // this.setState({ data: JSON.stringify(data), showSpinner: false });
-        if(input.semanticTag === "disorder" && input.field === "VURDERING") {
-            this.setState({ termsWithSemanticTagDisorderForVurdering: terms});
-            console.log("terms With SemanticTag Disorder For Vurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);
-        } else if (input.semanticTag === "finding" && input.field === "NOTAT") {
-            this.setState({ termsWithSemanticTagFindingForNotat: terms});
-            console.log("terms With SemanticTag Finding For Notat: ", this.state.termsWithSemanticTagFindingForNotat);
-        } else if (input.semanticTag === "finding" && input.field === "FUNN") {
-            this.setState({ termsWithSemanticTagFindingForFunn: terms});
-            console.log("terms With SemanticTag Finding For funn: ", this.state.termsWithSemanticTagFindingForFunn);
-        }
+        this.getContentForCareIndexing(terms, input.field);
+
+        // // this.setState({ data: JSON.stringify(data), showSpinner: false });
+        //   if(input.field === "VURDERING") {
+        //       this.setState({ termsWithSemanticTagDisorderForVurdering: terms});
+        //       console.log("terms With SemanticTag Disorder For Vurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);
+        //   } else if (input.field === "NOTAT") {
+        //       this.setState({ termsWithSemanticTagFindingForNotat: terms});
+        //       console.log("terms With SemanticTag Finding For Notat: ", this.state.termsWithSemanticTagFindingForNotat);
+        //   } else if (input.field === "FUNN") {
+        //       this.setState({ termsWithSemanticTagFindingForFunn: terms});
+        //       console.log("terms With SemanticTag Finding For funn: ", this.state.termsWithSemanticTagFindingForFunn);
+        //   }
       });
 
     }
   }
 
-  codeSystemPromise = (url) => {
-    let promise = fetch(url, params).then((response) => response.json());
-    console.log("Does it work?");
-    return promise;
-  };
+  getContentForCareIndexing = (terms, field) => {
+    if(terms.length > 0) {
+      let codeSystemPromises = [];
+
+      terms.forEach((termObj) => {
+        // Get code for code system
+        const selectedCodeSystem = codeSystemEnv.find(o => o.id === this.state.env);
+
+        if(selectedCodeSystem) {
+          let codeSystemPromise = fetch(selectedCodeSystem.url + termObj.conceptId)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data?.items?.length > 0 && 
+                data.items[0]?.additionalFields?.mapTarget?.length > 0
+            ) { 
+              let code = data.items[0].additionalFields.mapTarget;
+              // TODO: ask about strange value for codes mapTarget
+
+              // Get data from hdir by code and code system
+              const url = helsedirBaseUrl + "?kodeverk=" + this.state.env + "&kode=" + code;
+
+              // TODO: handle if no code
+              let dataPromise = fetch(url, params)
+              .then((response) => response.json())
+              .then((hdirData) => {
+                // deepest level completes a promise (!); returns a string for render
+                return JSON.stringify(hdirData);
+              });
+
+              return dataPromise;
+            }
+            // TODO: handle if mapTarget code = "" (no ICD/ICPC for sctid)
+          });
+
+          codeSystemPromises.push(codeSystemPromise);
+        }
+      });
+
+      Promise.all(codeSystemPromises).then((hdirDataStrings) => {
+        if(field === "VURDERING") {
+          this.setState({datasForRenderVurdering: hdirDataStrings});
+        } else if (field === "NOTAT") {
+          this.setState({datasForRenderNotat: hdirDataStrings});
+        } else if (field === "FUNN") {
+          this.setState({datasForRenderFunn: hdirDataStrings});
+        }
+      });
+    }
+  }
+
 
   //getting forel and barn link data (h.p.)
   getLinkData = (link) => {
@@ -285,9 +318,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
 
   fetchContent = (url) => {
     this.setState({ showSpinner: true });
-    // reset state to clean results before new loading
     this.setState({ matches: -1, data: "", showContent: false });
-    // API key depends on environment: current -> Production
     
 
     fetch(url, params)
@@ -304,117 +335,17 @@ export const CareIndexing = class CareIndexing extends React.Component {
             showSpinner: false,
           });
 
-          //console.log("Content for " + codeSystem + ":", data);
-          //console.log("Content for " + codeSystem + ":", data.length);
         }
         console.log("So, what is here..?", data);
         this.processResponse(data);
       });
   };
 
-
-  /*
-  // Getting a content from autosuggest
-  fetchContentOld = (conceptId) => {
-    let promises = [];
-    let content = {};
-
-    // ICPC2
-    let codeSystemUrl1 = snomedURLs.getICPC2 + conceptId;
-
-    let promiseICPC2 = fetch(codeSystemUrl1)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("ICPC2", data);
-        if (data && Array.isArray(data.items) && data.items.length > 0) {
-          if (data.items[0]?.additionalFields?.mapTarget) {
-            content.icpc2 = {
-              code: data.items[0]?.additionalFields?.mapTarget,
-            };
-          }
-        }
-      });
-    promises.push(promiseICPC2);
-
-    // ICD
-    let codeSystemUrl = snomedURLs.getICD10 + conceptId;
-
-    let promiseICD10 = fetch(codeSystemUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("icd10", data);
-        if (data && Array.isArray(data.items) && data.items.length > 0) {
-          if (data.items[0]?.additionalFields?.mapTarget) {
-            content.icd10 = {
-              code: data.items[0]?.additionalFields?.mapTarget,
-            };
-          }
-        }
-      });
-    promises.push(promiseICD10);
-
-    Promise.all(promises).then(() => {
-      let contentPromises = [];
-      // Fetch by ICPC2 if available
-
-      // API key depends on environment: current -> Production
-      const apiKey = "89b72a3ad5cf4723b3f489c3eb4d82a1";
-      const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";
-      let params = {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Ocp-Apim-Subscription-Key": apiKey,
-        },
-      };
-
-      if (content.icpc2) {
-        let url = hdBaseUrl + "?kodeverk=ICPC-2&kode=" + content.icpc2.code;
-        let promiseICPC2Content = fetch(url, params)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("icpc2 items:", data);
-            if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
-              content.icpc2.text = data[0].tekst;
-            }
-          });
-        contentPromises.push(promiseICPC2Content);
-      }
-
-      // Fetch by ICD10 if available
-      if (content.icd10) {
-        let url = hdBaseUrl + "?kodeverk=ICD-10&kode=" + content.icd10.code;
-        console.log(url);
-        let promiseICD10Content = fetch(url, params)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("icd10 items:", data);
-            if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
-              content.icd10.text = data[0].tekst;
-            }
-          });
-        contentPromises.push(promiseICD10Content);
-      }
-
-      Promise.all(contentPromises).then(() => {
-        console.log("Content", content);
-
-        //making render for icpc
-        if (content?.icpc2?.text) {
-          this.setState({ icpc2Content: content.icpc2.text });
-        }
-
-        //making render for icd
-        if (content?.icd10?.text) {
-          this.setState({ icd10Content: content.icd10.text });
-        }
-      });
-    });
-  }; */
-
   render() {
+    // TODO render for notat, funn, vurdering
     return (
       <div>
+        <button onClick={() => console.log(this.state)}>Log state</button>
         <div className="jumbotron text-center">
           <h1>CareIndexing</h1>
         </div>
