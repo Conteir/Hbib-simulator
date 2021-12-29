@@ -195,7 +195,6 @@ export const CareIndexing = class CareIndexing extends React.Component {
               // Get data from hdir by code and code system
               const url = helsedirBaseUrl + "?kodeverk=" + this.state.env + "&kode=" + code;
 
-              // TODO: handle if no code
               let dataPromise = fetch(url, params)
               .then((response) => response.json())
               .then((hdirData) => {
@@ -204,8 +203,10 @@ export const CareIndexing = class CareIndexing extends React.Component {
               });
 
               return dataPromise;
+            } else {
+              console.log("termObj ", termObj.conceptId);
+              alert("An error while getting a code: no code in code system for this sctid: " + termObj.conceptId + "!");
             }
-            // TODO: handle if mapTarget code = "" (no ICD/ICPC for sctid)
           });
 
           codeSystemPromises.push(codeSystemPromise);
@@ -342,7 +343,6 @@ export const CareIndexing = class CareIndexing extends React.Component {
   };
 
   render() {
-    // TODO render for notat, funn, vurdering
     return (
       <div>
         <button onClick={() => console.log(this.state)}>Log state</button>
@@ -390,7 +390,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
               </div>
             </div>
 
-            <div className="row">
+            {/* <div className="row">
               <div className="form-group">
                   <b>Preferred terms (findings):</b>
                     {this.state.termsWithSemanticTagFindingForNotat.map((term, index) => {
@@ -401,7 +401,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                       );
                     })}
               </div>
-            </div>
+            </div> */}
 
             <div className="row">
               <div className="form-group">
@@ -418,7 +418,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
               </div>
             </div>
 
-            <div className="row">
+            {/* <div className="row">
               <div className="form-group">
                   <b>Preferred terms (findings):</b>
                     {this.state.termsWithSemanticTagFindingForFunn.map((term, index) => {
@@ -429,7 +429,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                       );
                     })}
               </div>
-            </div>
+            </div> */}
 
             <div className="row">
               <div className="form-group">
@@ -446,7 +446,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
               </div>
             </div>
 
-            <div className="row">
+            {/* <div className="row">
               <div className="form-group">
                   <b>Preferred terms (disorders):</b>
                     {this.state.termsWithSemanticTagDisorderForVurdering.map((term, index) => {
@@ -457,7 +457,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                       );
                     })}
               </div>
-            </div>
+            </div> */}
 
             <div className="row">
               <div className="form-group">
@@ -539,6 +539,73 @@ export const CareIndexing = class CareIndexing extends React.Component {
                 ) : null}
               </div>
             </div>
+
+            {/* Notat: */}
+            <div className="row">
+              {
+                this.state.datasForRenderNotat.length > 0 ? 
+                  <p>SNOMED CT konsepter (kliniske funn) funnet i feltet Notat:</p> 
+                : null
+              }
+              { 
+                this.state.datasForRenderNotat.length > 0 &&
+                  this.state.datasForRenderNotat.map( (item, index) => {
+                    return (
+                      <div key={index}>
+                        <HTMLRender
+                          data={item}
+                          linkCallback={this.linkCallback}
+                          hideMetadata={true}
+                          hideLinksNavigation={true}
+                      />
+                      </div>
+                    );
+                })
+              }
+            </div>
+
+            {/* Funn: */}
+            <div className="row">
+              {this.state.datasForRenderFunn.length > 0 ? 
+                <p>SNOMED CT konsepter (kliniske funn) funnet i feltet Funn:</p>
+              : null}
+              {this.state.datasForRenderFunn.length > 0 &&
+                this.state.datasForRenderFunn.map( (item, index) => {
+                  return (
+                    <div key={index}>
+                      <HTMLRender
+                        data={item}
+                        linkCallback={this.linkCallback}
+                        hideMetadata={true}
+                        hideLinksNavigation={true}
+                      />
+                    </div>
+                  );
+                })
+              }
+            </div>
+
+            {/* Vurdering: */}
+            <div className="row">
+              {this.state.datasForRenderVurdering.length > 0 ?
+                <p>SNOMED CT konsepter (sykdom) funnet i feltet Vurdering:</p>
+              : null}
+              {this.state.datasForRenderVurdering.length > 0 &&
+                this.state.datasForRenderVurdering.map( (item, index) => {
+                  return (
+                    <div key={index}>
+                      <HTMLRender
+                        data={item}
+                        linkCallback={this.linkCallback}
+                        hideMetadata={true}
+                        hideLinksNavigation={true}
+                      />
+                    </div>
+                  );
+                })
+              }
+            </div>
+
           </div>
           {/*
           <div>
