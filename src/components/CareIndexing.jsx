@@ -557,6 +557,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                           linkCallback={this.linkCallback}
                           hideMetadata={true}
                           hideLinksNavigation={true}
+                          tag="notat"
                       />
                       </div>
                     );
@@ -578,6 +579,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                         linkCallback={this.linkCallback}
                         hideMetadata={true}
                         hideLinksNavigation={true}
+                        tag="funn"
                       />
                     </div>
                   );
@@ -599,6 +601,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                         linkCallback={this.linkCallback}
                         hideMetadata={true}
                         hideLinksNavigation={true}
+                        tag="vurdering"
                       />
                     </div>
                   );

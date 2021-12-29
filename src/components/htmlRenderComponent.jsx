@@ -186,7 +186,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
   renderItem(item) {
     return (
-      <CollapsibleComponent name={item.id}>
+      <CollapsibleComponent name={(this.props.tag ? this.props.tag : '') + item.id}>
         {" "}
         {/** remember id - should be only 1! */}
         <CollapsibleHead>
