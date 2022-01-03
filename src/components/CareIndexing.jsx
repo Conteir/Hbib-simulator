@@ -6,7 +6,6 @@ import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 // import GetParamComponent from "./GetParamComponent.jsx";
-// import axios from 'axios';
 
 const INPUT_VURDERING = {semanticTag: "disorder", field: "VURDERING"};
 const INPUT_NOTAT = {semanticTag: "finding", field: "NOTAT"};
@@ -25,9 +24,9 @@ export const CareIndexing = class CareIndexing extends React.Component {
       assessmentData: [],
       preferredTerms: [],
       assessment: '',
-      termsWithSemanticTagDisorderForVurdering: [],
-      termsWithSemanticTagFindingForNotat: [],
-      termsWithSemanticTagFindingForFunn: [],
+      // termsWithSemanticTagDisorderForVurdering: [],
+      // termsWithSemanticTagFindingForNotat: [],
+      // termsWithSemanticTagFindingForFunn: [],
       datasForRenderNotat: [],
       datasForRenderFunn: [],
       datasForRenderVurdering: [],
@@ -60,7 +59,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
     
     this.setState({ assessment: assessment });
 
-    console.log("assessment: ", assessment);
+    console.log("vurdering: ", assessment);
     console.log("semanticTag: ", input.semanticTag);
 
     this.sendRequestToCareindexing(assessment, input);
@@ -68,44 +67,62 @@ export const CareIndexing = class CareIndexing extends React.Component {
 
   sendRequestToCareindexing = (assessment, input) => {
     // setTimeout(() => {
-      console.log("current: '" + assessment + "'");
+    console.log("current: '" + assessment + "'");
 
-      // if (this.state.assessment === assessment && assessment.length > 0) {
+    // if (this.state.assessment === assessment && assessment.length > 0) {
+    console.log("sent assessment:" , assessment);
 
-        console.log("sent assessment:" , assessment);
+    const parameters = {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token c576c9e9e556a4715a37d4702a659fca41ec6e9b",
+        "Accept": "application/json",
+        "Origin": "http://smpulse.careindexing.com"
+      },  
+      body: JSON.stringify({
+        payload: assessment
+      })
+    };
 
-        const parameters = {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Token c576c9e9e556a4715a37d4702a659fca41ec6e9b",
-            "Accept": "application/json",
-            "Origin": "http://smpulse.careindexing.com"
-          },  
-          body: JSON.stringify({
-            payload: assessment
-          })
-        };
+    const careindexingURL = 'https://snowstorm.conteir.no/careindexing/api/v1/annotations/';
 
-        const careindexingURL = 'https://snowstorm.conteir.no/careindexing/api/v1/annotations/';
-    
-        fetch(careindexingURL, parameters)
-          .then(response => response.json())
-          .then(data => {
-            if(this.state.assessment === assessment) {
-              this.setState({ preferredTerms: data});
-              console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
+    fetch(careindexingURL, parameters)
+      .then(response => response.json())
+      .then(data => {
+        if(this.state.assessment === assessment) {
 
-              this.useSemanticTags(this.state.preferredTerms, input);
-            }
-          });
+          console.log("DATA: ", data);
 
-        // axios.post(careindexingURL, payload, parameters)
-        //     .then(response => this.setState({ testData: JSON.stringify(response) }),
-        //     console.log("testData:" + this.state.testData)
-        //     );
-      // } else this.setState({ preferredTerms: []});
-    // }, 350);
+          // let processedTerms = {};
+
+          // data.forEach((item) => {
+          //   if(!data[item.code]) {
+          //     // no matches yet:
+          //     data[item.$existsOnce] = true;
+          //     console.log("data: ", data);
+          //   }
+          // });
+
+          // let unique = [...new Set(data)];
+          // console.log(unique);
+
+          // const unique = (value, index, self) => {
+          //   return self.indexOf(value) === index
+          // }
+
+         
+
+          // let unique = data.filter((item, i, ar) => ar.indexOf(item) === i);
+          // console.log("unique", unique);
+
+
+          this.setState({ preferredTerms: data});
+          console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
+
+          this.useSemanticTags(this.state.preferredTerms, input);
+        }
+      });
   };
 
   useSemanticTags = (preferredTerms, input) => {
@@ -130,7 +147,20 @@ export const CareIndexing = class CareIndexing extends React.Component {
         }
       };
 
+      // check unique objects:
+      // 1. create an empty obj
+      let uniqueTerms = {};
+
       preferredTerms.forEach((term) => {
+
+        // 2. iterating through each item and trying to get a value:
+        if(uniqueTerms[term.code])
+          return; // 3. do nothing if the object already has duplicates
+          
+        // 4. else if there is no term.code field, set this field and set it as true
+        uniqueTerms[term.code] = true;
+        console.log("unique codes: ", uniqueTerms);
+
         let sctid = term.code;
 
         let url = 'https://snowstorm.conteir.no/browser/' + branch +
@@ -145,10 +175,12 @@ export const CareIndexing = class CareIndexing extends React.Component {
 
             if (data.items.length !== 0) {
               data.items.forEach((item) => {
-                let sortedPTterm = item.concept.pt.term; 
-                terms.push({term: sortedPTterm, conceptId: item.concept.conceptId});
+                let filteredPTterm = item.concept.pt.term; 
+                terms.push( {term: filteredPTterm, conceptId: item.concept.conceptId} );
               });
               console.log("terms during useSemanticTags function: ", terms);
+              console.log("this.state.terms during useSemanticTags function: ", this.state.terms);
+
             }
            
           });
@@ -551,7 +583,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                 this.state.datasForRenderNotat.length > 0 &&
                   this.state.datasForRenderNotat.map( (item, index) => {
                     return (
-                      <div key={index}>
+                      <div key={index} className="content">
                         <HTMLRender
                           data={item}
                           linkCallback={this.linkCallback}
@@ -592,6 +624,22 @@ export const CareIndexing = class CareIndexing extends React.Component {
               {this.state.datasForRenderVurdering.length > 0 ?
                 <p>SNOMED CT konsepter (sykdom) funnet i feltet Vurdering:</p>
               : null}
+              {/* {
+                this.state.termsVurdering.map( (t, ind)=>{
+                  return (
+                    <div key={ind}>
+                      {" - "}{t.term}
+                    </div>
+                  );
+                })
+              } */}
+              {/* {this.state.preferredTerms.map( (pt, ind)=>{
+                return (
+                  <div key={ind}>
+                    {pt}
+                  </div>
+                );
+              })} */}
               {this.state.datasForRenderVurdering.length > 0 &&
                 this.state.datasForRenderVurdering.map( (item, index) => {
                   return (
