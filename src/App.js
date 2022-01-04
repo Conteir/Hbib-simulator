@@ -8,6 +8,7 @@ import { Semantic } from './components/Semantic.jsx';
 import { BMJ } from './components/BMJ.jsx';
 import { Helsebiblioteket } from './components/Helsebiblioteket.jsx';
 import { CareIndexing } from './components/CareIndexing.jsx';
+import { Eirik } from './components/Eirik.jsx';
 import Nav from 'react-bootstrap/Nav';
 
 
@@ -40,6 +41,7 @@ export const App = class App extends React.Component {
 
                 <Nav.Link href="/careindexing">Care Indexing</Nav.Link>
 
+                <Nav.Link href="/eirik">Eirik</Nav.Link>
 
             </Nav>
 
@@ -74,6 +76,10 @@ export const App = class App extends React.Component {
 
                 <Route path="/careindexing" component={CareIndexing}>
                   <CareIndexing />
+                </Route>
+
+                <Route path="/eirik" component={Eirik}>
+                  <Eirik />
                 </Route>
 
             </Switch>
