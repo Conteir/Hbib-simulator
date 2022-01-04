@@ -65,6 +65,9 @@ h2 {
   padding: 10px 0 10px 0;
   margin: 0px;
 }
+h2.small {
+  font-size: 20px;
+}
 
 .link {
   text-decoration: underline;
@@ -256,7 +259,6 @@ ul {
 }
 /**/
 
-
 .Collapsible__trigger {
   display: block;
   font-weight: 400;
@@ -267,6 +269,4 @@ ul {
   padding: 5px;
   background: #3275a8;
   color: white;
-
 }
-

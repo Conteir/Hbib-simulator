@@ -5,10 +5,11 @@ import DisordersAutosuggest from "./DisordersAutosuggest";
 import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
+import { Accordion } from "react-bootstrap";
 
-const INPUT_VURDERING = {semanticTag: "disorder", field: "VURDERING"};
-const INPUT_NOTAT = {semanticTag: "finding", field: "NOTAT"};
-const INPUT_FUNN = {semanticTag: "finding", field: "FUNN"};
+const INPUT_VURDERING = { semanticTag: "disorder", field: "VURDERING" };
+const INPUT_NOTAT = { semanticTag: "finding", field: "NOTAT" };
+const INPUT_FUNN = { semanticTag: "finding", field: "FUNN" };
 
 export const Eirik = class Eirik extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export const Eirik = class Eirik extends React.Component {
       showSpinner: false,
       assessmentData: [],
       preferredTerms: [],
-      assessment: '',
+      assessment: "",
       datasForRenderNotat: [],
       datasForRenderFunn: [],
       datasForRenderVurdering: [],
@@ -31,17 +32,17 @@ export const Eirik = class Eirik extends React.Component {
 
   componentDidMount() {
     const urlParams = new URLSearchParams(window.location.search);
-    const valueHapiId = urlParams.get('hapiId');
-    if(valueHapiId) {
+    const valueHapiId = urlParams.get("hapiId");
+    if (valueHapiId) {
       const url = helsedirBaseUrl + valueHapiId;
       this.fetchContent(url);
       this.setState({ showContent: true });
     }
   }
-  
+
   getAssessment = (input) => (evt) => {
     let assessment = evt.target.value;
-    
+
     this.setState({ assessment: assessment });
 
     console.log("vurdering: ", assessment);
@@ -55,32 +56,35 @@ export const Eirik = class Eirik extends React.Component {
     console.log("current: '" + assessment + "'");
 
     // if (this.state.assessment === assessment && assessment.length > 0) {
-    console.log("sent assessment:" , assessment);
+    console.log("sent assessment:", assessment);
 
     const parameters = {
-      method: 'POST',
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Token c576c9e9e556a4715a37d4702a659fca41ec6e9b",
-        "Accept": "application/json",
-        "Origin": "http://smpulse.careindexing.com"
-      },  
+        Authorization: "Token c576c9e9e556a4715a37d4702a659fca41ec6e9b",
+        Accept: "application/json",
+        Origin: "http://smpulse.careindexing.com",
+      },
       body: JSON.stringify({
-        payload: assessment
-      })
+        payload: assessment,
+      }),
     };
 
-    const careindexingURL = 'https://snowstorm.conteir.no/careindexing/api/v1/annotations/';
+    const careindexingURL =
+      "https://snowstorm.conteir.no/careindexing/api/v1/annotations/";
 
     fetch(careindexingURL, parameters)
-      .then(response => response.json())
-      .then(data => {
-        if(this.state.assessment === assessment) {
-
+      .then((response) => response.json())
+      .then((data) => {
+        if (this.state.assessment === assessment) {
           console.log("DATA: ", data);
 
-          this.setState({ preferredTerms: data});
-          console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
+          this.setState({ preferredTerms: data });
+          console.log(
+            "responce with array of objects with preferredTerms: ",
+            this.state.preferredTerms
+          );
 
           this.useSemanticTags(this.state.preferredTerms, input);
         }
@@ -88,25 +92,23 @@ export const Eirik = class Eirik extends React.Component {
   };
 
   useSemanticTags = (preferredTerms, input) => {
-
     let branch = "MAIN/SNOMEDCT-NO/";
 
     console.log("input", input);
     console.log("preferredTerms without sorting: ", preferredTerms);
 
-    if (Array.isArray(preferredTerms) && preferredTerms.length>0) {
-
+    if (Array.isArray(preferredTerms) && preferredTerms.length > 0) {
       let ptPromises = [];
       let terms = [];
 
       let parameters = {
-        method: 'GET',
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Token c576c9e9e556a4715a37d4702a659fca41ec6e9b",
-          "Accept": "application/json",
-          "Origin": "http://smpulse.careindexing.com"
-        }
+          Authorization: "Token c576c9e9e556a4715a37d4702a659fca41ec6e9b",
+          Accept: "application/json",
+          Origin: "http://smpulse.careindexing.com",
+        },
       };
 
       // check unique objects:
@@ -114,99 +116,116 @@ export const Eirik = class Eirik extends React.Component {
       let uniqueTerms = {};
 
       preferredTerms.forEach((term) => {
-
         // 2. iterating through each item and trying to get a value:
-        if(uniqueTerms[term.code])
-          return; // 3. do nothing if the object already has duplicates
-          
+        if (uniqueTerms[term.code]) return; // 3. do nothing if the object already has duplicates
+
         // 4. else if there is no term.code field, set this field and set it as true
         uniqueTerms[term.code] = true;
         console.log("unique codes: ", uniqueTerms);
 
         let sctid = term.code;
 
-        let url = 'https://snowstorm.conteir.no/browser/' + branch +
-          'descriptions?term=' + sctid +
-          '&active=true&semanticTags=' + input.semanticTag +
-          '&groupByConcept=true&searchMode=STANDARD&offset=0&limit=50';  
+        let url =
+          "https://snowstorm.conteir.no/browser/" +
+          branch +
+          "descriptions?term=" +
+          sctid +
+          "&active=true&semanticTags=" +
+          input.semanticTag +
+          "&groupByConcept=true&searchMode=STANDARD&offset=0&limit=50";
 
         // get terms according to semanticTags:
         let ptPromise = fetch(url, parameters)
           .then((response) => response.json())
           .then((data) => {
-
             if (data.items.length !== 0) {
               data.items.forEach((item) => {
-                let filteredPTterm = item.concept.pt.term; 
-                terms.push( {term: filteredPTterm, conceptId: item.concept.conceptId} );
+                let filteredPTterm = item.concept.pt.term;
+                terms.push({
+                  term: filteredPTterm,
+                  conceptId: item.concept.conceptId,
+                });
               });
               console.log("terms during useSemanticTags function: ", terms);
-              console.log("this.state.terms during useSemanticTags function: ", this.state.terms);
-
+              console.log(
+                "this.state.terms during useSemanticTags function: ",
+                this.state.terms
+              );
             }
-           
           });
-          ptPromises.push(ptPromise);
+        ptPromises.push(ptPromise);
       });
 
       Promise.all(ptPromises).then(() => {
         this.getContentForCareIndexing(terms, input.field);
-
       });
-
     }
-  }
+  };
 
   getContentForCareIndexing = (terms, field) => {
-    if(terms.length > 0) {
+    if (terms.length > 0) {
       let codeSystemPromises = [];
 
       terms.forEach((termObj) => {
         // Get code for code system
-        const selectedCodeSystem = codeSystemEnv.find(o => o.id === this.state.env);
+        const selectedCodeSystem = codeSystemEnv.find(
+          (o) => o.id === this.state.env
+        );
 
-        if(selectedCodeSystem) {
-          let codeSystemPromise = fetch(selectedCodeSystem.url + termObj.conceptId)
-          .then((response) => response.json())
-          .then((data) => {
-            if (data?.items?.length > 0 && 
+        if (selectedCodeSystem) {
+          let codeSystemPromise = fetch(
+            selectedCodeSystem.url + termObj.conceptId
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              if (
+                data?.items?.length > 0 &&
                 data.items[0]?.additionalFields?.mapTarget?.length > 0
-            ) { 
-              let code = data.items[0].additionalFields.mapTarget;
-              // TODO: ask about strange value for codes mapTarget
+              ) {
+                let code = data.items[0].additionalFields.mapTarget;
+                // TODO: ask about strange value for codes mapTarget
 
-              // Get data from hdir by code and code system
-              const url = helsedirBaseUrl + "?kodeverk=" + this.state.env + "&kode=" + code;
+                // Get data from hdir by code and code system
+                const url =
+                  helsedirBaseUrl +
+                  "?kodeverk=" +
+                  this.state.env +
+                  "&kode=" +
+                  code;
 
-              let dataPromise = fetch(url, params)
-              .then((response) => response.json())
-              .then((hdirData) => {
-                // deepest level completes a promise (!); returns a string for render
-                return JSON.stringify(hdirData);
-              });
+                let dataPromise = fetch(url, params)
+                  .then((response) => response.json())
+                  .then((hdirData) => {
+                    // deepest level completes a promise (!); returns a string for render
+                    return JSON.stringify(hdirData);
+                  });
 
-              return dataPromise;
-            } else {
-              console.log("termObj ", termObj.conceptId);
-              alert("An error while getting a code: no code in code system for this sctid: " + termObj.conceptId + "!");
-            }
-          });
+                return dataPromise;
+              } else {
+                console.log("termObj ", termObj.conceptId);
+                alert(
+                  "An error while getting a code: no code in code system for this sctid: " +
+                    termObj.conceptId +
+                    "!"
+                );
+              }
+            });
 
           codeSystemPromises.push(codeSystemPromise);
         }
       });
 
       Promise.all(codeSystemPromises).then((hdirDataStrings) => {
-        if(field === "VURDERING") {
-          this.setState({datasForRenderVurdering: hdirDataStrings});
+        if (field === "VURDERING") {
+          this.setState({ datasForRenderVurdering: hdirDataStrings });
         } else if (field === "NOTAT") {
-          this.setState({datasForRenderNotat: hdirDataStrings});
+          this.setState({ datasForRenderNotat: hdirDataStrings });
         } else if (field === "FUNN") {
-          this.setState({datasForRenderFunn: hdirDataStrings});
+          this.setState({ datasForRenderFunn: hdirDataStrings });
         }
       });
     }
-  }
+  };
 
   //getting forel and barn link data (h.p.)
   getLinkData = (link) => {
@@ -247,7 +266,7 @@ export const Eirik = class Eirik extends React.Component {
       });
 
       // Text render demo (commented out now) START
-        // check if there is data with required field:
+      // check if there is data with required field:
       if (data[0]?.tekst !== undefined) {
         this.setState({ content: data[0].tekst });
       }
@@ -297,7 +316,7 @@ export const Eirik = class Eirik extends React.Component {
 
     const url = helsedirBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
     this.fetchContent(url);
-  }
+  };
 
   fetchContent = (url) => {
     this.setState({ showSpinner: true });
@@ -316,7 +335,6 @@ export const Eirik = class Eirik extends React.Component {
             data: JSON.stringify(data),
             showSpinner: false,
           });
-
         }
         console.log("So, what is here..?", data);
         this.processResponse(data);
@@ -358,7 +376,7 @@ export const Eirik = class Eirik extends React.Component {
             <div className="row">
               <div className="form-group">
                 <label htmlFor="notat">
-                  <b>Notat:</b>
+                  <b>Anamnese:</b>
                 </label>
                 <textarea
                   aria-label="Notat"
@@ -400,7 +418,40 @@ export const Eirik = class Eirik extends React.Component {
                 />
               </div>
             </div>
-
+            <div className="row">
+              <p>
+                Hanna: Content below should only be shown if content is fetched
+                from HAPI
+              </p>
+            </div>
+            <div className="row">
+              <Accordion defaultActiveKey="1">
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>Beslutningsstøtte</Accordion.Header>
+                  <Accordion.Body>
+                    <section>
+                      <h1>Helsedirekotatet</h1>
+                      <Accordion defaultActiveKey="0">
+                        <Accordion.Item eventKey="1">
+                          <Accordion.Header>Title content 1</Accordion.Header>
+                          <Accordion.Body>Text content 1</Accordion.Body>
+                        </Accordion.Item>
+                      </Accordion>
+                      <Accordion defaultActiveKey="0">
+                        <Accordion.Item eventKey="7">
+                          <Accordion.Header>Title content 2</Accordion.Header>
+                          <Accordion.Body>Text content 2</Accordion.Body>
+                        </Accordion.Item>
+                      </Accordion>
+                    </section>
+                    <section>
+                      <h1>BMJ</h1>
+                      <p>Comes later</p>
+                    </section>
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            </div>
             <div className="row">
               <div className="form-group">
                 <label htmlFor="tiltak">
@@ -419,10 +470,9 @@ export const Eirik = class Eirik extends React.Component {
           <div className="col-sm-6">
             <div className="row">
               <p>
-                <b>Årsak (symptom, plage eller tentativ diagnose):</b>
+                <b>Problemstilling:</b>
               </p>
             </div>
-
             <div className="row">
               <div className="col-sm-8">
                 <DisordersAutosuggest
@@ -449,11 +499,9 @@ export const Eirik = class Eirik extends React.Component {
                 ) : null}
               </div>
             </div>
-
             <div className="row">
               {this.state.showSpinner ? <Spinner color="success" /> : null}
             </div>
-
             <div className="row">
               <div className="col-sm-8">
                 {/* this.state.showContent ? <HTMLRender data={this.state.data} linkCallback={this.linkCallback} /> : null */}
@@ -481,77 +529,48 @@ export const Eirik = class Eirik extends React.Component {
                 ) : null}
               </div>
             </div>
-
+            <div className="row">
+              <h2 className="small">SNOMED CT-konsepter funnet ved NPL</h2>
+            </div>
+            <div className="row">
+              <p>
+                Hanna: The content under here will should be shown only when a
+                term is finded
+              </p>
+            </div>
             {/* Notat: */}
             <div className="row">
-              {
-                this.state.datasForRenderNotat.length > 0 ? 
-                  <p>SNOMED CT konsepter (kliniske funn) funnet i feltet Notat:</p> 
-                : null
-              }
-              { 
-                this.state.datasForRenderNotat.length > 0 &&
-                  this.state.datasForRenderNotat.map( (item, index) => {
-                    return (
-                      <div key={index} className="content">
-                        <HTMLRender
-                          data={item}
-                          linkCallback={this.linkCallback}
-                          hideMetadata={true}
-                          hideLinksNavigation={true}
-                          tag="notat"
-                      />
-                      </div>
-                    );
-                })
-              }
+              <h3 className="small">
+                SNOMED CT-konsepter (kliniske funn) funnet i feltet Anamnese
+              </h3>
+              <ul>
+                <li>Preferd term 1</li>
+                <li>Preferd term 2</li>
+                <li>Etc.</li>
+              </ul>
             </div>
-
             {/* Funn: */}
             <div className="row">
-              {this.state.datasForRenderFunn.length > 0 ? 
-                <p>SNOMED CT konsepter (kliniske funn) funnet i feltet Funn:</p>
-              : null}
-              {this.state.datasForRenderFunn.length > 0 &&
-                this.state.datasForRenderFunn.map( (item, index) => {
-                  return (
-                    <div key={index}>
-                      <HTMLRender
-                        data={item}
-                        linkCallback={this.linkCallback}
-                        hideMetadata={true}
-                        hideLinksNavigation={true}
-                        tag="funn"
-                      />
-                    </div>
-                  );
-                })
-              }
+              <h3 className="small">
+                SNOMED CT-konsepter (kliniske funn) funnet i feltet Funn
+              </h3>
+              <ul>
+                <li>Preferd term 1</li>
+                <li>Preferd term 2</li>
+                <li>Etc.</li>
+              </ul>
             </div>
-
             {/* Vurdering: */}
             <div className="row">
-              {this.state.datasForRenderVurdering.length > 0 ?
-                <p>SNOMED CT konsepter (sykdom) funnet i feltet Vurdering:</p>
-              : null}
-              
-              {this.state.datasForRenderVurdering.length > 0 &&
-                this.state.datasForRenderVurdering.map( (item, index) => {
-                  return (
-                    <div key={index}>
-                      <HTMLRender
-                        data={item}
-                        linkCallback={this.linkCallback}
-                        hideMetadata={true}
-                        hideLinksNavigation={true}
-                        tag="vurdering"
-                      />
-                    </div>
-                  );
-                })
-              }
+              <h3 className="small">
+                SNOMED CT-konsepter (kliniske funn) funnet i feltet Funn
+              </h3>
+              <ul>
+                <li>Preferd term 1</li>
+                <li>Preferd term 2</li>
+                <li>Etc.</li>
+              </ul>
             </div>
-
           </div>
         </div>
       </div>
