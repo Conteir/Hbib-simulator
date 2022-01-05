@@ -468,7 +468,22 @@ export const CareIndexing = class CareIndexing extends React.Component {
                         this.state.datasForRenderAnamnese.length > 0 || 
                         this.state.datasForRenderFunn.length > 0 ||
                         this.state.datasForRenderVurdering.length > 0 ?
-                          <h1>Helsedirekotatet</h1> 
+                          <h1>
+                            Helsedirekotatet [
+                              {this.state.datasForRenderAnamnese.length + 
+                              this.state.datasForRenderFunn.length +
+                              this.state.datasForRenderVurdering.length}
+                                {" "}
+                                document
+                                {
+                                  (this.state.datasForRenderAnamnese.length + 
+                                  this.state.datasForRenderFunn.length +
+                                  this.state.datasForRenderVurdering.length) > 1 ? 
+                                  'er' 
+                                  : 'et'
+                                }
+                            ]
+                          </h1> 
                         : null
                       }
                       
@@ -502,11 +517,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
                             return (
                               <div key={index} className="content">
                                 <AccordionRender
-                                  // title={item}
                                   data={item}
                                   linkCallback={this.linkCallback}
-                                  // hideMetadata={true}
-                                  // hideLinksNavigation={true}
                                   tag="anamnese"
                                 />
                               </div>
@@ -519,11 +531,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
                             return (
                               <div key={index} className="content">
                                 <AccordionRender
-                                  // title={item}
                                   data={item}
                                   linkCallback={this.linkCallback}
-                                  // hideMetadata={true}
-                                  // hideLinksNavigation={true}
                                   tag="funn"
                                 />
                               </div>
@@ -536,11 +545,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
                             return (
                               <div key={index} className="content">
                                 <AccordionRender
-                                  // title={item}
                                   data={item}
                                   linkCallback={this.linkCallback}
-                                  // hideMetadata={true}
-                                  // hideLinksNavigation={true}
                                   tag="vurdering"
                                 />
                               </div>

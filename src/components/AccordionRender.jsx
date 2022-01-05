@@ -3,167 +3,19 @@ import { Accordion } from "react-bootstrap";
 
 export const AccordionRender = class AccordionRender extends React.Component {
 
-    constructor(props) {
-        super(props);
-    
-        this.state = {
-          title: [],
-          content: []
-        };
-    }
-
     render() {
         return (
-        <div>
-            <div>{this.renderJson()}</div>
-        </div>
+            <div className="fill-width">
+                {this.renderJson()}
+            </div>
         );
     }
-
-    // renderItemMetadata(item) {
-    //     return (
-    //     <table>
-    //         <tbody>
-    //         <tr>
-    //             <td style={{ fontWeight: "bold" }}>Id</td>
-    //             <td>{item.id ? item.id : null}</td>
-    //         </tr>
-
-    //         <tr>
-    //             <td style={{ fontWeight: "bold" }}>Eier</td>
-    //             <td>{item.eier ? item.eier : null}</td>
-    //         </tr>
-
-    //         <tr>
-    //             <td style={{ fontWeight: "bold" }}>Sist Oppdatert</td>
-    //             <td>{item.sistOppdatert ? item.sistOppdatert : null}</td>
-    //         </tr>
-
-    //         {item.forstPublisert ? (
-    //             <tr>
-    //             <td>Forst Publisert</td>
-    //             <td>{item.forstPublisert}</td>
-    //             </tr>
-    //         ) : null}
-
-    //         {item.gruppeId ? (
-    //             <tr>
-    //             <td>Gruppe Id</td>
-    //             <td>{item.gruppeId}</td>
-    //             </tr>
-    //         ) : null}
-
-    //         {item?.koder?.["ICPC-2"] ? (
-    //             <tr>
-    //             <td>ICPC-2</td>
-    //             <td>{item?.koder["ICPC-2"]}</td>
-    //             </tr>
-    //         ) : null}
-
-    //         {item?.koder?.["ICD-10"] ? (
-    //             <tr>
-    //             <td>ICD-10</td>
-    //             <td>{item?.koder["ICD-10"]}</td>
-    //             </tr>
-    //         ) : null}
-
-    //         {item?.koder?.["lis-spesialitet"] ? (
-    //             <tr>
-    //             <td>lis-spesialitet</td>
-    //             <td>{item?.koder["lis-spesialitet"]}</td>
-    //             </tr>
-    //         ) : null}
-
-    //         {item?.koder?.["lis-laeringsmaal"] ? (
-    //             <tr>
-    //             <td>lis-laeringsmaal</td>
-    //             <td>{item?.koder["lis-laeringsmaal"]}</td>
-    //             </tr>
-    //         ) : null}
-
-    //         {item?.koder?.["SNOMED-CT"] ? (
-    //             <tr>
-    //             <td>SNOMED-CT</td>
-    //             <td>{item?.koder["SNOMED-CT"]}</td>
-    //             </tr>
-    //         ) : null}
-
-    //         <tr>
-    //             <td style={{ fontWeight: "bold" }} colSpan="2">
-    //             Tekniske data
-    //             </td>
-    //             <td>{item.tekniskeData ? "" : "none"}</td>
-    //         </tr>
-
-    //         <tr>
-    //             <td style={{ fontWeight: "bold" }}>Info Id</td>
-    //             <td>
-    //             {item.tekniskeData && item.tekniskeData.infoId
-    //                 ? item.tekniskeData.infoId
-    //                 : ""}
-    //             </td>
-    //         </tr>
-
-    //         <tr>
-    //             <td style={{ fontWeight: "bold" }}>Info type</td>
-    //             <td>
-    //             {item.tekniskeData && item.tekniskeData.infoType
-    //                 ? item.tekniskeData.infoType
-    //                 : ""}
-    //             </td>
-    //         </tr>
-
-    //         {item.tekniskeData && item.tekniskeData.subType ? (
-    //             <tr>
-    //             <td>Subtype</td>
-    //             <td>{item.tekniskeData.subType}</td>
-    //             </tr>
-    //         ) : null}
-
-    //         {item.tekniskeData && item.tekniskeData.HapiId ? (
-    //             <tr>
-    //             <td>HAPI id</td>
-    //             <td>{item.tekniskeData.HapiId}</td>
-    //             </tr>
-    //         ) : null}
-
-    //         {
-    //             //rendering links for metadata
-    //             Array.isArray(item.links) ? (
-    //             <tr>
-    //                 <td colSpan="2">{this.renderLinks(item.links)}</td>
-    //             </tr>
-    //             ) : null
-    //         }
-
-    //         {item.attachments ? (
-    //             <tr>
-    //             <td>Attachments</td>
-    //             <td>{item.attachments}</td>
-    //             </tr>
-    //         ) : null}
-
-    //         <tr>
-    //             <td style={{ fontWeight: "bold" }}>Dokument type</td>
-    //             <td>{item.dokumentType ? item.dokumentType : ""}</td>
-    //         </tr>
-
-    //         <tr>
-    //             <td style={{ fontWeight: "bold" }}>Sist importert til Hapi</td>
-    //             <td>
-    //             {item.sistImportertTilHapi ? item.sistImportertTilHapi : ""}
-    //             </td>
-    //         </tr>
-    //         </tbody>
-    //     </table>
-    //     );
-    // }
 
     renderTitle = (item) => {
         let rootLink = undefined;
 
         if (Array.isArray(item.links)) {
-        rootLink = item.links.find((link) => link.rel === "root");
+            rootLink = item.links.find((link) => link.rel === "root");
         }
 
         return (
@@ -641,24 +493,17 @@ export const AccordionRender = class AccordionRender extends React.Component {
             // if the response from HomePage "data={this.state.response}" was recived:
             let json = JSON.parse(this.props.data);
 
-            if (
-                Array.isArray(json) &&
-                !window.location.href.indexOf("getid") > -1
-            ) {
+            if (Array.isArray(json) && !window.location.href.indexOf("getid") > -1) {
                 return json.map((item, index) => (
-                    <div key={index}>
-                        {/* TODO: set the same size of boxes if several concepts for one request and if only one */}
+                    <div key={index} className="fill-width">
                         <Accordion>
                             <Accordion.Item eventKey={index}>
-
                                 <Accordion.Header>
                                     {item.tittel}
                                 </Accordion.Header>
-
                                 <Accordion.Body>
                                     {this.renderItem(item)}
                                 </Accordion.Body>
-
                             </Accordion.Item>
                         </Accordion>
                     </div>
