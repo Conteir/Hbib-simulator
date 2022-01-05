@@ -27,9 +27,9 @@ export const CareIndexing = class CareIndexing extends React.Component {
       assessmentData: [],
       preferredTerms: [],
       assessment: '',
-      // termsWithSemanticTagDisorderForVurdering: [],
-      // termsWithSemanticTagFindingForNotat: [],
-      // termsWithSemanticTagFindingForFunn: [],
+      termsWithSemanticTagDisorderForVurdering: [],
+      termsWithSemanticTagFindingForAnamnese: [],
+      termsWithSemanticTagFindingForFunn: [],
       datasForRenderAnamnese: [],
       datasForRenderFunn: [],
       datasForRenderVurdering: [],
@@ -193,17 +193,17 @@ export const CareIndexing = class CareIndexing extends React.Component {
       Promise.all(ptPromises).then(() => {
         this.getContentForCareIndexing(terms, input.field);
 
-        // // this.setState({ data: JSON.stringify(data), showSpinner: false });
-        //   if(input.field === "VURDERING") {
-        //       this.setState({ termsWithSemanticTagDisorderForVurdering: terms});
-        //       console.log("terms With SemanticTag Disorder For Vurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);
-        //   } else if (input.field === "NOTAT") {
-        //       this.setState({ termsWithSemanticTagFindingForNotat: terms});
-        //       console.log("terms With SemanticTag Finding For Notat: ", this.state.termsWithSemanticTagFindingForNotat);
-        //   } else if (input.field === "FUNN") {
-        //       this.setState({ termsWithSemanticTagFindingForFunn: terms});
-        //       console.log("terms With SemanticTag Finding For funn: ", this.state.termsWithSemanticTagFindingForFunn);
-        //   }
+        // this.setState({ data: JSON.stringify(data), showSpinner: false });
+        if(input.field === "VURDERING") {
+            this.setState({ termsWithSemanticTagDisorderForVurdering: terms});
+            console.log("terms With SemanticTag Disorder For Vurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);
+        } else if (input.field === "ANAMNESE") {
+            this.setState({ termsWithSemanticTagFindingForAnamnese: terms});
+            console.log("terms With SemanticTag Finding For Anamnese: ", this.state.termsWithSemanticTagFindingForAnamnese);
+        } else if (input.field === "FUNN") {
+            this.setState({ termsWithSemanticTagFindingForFunn: terms});
+            console.log("terms With SemanticTag Finding For funn: ", this.state.termsWithSemanticTagFindingForFunn);
+        }
       });
 
     }
@@ -425,19 +425,6 @@ export const CareIndexing = class CareIndexing extends React.Component {
               </div>
             </div>
 
-            {/* <div className="row">
-              <div className="form-group">
-                  <b>Preferred terms (findings):</b>
-                    {this.state.termsWithSemanticTagFindingForNotat.map((term, index) => {
-                      return (
-                        <ul key={index+1}>
-                          {term}
-                        </ul>
-                      );
-                    })}
-              </div>
-            </div> */}
-
             <div className="row">
               <div className="form-group">
                 <label htmlFor="funn">
@@ -452,19 +439,6 @@ export const CareIndexing = class CareIndexing extends React.Component {
                 />
               </div>
             </div>
-
-            {/* <div className="row">
-              <div className="form-group">
-                  <b>Preferred terms (findings):</b>
-                    {this.state.termsWithSemanticTagFindingForFunn.map((term, index) => {
-                      return (
-                        <ul key={index+1}>
-                          {term}
-                        </ul>
-                      );
-                    })}
-              </div>
-            </div> */}
 
             <div className="row">
               <div className="form-group">
@@ -481,19 +455,6 @@ export const CareIndexing = class CareIndexing extends React.Component {
               </div>
             </div>
 
-            {/* <div className="row">
-              <div className="form-group">
-                  <b>Preferred terms (disorders):</b>
-                    {this.state.termsWithSemanticTagDisorderForVurdering.map((term, index) => {
-                      return (
-                        <ul key={index+1}>
-                          {term}
-                        </ul>
-                      );
-                    })}
-              </div>
-            </div> */}
-
             <div className="row">
 
               <Accordion defaultActiveKey="1">
@@ -503,7 +464,14 @@ export const CareIndexing = class CareIndexing extends React.Component {
                   <Accordion.Body>
                     
                     <section>
-                      <h1>Helsedirekotatet</h1>
+                      {
+                        this.state.datasForRenderAnamnese.length > 0 || 
+                        this.state.datasForRenderFunn.length > 0 ||
+                        this.state.datasForRenderVurdering.length > 0 ?
+                          <h1>Helsedirekotatet</h1> 
+                        : null
+                      }
+                      
                       {/* <Accordion defaultActiveKey="0">
                         <Accordion.Item eventKey="1">
                           <Accordion.Header>Content from Anamnese</Accordion.Header>
@@ -622,7 +590,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
           <div className="col-sm-6">
             <div className="row">
               <p>
-                <b>Årsak (symptom, plage eller tentativ diagnose):</b>
+                <b>Problemstilling:</b>
               </p>
             </div>
 
@@ -631,9 +599,11 @@ export const CareIndexing = class CareIndexing extends React.Component {
                 <DisordersAutosuggest
                   suggestCallback={this.suggestCallback}
                   codeSystem={this.state.env}
+                  placeholder="Årsak (symptom, plage eller tentativ diagnose):"
                 />
               </div>
 
+              {/* Badge with amount of matches */}
               <div className="col-sm-4 match-block">
                 {this.state.matches > 0 ? (
                   <div>
@@ -657,6 +627,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
               {this.state.showSpinner ? <Spinner color="success" /> : null}
             </div>
 
+            {/* HAPI render */}
             <div className="row">
               <div className="col-sm-8">
                 {/* this.state.showContent ? <HTMLRender data={this.state.data} linkCallback={this.linkCallback} /> : null */}
@@ -685,26 +656,34 @@ export const CareIndexing = class CareIndexing extends React.Component {
               </div>
             </div>
 
+            {/* Preferred terms' render: */}
             <div className="row">
               {
-                this.state.datasForRenderAnamnese.length > 0 ? 
-                  <p>SNOMED CT konsepter (kliniske funn) funnet i feltet Anamnese:</p> 
+                this.state.datasForRenderAnamnese.length > 0 || 
+                this.state.datasForRenderFunn.length > 0 || 
+                this.state.datasForRenderVurdering.length > 0 ? 
+                  <div className="row">
+                    <h2 className="small">SNOMED CT-konsepter funnet ved NPL</h2>
+                  </div>
                 : null
               }
-              { 
-                this.state.datasForRenderAnamnese.length > 0 &&
-                  this.state.datasForRenderAnamnese.map( (item, index) => {
+            </div>
+            
+            {/* Anamnese: */}
+            <div className="row">
+              {this.state.datasForRenderAnamnese.length > 0 ? 
+                <h3 className="small">SNOMED CT-konsepter (kliniske funn) funnet i feltet Anamnese</h3>
+              : null}
+              {
+                this.state.termsWithSemanticTagFindingForAnamnese.map((term, index) => {
+                  console.log("termsWithSemanticTagFindingForAnamnese: ", this.state.termsWithSemanticTagFindingForAnamnese);
                     return (
-                      <div key={index} className="content">
-                        <HTMLRender
-                          data={item}
-                          linkCallback={this.linkCallback}
-                          hideMetadata={true}
-                          hideLinksNavigation={true}
-                          tag="anamnese"
-                      />
+                      <div key={index+1}>
+                        <ul>
+                          <li>{term.term}</li>
+                        </ul>
                       </div>
-                    );
+                      );
                 })
               }
             </div>
@@ -712,46 +691,40 @@ export const CareIndexing = class CareIndexing extends React.Component {
             {/* Funn: */}
             <div className="row">
               {this.state.datasForRenderFunn.length > 0 ? 
-                <p>SNOMED CT konsepter (kliniske funn) funnet i feltet Funn:</p>
+                <h3 className="small">SNOMED CT-konsepter (kliniske funn) funnet i feltet Funn</h3>
               : null}
-              {this.state.datasForRenderFunn.length > 0 &&
-                this.state.datasForRenderFunn.map( (item, index) => {
+                {
+                  this.state.termsWithSemanticTagFindingForFunn.map((term, index) => {
+                    console.log("termsWithSemanticTagFindingForFunn: ", this.state.termsWithSemanticTagFindingForFunn);
+                      return (
+                        <div key={index+1}>
+                          <ul>
+                            <li>{term.term}</li>
+                          </ul>
+                        </div>
+                        );
+                  })
+                }
+            </div>
+
+            {/* Vurdering: */}
+            <div className="row">
+              {this.state.datasForRenderVurdering.length > 0 ? 
+                (<h3 className="small">SNOMED CT-konsepter (lidelse) funnet i feltet Vurdering</h3>)
+              : null}
+              {this.state.termsWithSemanticTagDisorderForVurdering.map((term, index) => {
+                console.log("termsWithSemanticTagDisorderForVurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);
                   return (
-                    <div key={index}>
-                      <HTMLRender
-                        data={item}
-                        linkCallback={this.linkCallback}
-                        hideMetadata={true}
-                        hideLinksNavigation={true}
-                        tag="funn"
-                      />
+                    <div key={index+1}>
+                      <ul>
+                        <li>{term.term}</li>
+                      </ul>
                     </div>
                   );
                 })
               }
             </div>
 
-            {/* Vurdering: */}
-            <div className="row">
-              {this.state.datasForRenderVurdering.length > 0 ?
-                <p>SNOMED CT konsepter (sykdom) funnet i feltet Vurdering:</p>
-              : null}
-              {this.state.datasForRenderVurdering.length > 0 &&
-                this.state.datasForRenderVurdering.map( (item, index) => {
-                  return (
-                    <div key={index}>
-                      <HTMLRender
-                        data={item}
-                        linkCallback={this.linkCallback}
-                        hideMetadata={true}
-                        hideLinksNavigation={true}
-                        tag="vurdering"
-                      />
-                    </div>
-                  );
-                })
-              }
-            </div>
           </div>
         </div>
       </div>

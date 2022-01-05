@@ -147,7 +147,8 @@ export default class DisordersAutosuggest extends React.Component {
     // Autosuggest will pass through all these props to the input.
     const inputProps = {
       value,
-      onChange: this.onChange
+      onChange: this.onChange,
+      placeholder: this.props.placeholder
     };
 
     // Finally, render it!
