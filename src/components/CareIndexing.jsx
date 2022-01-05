@@ -3,12 +3,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import DisordersAutosuggest from "./DisordersAutosuggest";
 import { HTMLRender } from "./htmlRenderComponent";
+import { AccordionRender } from "./AccordionRender";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
+import { Accordion } from "react-bootstrap";
 // import GetParamComponent from "./GetParamComponent.jsx";
 
 const INPUT_VURDERING = {semanticTag: "disorder", field: "VURDERING"};
-const INPUT_NOTAT = {semanticTag: "finding", field: "NOTAT"};
+const INPUT_ANAMNESE = {semanticTag: "finding", field: "ANAMNESE"};
 const INPUT_FUNN = {semanticTag: "finding", field: "FUNN"};
 
 export const CareIndexing = class CareIndexing extends React.Component {
@@ -18,6 +20,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
     this.state = {
       env: "",
       data: "",
+      title: "",
       matches: -1,
       showContent: false,
       showSpinner: false,
@@ -27,7 +30,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
       // termsWithSemanticTagDisorderForVurdering: [],
       // termsWithSemanticTagFindingForNotat: [],
       // termsWithSemanticTagFindingForFunn: [],
-      datasForRenderNotat: [],
+      datasForRenderAnamnese: [],
       datasForRenderFunn: [],
       datasForRenderVurdering: [],
     };
@@ -248,8 +251,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
       Promise.all(codeSystemPromises).then((hdirDataStrings) => {
         if(field === "VURDERING") {
           this.setState({datasForRenderVurdering: hdirDataStrings});
-        } else if (field === "NOTAT") {
-          this.setState({datasForRenderNotat: hdirDataStrings});
+        } else if (field === "ANAMNESE") {
+          this.setState({datasForRenderAnamnese: hdirDataStrings});
         } else if (field === "FUNN") {
           this.setState({datasForRenderFunn: hdirDataStrings});
         }
@@ -408,16 +411,16 @@ export const CareIndexing = class CareIndexing extends React.Component {
           <div className="col-sm-6">
             <div className="row">
               <div className="form-group">
-                <label htmlFor="notat">
-                  <b>Notat:</b>
+                <label htmlFor="anamnese">
+                  <b>Anamnese:</b>
                 </label>
                 <textarea
-                  aria-label="Notat"
-                  id="notat"
+                  aria-label="Anamnese"
+                  id="anamnese"
                   type="text"
                   autoComplete="off"
                   placeholder=""
-                  onBlur={this.getAssessment(INPUT_NOTAT)}
+                  onBlur={this.getAssessment(INPUT_ANAMNESE)}
                 />
               </div>
             </div>
@@ -490,6 +493,116 @@ export const CareIndexing = class CareIndexing extends React.Component {
                     })}
               </div>
             </div> */}
+
+            <div className="row">
+
+              <Accordion defaultActiveKey="1">
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>Beslutningsstøtte</Accordion.Header>
+
+                  <Accordion.Body>
+                    
+                    <section>
+                      <h1>Helsedirekotatet</h1>
+                      {/* <Accordion defaultActiveKey="0">
+                        <Accordion.Item eventKey="1">
+                          <Accordion.Header>Content from Anamnese</Accordion.Header>
+                          <Accordion.Body>
+                            {this.state.datasForRenderAnamnese.length > 0 &&
+                                this.state.datasForRenderAnamnese.map( (item, index) => {
+                                  return (
+                                    <div key={index} className="content">
+                                      <AccordionRender
+                                        data={item}
+                                        linkCallback={this.linkCallback}
+                                        // hideMetadata={true}
+                                        // hideLinksNavigation={true}
+                                        tag="anamnese"
+                                    />
+                                    </div>
+                                  );
+                              })
+                            }
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      </Accordion> */}
+
+                      {/* <Accordion defaultActiveKey="6"> */}
+
+                      {this.state.datasForRenderAnamnese.length > 0 &&
+                          this.state.datasForRenderAnamnese.map( (item, index) => {
+                            return (
+                              <div key={index} className="content">
+                                <AccordionRender
+                                  // title={item}
+                                  data={item}
+                                  linkCallback={this.linkCallback}
+                                  // hideMetadata={true}
+                                  // hideLinksNavigation={true}
+                                  tag="anamnese"
+                                />
+                              </div>
+                            );
+                        })
+                      }
+
+                      {this.state.datasForRenderFunn.length > 0 &&
+                          this.state.datasForRenderFunn.map( (item, index) => {
+                            return (
+                              <div key={index} className="content">
+                                <AccordionRender
+                                  // title={item}
+                                  data={item}
+                                  linkCallback={this.linkCallback}
+                                  // hideMetadata={true}
+                                  // hideLinksNavigation={true}
+                                  tag="funn"
+                                />
+                              </div>
+                            );
+                        })
+                      }
+
+                      {this.state.datasForRenderVurdering.length > 0 &&
+                          this.state.datasForRenderVurdering.map( (item, index) => {
+                            return (
+                              <div key={index} className="content">
+                                <AccordionRender
+                                  // title={item}
+                                  data={item}
+                                  linkCallback={this.linkCallback}
+                                  // hideMetadata={true}
+                                  // hideLinksNavigation={true}
+                                  tag="vurdering"
+                                />
+                              </div>
+                            );
+                        })
+                      }
+
+                      {/* </Accordion> */}
+
+
+                      {/* <Accordion defaultActiveKey="3">
+                        <Accordion.Item eventKey="8">
+                          <Accordion.Header>Title content 2</Accordion.Header>
+                          <Accordion.Body>Text content 2</Accordion.Body>
+                        </Accordion.Item>
+                      </Accordion> */}
+                      
+                    </section>
+
+                    <section>
+                      <h1>BMJ</h1>
+                      <p>Comes later</p>
+                    </section>
+
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+
+            </div>
+
 
             <div className="row">
               <div className="form-group">
@@ -572,16 +685,15 @@ export const CareIndexing = class CareIndexing extends React.Component {
               </div>
             </div>
 
-            {/* Notat: */}
             <div className="row">
               {
-                this.state.datasForRenderNotat.length > 0 ? 
-                  <p>SNOMED CT konsepter (kliniske funn) funnet i feltet Notat:</p> 
+                this.state.datasForRenderAnamnese.length > 0 ? 
+                  <p>SNOMED CT konsepter (kliniske funn) funnet i feltet Anamnese:</p> 
                 : null
               }
               { 
-                this.state.datasForRenderNotat.length > 0 &&
-                  this.state.datasForRenderNotat.map( (item, index) => {
+                this.state.datasForRenderAnamnese.length > 0 &&
+                  this.state.datasForRenderAnamnese.map( (item, index) => {
                     return (
                       <div key={index} className="content">
                         <HTMLRender
@@ -589,7 +701,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                           linkCallback={this.linkCallback}
                           hideMetadata={true}
                           hideLinksNavigation={true}
-                          tag="notat"
+                          tag="anamnese"
                       />
                       </div>
                     );
@@ -624,22 +736,6 @@ export const CareIndexing = class CareIndexing extends React.Component {
               {this.state.datasForRenderVurdering.length > 0 ?
                 <p>SNOMED CT konsepter (sykdom) funnet i feltet Vurdering:</p>
               : null}
-              {/* {
-                this.state.termsVurdering.map( (t, ind)=>{
-                  return (
-                    <div key={ind}>
-                      {" - "}{t.term}
-                    </div>
-                  );
-                })
-              } */}
-              {/* {this.state.preferredTerms.map( (pt, ind)=>{
-                return (
-                  <div key={ind}>
-                    {pt}
-                  </div>
-                );
-              })} */}
               {this.state.datasForRenderVurdering.length > 0 &&
                 this.state.datasForRenderVurdering.map( (item, index) => {
                   return (
@@ -656,14 +752,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                 })
               }
             </div>
-
           </div>
-          {/*
-          <div>
-            <h1>test</h1>
-            <GetParamComponent/>
-          </div>
-          */}
         </div>
       </div>
     );

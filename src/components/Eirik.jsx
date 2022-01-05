@@ -418,12 +418,14 @@ export const Eirik = class Eirik extends React.Component {
                 />
               </div>
             </div>
+            
             <div className="row">
               <p>
                 Hanna: Content below should only be shown if content is fetched
                 from HAPI
               </p>
             </div>
+            
             <div className="row">
               <Accordion defaultActiveKey="1">
                 <Accordion.Item eventKey="0">
@@ -452,6 +454,7 @@ export const Eirik = class Eirik extends React.Component {
                 </Accordion.Item>
               </Accordion>
             </div>
+            
             <div className="row">
               <div className="form-group">
                 <label htmlFor="tiltak">
@@ -473,6 +476,7 @@ export const Eirik = class Eirik extends React.Component {
                 <b>Problemstilling:</b>
               </p>
             </div>
+
             <div className="row">
               <div className="col-sm-8">
                 <DisordersAutosuggest
@@ -499,9 +503,11 @@ export const Eirik = class Eirik extends React.Component {
                 ) : null}
               </div>
             </div>
+
             <div className="row">
               {this.state.showSpinner ? <Spinner color="success" /> : null}
             </div>
+
             <div className="row">
               <div className="col-sm-8">
                 {/* this.state.showContent ? <HTMLRender data={this.state.data} linkCallback={this.linkCallback} /> : null */}
@@ -529,15 +535,18 @@ export const Eirik = class Eirik extends React.Component {
                 ) : null}
               </div>
             </div>
+
             <div className="row">
               <h2 className="small">SNOMED CT-konsepter funnet ved NPL</h2>
             </div>
+            
             <div className="row">
               <p>
                 Hanna: The content under here will should be shown only when a
                 term is finded
               </p>
             </div>
+
             {/* Notat: */}
             <div className="row">
               <h3 className="small">

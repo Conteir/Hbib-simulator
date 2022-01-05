@@ -25,13 +25,27 @@ export const HomePage = class HomePage extends React.Component {
 
   }
 
-  // after pressing the button...:
+  getEnvironment = (event) => {
+    this.setState({ enviroment: event.target.value });
+  }
+
+  getUglyId = (event) => {
+    this.setState({ uglyId: event.target.value });
+  }
+
+  getCodeSystem = (event) => {
+    this.setState({ codeSystem: event.target.value });
+  }
+
+  getCode = (event) => {
+    this.setState({ code: event.target.value });
+  }
+
   mySubmitHandler = (event, conceptId) => {
     if(event) event.preventDefault();
 
     this.setState({ response: '' });
 
-    //const urlAddress = 'https://api.helsedirektoratet.no/innhold/innhold';
     const enviroment = this.state.enviroment;
     let setEnviroments = enviroments.find(o => o.id === enviroment);
 
@@ -48,11 +62,6 @@ export const HomePage = class HomePage extends React.Component {
     } else {
       url += '?kodeverk=' + codeSystem + "&kode=" + code;
     }
-    /*else {
-      alert("Neither HAPI-id nor Code defined!")
-      return;
-    }*/
-
 
     this.setState({ url: url });
     this.setState({ showSpinner: true });
@@ -114,6 +123,7 @@ export const HomePage = class HomePage extends React.Component {
       // Set state only when all the data is fetched
       Promise.all(promises).then(() => {
         let dataStr = JSON.stringify(data, null, 2);
+        console.log("dataStr from homepage:", dataStr);
         this.setState({
           response: dataStr,
           showSpinner: false
@@ -123,7 +133,6 @@ export const HomePage = class HomePage extends React.Component {
   }
 
   //Retrieving the links for naming them barn, forelder
-  // ...passing link object....
   getLinkData = (link) => {
 
     let promise = this.linkPromise(link.href);
@@ -142,7 +151,6 @@ export const HomePage = class HomePage extends React.Component {
 
     const enviroment = this.state.enviroment;
     let setEnviroments = enviroments.find(o => o.id === enviroment);
-
     let key = setEnviroments.key;
 
     let promise = fetch(url,
@@ -161,40 +169,7 @@ export const HomePage = class HomePage extends React.Component {
     return promise; //to the getLinkData f
   }
 
-  //when putting id
-  myChangeHandler = (event) => {
-    this.setState({
-      uglyId: event.target.value
-    });
-  }
-
-  ChangeHandlerCode = (event) => {
-    this.setState({
-      code: event.target.value
-    });
-  }
-
-  ChangeHandlerCodeSystem = (event) => {
-    this.setState({
-      codeSystem: event.target.value
-    });
-  }
-
-  ChangeHandlerEnviroment = (event) => {
-    // sets 'this.state.environment' to the selected in the 'select' box environment as string
-    // (one of the 'prod', 'qa', ...)
-    this.setState({
-      enviroment: event.target.value
-    });
-  }
-
-  /* ChangeHandlerLink = (link) => {
-    if (link) {
-      this.setState({
-        links: link.target.value
-      });
-    }
-  }*/
+  
 
   //Fetching responce again to get content from links data for getting links name
   linkCallback = (url) => {
@@ -222,18 +197,6 @@ export const HomePage = class HomePage extends React.Component {
         this.responseHandler(data);
       }, () => this.setState({ showSpinner: false }));
   }
-
-  /*codeSystemPromise = (url) => {
-    let promise = fetch(url,
-      {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json'
-        }
-      }
-    ).then(response => response.json());
-    return promise;
-  }*/
 
   searchCallback = (request) => {
     this.setState({ concepts: '' }); // hide result on input regardless
@@ -325,7 +288,7 @@ export const HomePage = class HomePage extends React.Component {
         id="code"
         placeholder="Code"
         value={this.state.code}
-        onChange={evt => this.ChangeHandlerCode(evt)}
+        onChange={evt => this.getCode(evt)}
       />;
     }
     return (
@@ -340,14 +303,12 @@ export const HomePage = class HomePage extends React.Component {
 
           <div className="form-group">
             <select name="enviroment" id="enviroment"
-              onChange={evt => this.ChangeHandlerEnviroment(evt)}
+              onChange={evt => this.getEnvironment(evt)}
             >
-
               <option value="prod">Production</option>
               <option value="test-bt">Test BT</option>
               <option value="test-st">Test ST</option>
               <option value="qa">QA</option>
-
             </select>
           </div>
 
@@ -364,7 +325,7 @@ export const HomePage = class HomePage extends React.Component {
               autoComplete="off"
               placeholder="HAPI-id"
               value={this.state.uglyId}
-              onChange={evt => this.myChangeHandler(evt)}
+              onChange={evt => this.getUglyId(evt)}
             />
           </div>
 
@@ -374,7 +335,7 @@ export const HomePage = class HomePage extends React.Component {
 
           <div className="form-group">
             <select name="codeSystem" id="codeSystem"
-              onChange={evt => this.ChangeHandlerCodeSystem(evt)}
+              onChange={evt => this.getCodeSystem(evt)}
             >
               <option value="" select="default">Choose code system</option>
               <option value="ICD-10">ICD-10</option>
@@ -383,11 +344,11 @@ export const HomePage = class HomePage extends React.Component {
               <option value="SNOMED-CT">SNOMED-CT</option>
             </select>
           </div>
+
           <div className="form-group">
             {searchField /* render selected block depending on selected codeSystem */}
             {this.state.showSpinner ? <Spinner color="success" /> : null}
           </div>
-
 
           <div className="form-group">
             <input
