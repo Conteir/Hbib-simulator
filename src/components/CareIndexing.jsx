@@ -7,6 +7,7 @@ import { AccordionRender } from "./AccordionRender";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 import { Accordion } from "react-bootstrap";
+import fetchJsonp from "fetch-jsonp";
 // import GetParamComponent from "./GetParamComponent.jsx";
 
 const INPUT_VURDERING = {semanticTag: "disorder", field: "VURDERING"};
@@ -33,6 +34,10 @@ export const CareIndexing = class CareIndexing extends React.Component {
       datasForRenderAnamnese: [],
       datasForRenderFunn: [],
       datasForRenderVurdering: [],
+      sctid: "",
+      BMJAnamneseData: [],
+      BMJFunnData: [],
+      BMJVurderingData: []
     };
   }
 
@@ -261,6 +266,72 @@ export const CareIndexing = class CareIndexing extends React.Component {
   }
 
 
+  getBMJdata = () => {
+
+    // let termsWithSemanticTagFindingForAnamnese = [ {conceptId: 77880009}];
+    // const BMJparam = {
+    //   method: "GET",
+    //   headers: {
+    //     "Connection"
+    //     "Ocp-Apim-Subscription-Key": "89b72a3ad5cf4723b3f489c3eb4d82a1",
+    //   },
+    // };
+
+    let BMJrequest = 
+    'https://bestpractice.bmj.com/infobutton?knowledgeResponseType=application/javascript&mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c=';
+
+    if (this.state.termsWithSemanticTagFindingForAnamnese.length > 0) {
+      this.state.termsWithSemanticTagFindingForAnamnese.forEach( term => {
+      // termsWithSemanticTagFindingForAnamnese.forEach( term => {
+        fetchJsonp(BMJrequest + term.conceptId)
+        .then((response) => response.json())
+        .then(data => {
+          console.log("Data from BMJ (anamn)", data);
+          let BMJAnamneseData = this.state.BMJAnamneseData;
+          BMJAnamneseData.push(data);
+          this.setState({BMJAnamneseData: BMJAnamneseData});
+        }).catch(function(ex) {
+          console.log('parsing failed', ex)
+        });
+      });
+    }
+
+    if (this.state.termsWithSemanticTagFindingForFunn.length > 0) {
+      this.state.termsWithSemanticTagFindingForFunn.forEach( term => {
+        fetchJsonp(BMJrequest + term.conceptId)
+        .then((response) => response.json())
+        .then(data => {
+          console.log("Data from BMJ (funn)", data);
+          let BMJFunnData = this.state.BMJFunnData;
+          BMJFunnData.push(data);
+          this.setState({BMJFunnData: BMJFunnData});
+        }).catch(function(ex) {
+          console.log('parsing failed', ex)
+        });
+      });
+    }
+
+    if (this.state.termsWithSemanticTagDisorderForVurdering.length > 0) {
+      this.state.termsWithSemanticTagDisorderForVurdering.forEach( term => {
+        fetchJsonp(BMJrequest + term.conceptId)
+        .then((response) => response.json())
+        .then(data => {
+          console.log("Data from BMJ (vurd) ", data);
+          let BMJVurderingData = this.state.BMJVurderingData;
+          BMJVurderingData.push(data);
+          this.setState({BMJVurderingData: BMJVurderingData});
+        }).catch(function(ex) {
+          console.log('parsing failed', ex)
+        });
+      });
+    }
+
+    console.log("sctid from callback", this.state.sctid);
+    console.log("termsWithSemanticTagFindingForAnamnese: ", this.state.termsWithSemanticTagFindingForAnamnese);
+    console.log("termsWithSemanticTagFindingForFunn: ", this.state.termsWithSemanticTagFindingForFunn);
+    console.log("termsWithSemanticTagFindingForVurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);
+  }
+
   //getting forel and barn link data (h.p.)
   getLinkData = (link) => {
     let promise = fetch(link.href, params)
@@ -348,6 +419,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
     const codeSystem = codeSystemResult.codeSystem;
     const code = codeSystemResult.code;
 
+    this.setState( {sctid: code} );
+
     const url = helsedirBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
     this.fetchContent(url);
   }
@@ -381,6 +454,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
     return (
       <div>
         <button onClick={() => console.log(this.state)}>Log state</button>
+        <button onClick={() => this.getBMJdata()}>Get data</button>
+
         <div className="jumbotron text-center">
           <h1>CareIndexing</h1>
         </div>
@@ -568,7 +643,81 @@ export const CareIndexing = class CareIndexing extends React.Component {
 
                     <section>
                       <h1>BMJ</h1>
-                      <p>Comes later</p>
+
+                      {/* TODO: reset state when adding new terms */}
+                      {/* TODO: condition if content from BMJ exists */}
+                      {/* TODO: add each link to a separate block ? */}
+                      {/* TODO: to show only unique links? */}
+                      {/* TODO: entr.link[0] is always 0 ? */}
+                       {/* TODO: no button with get data */}
+
+
+
+                      <div>
+                        {this.state.BMJAnamneseData.map( (obj, key) => {
+                          return (
+                            <div key={key}>
+                              {obj.feed.entry.map( (entr, idx) => {
+                                return (
+                                  <p key={idx}>
+                                    <a 
+                                      href={entr.link[0].href}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {entr.link[0].title}
+                                    </a>
+                                  </p>
+                                );
+                              })}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div>
+                        {this.state.BMJFunnData.map( (obj, key) => {
+                          return (
+                            <div key={key}>
+                              {obj.feed.entry.map( (entr, idx) => {
+                                return (
+                                  <p key={idx}>
+                                    <a 
+                                      href={entr.link[0].href}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {entr.link[0].title}
+                                    </a>
+                                  </p>
+                                );
+                              })}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      <div>
+                        {this.state.BMJVurderingData.map( (obj, key) => {
+                          return (
+                            <div key={key}>
+                              {obj.feed.entry.map( (entr, idx) => {
+                                return (
+                                  <p key={idx}>
+                                    <a 
+                                      href={entr.link[0].href}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      {entr.link[0].title}
+                                    </a>
+                                  </p>
+                                );
+                              })}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </section>
 
                   </Accordion.Body>
@@ -716,7 +865,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
             {/* Vurdering: */}
             <div className="row">
               {this.state.datasForRenderVurdering.length > 0 ? 
-                (<h3 className="small">SNOMED CT-konsepter (lidelse) funnet i feltet Vurdering</h3>)
+                (<h3 className="small">SNOMED CT-konsepter (sykdom/tilstand) funnet i feltet Vurdering</h3>)
               : null}
               {this.state.termsWithSemanticTagDisorderForVurdering.map((term, index) => {
                 console.log("termsWithSemanticTagDisorderForVurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);

@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
-import { codeSystemEnv, params } from "../config.ts";
+import { codeSystemEnv } from "../config.ts";
 import DisordersAutosuggest from './DisordersAutosuggest';
 
 export const BMJ = class BMJ extends React.Component {
@@ -17,34 +17,34 @@ export const BMJ = class BMJ extends React.Component {
     };
   }
 
-  codeSystemPromise = (url) => {
-    let promise = fetch(url, 
-      params)
-    .then((response) => response.json());
-    return promise;
-  };
+  // codeSystemPromise = (url) => {
+  //   let promise = fetch(url, 
+  //     params)
+  //   .then((response) => response.json());
+  //   return promise;
+  // };
 
   //setID to SCTID
   setSCTID = (suggestion) => {
     this.setState({SCTID: suggestion.concept.conceptId});
   };
 
-  fetchContent = (codeSystemResult) => {
-    // API key depends on environment: current -> Production
-    const codeSystem = codeSystemResult.codeSystem;
-    const code = codeSystemResult.code;
-    const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";
-    const url = hdBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
+  // fetchContent = (codeSystemResult) => {
+  //   // API key depends on environment: current -> Production
+  //   const codeSystem = codeSystemResult.codeSystem;
+  //   const code = codeSystemResult.code;
+  //   const hdBaseUrl = "https://api.helsedirektoratet.no/innhold/innhold";
+  //   const url = hdBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
 
-    fetch(url, params)
-    .then(response => response.json())
-    .then(data => {
-      console.log("Content for " + codeSystem + ":", data);
-      if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
-        this.setState({content: data[0].tekst, data: JSON.stringify(data)});
-      }
-    });
-  };
+  //   fetch(url, params)
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     console.log("Content for " + codeSystem + ":", data);
+  //     if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
+  //       this.setState({content: data[0].tekst, data: JSON.stringify(data)});
+  //     }
+  //   });
+  // };
 
   /*
   // Getting a content from autosuggest
