@@ -251,6 +251,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
         }
       });
     }
+    // this.getBMJdata();
   }
 
 
