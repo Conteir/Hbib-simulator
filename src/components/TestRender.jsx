@@ -22,7 +22,7 @@ export const TestRender = class TestRender extends React.Component {
     return (
       <h2 className="product-context">
           {item.tittel}
-         {/* Hentetfra: {rootLink ? rootLink.$title : ""} */}
+          Hentet fra: {rootLink ? rootLink.$title : ""}
       </h2>
     );
   };

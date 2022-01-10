@@ -4,7 +4,7 @@ import "../index.css";
 import DisordersAutosuggest from "./DisordersAutosuggest";
 import { HTMLRender } from "./htmlRenderComponent";
 import { AccordionRender } from "./AccordionRender";
-import { TestRender } from "./TestRender";
+// import { TestRender } from "./TestRender";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 import { Accordion } from "react-bootstrap";
@@ -36,9 +36,10 @@ export const CareIndexing = class CareIndexing extends React.Component {
       datasForRenderFunn: [],
       datasForRenderVurdering: [],
       sctid: "",
-      BMJAnamneseData: [],
-      BMJFunnData: [],
-      BMJVurderingData: [],
+      // BMJAnamneseData: [],
+      // BMJFunnData: [],
+      // BMJVurderingData: [],
+      BMJData: {},
       totalBMJEntries: 0
     };
   }
@@ -82,6 +83,38 @@ export const CareIndexing = class CareIndexing extends React.Component {
         this.setState({ termsWithSemanticTagFindingForFunn: []});
         this.setState({datasForRenderFunn: []});
     }
+
+    //////////// Delete terms from fields ///////////////
+    // Keep Only BMJ Data which conceptIds still exist in the term arrays above
+   
+    // 1) Join arrays to 1 and clean current array if no terms anymore or use state.arr
+    let termsList = [].concat.apply([], [
+      input.field === "VURDERING" ? [] : this.state.termsWithSemanticTagDisorderForVurdering,
+      input.field === "ANAMNESE" ? [] : this.state.termsWithSemanticTagFindingForAnamnese,
+      input.field === "FUNN" ? [] : this.state.termsWithSemanticTagFindingForFunn]
+    );
+
+    // 2) Create BMJ data storage for concepts, that should be kept
+    let BMJData = {};
+
+    // 3) Delete inside out: 
+    // Copy BMJ data from state only if its concept exists in the termsList
+    termsList.forEach((term) => { // ...for each existing concept...
+      // 3.1 Check if previous BMJData has data for current term's conceptId
+      if(this.state.BMJData[term.conceptId] !== undefined) { 
+        // ...if exists:
+        BMJData[term.conceptId] = this.state.BMJData[term.conceptId];
+      }
+    });
+
+    // 4. Recalculate matches
+    let count = 0;
+    // Iterate through OBJECT fields
+    for (let field in BMJData) {
+      count += BMJData[field].feed?.entry?.length || 0;
+    }
+    this.setState({BMJData: BMJData, totalBMJEntries: count});
+
 
     if(assessment?.length > 0) this.sendRequestToCareindexing(assessment, input);
   };
@@ -171,12 +204,15 @@ export const CareIndexing = class CareIndexing extends React.Component {
 
             if (data.items.length !== 0) {
               data.items.forEach((item) => {
+                console.log("item after useSemanticTag (to get conceptId): ", item);
+                // send bmj requests with conceptId from item:
+                this.getBMJdata(item.concept.conceptId);
+
                 let filteredPTterm = item.concept.pt.term; 
                 terms.push( {term: filteredPTterm, conceptId: item.concept.conceptId} );
               });
               console.log("terms during useSemanticTags function: ", terms);
               console.log("this.state.terms during useSemanticTags function: ", this.state.terms);
-
             }
            
           });
@@ -251,84 +287,86 @@ export const CareIndexing = class CareIndexing extends React.Component {
         }
       });
     }
-    // this.getBMJdata();
   }
 
 
-  getBMJdata = () => {
+  getBMJdata = (conceptId) => {
 
-    // let termsWithSemanticTagFindingForAnamnese = [ {conceptId: 77880009}];
-    // const BMJparam = {
-    //   method: "GET",
-    //   headers: {
-    //     "Connection"
-    //     "Ocp-Apim-Subscription-Key": "89b72a3ad5cf4723b3f489c3eb4d82a1",
-    //   },
-    // };
+    console.log("conceptId in getBMJdata: ", conceptId);
 
-    this.setState({
-      BMJAnamneseData:[],
-      BMJFunnData: [],
-      BMJVurderingData: [],
-      totalBMJEntries: 0
-    });
+    // this.setState({
+    //   BMJAnamneseData:[],
+    //   BMJFunnData: [],
+    //   BMJVurderingData: [],
+    //   totalBMJEntries: 0
+    // });
 
     let BMJrequest = 
     'https://bestpractice.bmj.com/infobutton?knowledgeResponseType=application/javascript&mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c=';
 
-    if (this.state.termsWithSemanticTagFindingForAnamnese.length > 0) {
-      this.state.termsWithSemanticTagFindingForAnamnese.forEach( term => {
+    // if (this.state.termsWithSemanticTagFindingForAnamnese.length > 0) {
+    if (conceptId?.length > 0) {
+
+      if(this.state.BMJData[conceptId] !== undefined) return;
+
+      // this.state.termsWithSemanticTagFindingForAnamnese.forEach( term => {
       // termsWithSemanticTagFindingForAnamnese.forEach( term => {
-        fetchJsonp(BMJrequest + term.conceptId)
+        fetchJsonp(BMJrequest + conceptId)
         .then((response) => response.json())
         .then(data => {
-          console.log("Data from BMJ (anamn)", data);
-          let BMJAnamneseData = this.state.BMJAnamneseData;
-          BMJAnamneseData.push(data);
+          console.log("Data from BMJ", data);
+          // let BMJAnamneseData = this.state.BMJAnamneseData;
+          let BMJData = this.state.BMJData;
+          // BMJAnamneseData.push(data);
 
-          this.setState({ BMJAnamneseData: BMJAnamneseData, totalBMJEntries: this.state.totalBMJEntries + data?.feed?.entry?.length || 0 });
+          BMJData[conceptId] = data;
+          // Calculate total entries
+          let count = 0;
+          // Iterate through object fields
+          for(let field in BMJData) {
+            count += BMJData[field].feed?.entry?.length || 0;
+          }
+
+          // this.setState({ BMJAnamneseData: BMJAnamneseData, totalBMJEntries: this.state.totalBMJEntries + data?.feed?.entry?.length || 0 });
+          this.setState({ BMJData: BMJData, totalBMJEntries: count});
         }).catch(function(ex) {
           console.log('parsing failed', ex)
         });
-      });
+      // });
     }
 
-    if (this.state.termsWithSemanticTagFindingForFunn.length > 0) {
-      this.state.termsWithSemanticTagFindingForFunn.forEach( term => {
-        fetchJsonp(BMJrequest + term.conceptId)
-        .then((response) => response.json())
-        .then(data => {
-          console.log("Data from BMJ (funn)", data);
-          let BMJFunnData = this.state.BMJFunnData;
-          BMJFunnData.push(data);
+    // if (this.state.termsWithSemanticTagFindingForFunn.length > 0) {
+    //   this.state.termsWithSemanticTagFindingForFunn.forEach( term => {
+    //     fetchJsonp(BMJrequest + term.conceptId)
+    //     .then((response) => response.json())
+    //     .then(data => {
+    //       console.log("Data from BMJ (funn)", data);
+    //       let BMJFunnData = this.state.BMJFunnData;
+    //       BMJFunnData.push(data);
 
-          this.setState({ BMJFunnData: BMJFunnData, totalBMJEntries: this.state.totalBMJEntries + data?.feed?.entry?.length || 0 });
-        }).catch(function(ex) {
-          console.log('parsing failed', ex)
-        });
-      });
-    }
+    //       this.setState({ BMJFunnData: BMJFunnData, totalBMJEntries: this.state.totalBMJEntries + data?.feed?.entry?.length || 0 });
+    //     }).catch(function(ex) {
+    //       console.log('parsing failed', ex)
+    //     });
+    //   });
+    // }
 
-    if (this.state.termsWithSemanticTagDisorderForVurdering.length > 0) {
-      this.state.termsWithSemanticTagDisorderForVurdering.forEach( term => {
-        fetchJsonp(BMJrequest + term.conceptId)
-        .then((response) => response.json())
-        .then(data => {
-          console.log("Data from BMJ (vurd) ", data);
-          let BMJVurderingData = this.state.BMJVurderingData;
-          BMJVurderingData.push(data);
+    // if (this.state.termsWithSemanticTagDisorderForVurdering.length > 0) {
+    //   console.log("this.state.termsWithSemanticTagDisorderForVurdering for BMJ: ", this.state.termsWithSemanticTagDisorderForVurdering);
+    //   this.state.termsWithSemanticTagDisorderForVurdering.forEach( term => {
+    //     fetchJsonp(BMJrequest + term.conceptId)
+    //     .then((response) => response.json())
+    //     .then(data => {
+    //       console.log("Data from BMJ (vurd) ", data);
+    //       let BMJVurderingData = this.state.BMJVurderingData;
+    //       BMJVurderingData.push(data);
 
-          this.setState({ BMJVurderingData: BMJVurderingData, totalBMJEntries: this.state.totalBMJEntries + data?.feed?.entry?.length || 0 });
-        }).catch(function(ex) {
-          console.log('parsing failed', ex)
-        });
-      });
-    }
-
-    console.log("sctid from callback", this.state.sctid);
-    console.log("termsWithSemanticTagFindingForAnamnese: ", this.state.termsWithSemanticTagFindingForAnamnese);
-    console.log("termsWithSemanticTagFindingForFunn: ", this.state.termsWithSemanticTagFindingForFunn);
-    console.log("termsWithSemanticTagFindingForVurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);
+    //       this.setState({ BMJVurderingData: BMJVurderingData, totalBMJEntries: this.state.totalBMJEntries + data?.feed?.entry?.length || 0 });
+    //     }).catch(function(ex) {
+    //       console.log('parsing failed', ex)
+    //     });
+    //   });
+    // }
   }
 
   //getting forel and barn link data (h.p.)
@@ -469,7 +507,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
     return (
       <div>
         <button onClick={() => console.log(this.state)}>Log state</button>
-        <button onClick={() => this.getBMJdata()}>Get data</button>
+        {/* <button onClick={() => this.getBMJdata()}>Get data</button> */}
 
         <div className="jumbotron text-center">
           <h1>CareIndexing</h1>
@@ -705,13 +743,13 @@ export const CareIndexing = class CareIndexing extends React.Component {
                       
 
                       <div>
-                        {this.state.BMJAnamneseData.map( (obj, key) => {
+                        {Object.keys(this.state.BMJData).map( (field, key) => {
 
-                          if(obj.feed?.entry?.length > 0) {
+                          if(this.state.BMJData[field].feed?.entry?.length > 0) {
 
                             return (
                               <div key={key}>
-                                {obj.feed.entry.map( (entr, idx) => {
+                                {this.state.BMJData[field].feed.entry.map( (entr, idx) => {
                                   return (
                                     <p key={idx}>
                                       <a
@@ -732,7 +770,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                         })}
                       </div>
 
-                      <div>
+                      {/* <div>
                         {this.state.BMJFunnData.map( (obj, key) => {
 
                           if(obj.feed?.entry?.length > 0) {
@@ -758,9 +796,9 @@ export const CareIndexing = class CareIndexing extends React.Component {
                           } else return "";
 
                         })}
-                      </div>
+                      </div> */}
 
-                      <div>
+                      {/* <div>
                         {this.state.BMJVurderingData.map( (obj, key) => {
 
                           if(obj.feed?.entry?.length > 0) {
@@ -786,7 +824,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                           } else return "";
                           
                         })}
-                      </div>
+                      </div> */}
                     </section>
 
                   </Accordion.Body>
