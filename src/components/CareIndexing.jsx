@@ -4,6 +4,7 @@ import "../index.css";
 import DisordersAutosuggest from "./DisordersAutosuggest";
 import { HTMLRender } from "./htmlRenderComponent";
 import { AccordionRender } from "./AccordionRender";
+import { TestRender } from "./TestRender";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 import { Accordion } from "react-bootstrap";
@@ -605,6 +606,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                             return (
                               <div key={index} className="content">
                                 <AccordionRender
+                                  // TestRender
                                   data={item}
                                   linkCallback={this.linkCallback}
                                   tag="anamnese"
@@ -619,6 +621,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                             return (
                               <div key={index} className="content">
                                 <AccordionRender
+                                  // TestRender
                                   data={item}
                                   linkCallback={this.linkCallback}
                                   tag="funn"
@@ -633,6 +636,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                             return (
                               <div key={index} className="content">
                                 <AccordionRender
+                                  // TestRender
                                   data={item}
                                   linkCallback={this.linkCallback}
                                   tag="vurdering"
