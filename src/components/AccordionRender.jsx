@@ -84,13 +84,31 @@ export const AccordionRender = class AccordionRender extends React.Component {
                     </>
                 ) : null}
 
-                {item?.data?.rasjonale ? (
-                    <b><h2>Rasjonale</h2></b>
-                ) : null}
+            </div>
+        );
+    }
+
+    renderPraktisk(item) {
+        return (
+            <div>
+                {
+                    item?.data?.praktisk ?
+                    <div>
+                        <b><h1>Praktisk</h1></b>
+                        <div dangerouslySetInnerHTML={{ __html: item.data.praktisk.replace(/\\t/g, "")}} ></div>
+                    </div> 
+                    : null
+                }
+            </div>
+        )
+    }
+
+    renderRasjonale(item) {
+        return (
+            <div>
                 {item?.data?.rasjonale ? (
                     <div dangerouslySetInnerHTML={{ __html: item.data.rasjonale }}></div>
                 ) : null}
-
             </div>
         );
     }
@@ -497,13 +515,26 @@ export const AccordionRender = class AccordionRender extends React.Component {
                 return json.map((item, index) => (
                     <div key={index} className="fill-width">
                         <Accordion>
-                            <Accordion.Item eventKey={index}>
+                            <Accordion.Item eventKey={index+1}>
                                 <Accordion.Header>
                                     {item.tittel}
                                 </Accordion.Header>
+
                                 <Accordion.Body>
                                     {this.renderItem(item)}
+                                        <Accordion>
+                                            <Accordion.Item eventKey={index*1}>
+                                                <Accordion.Header>
+                                                    Rasjonale
+                                                </Accordion.Header>
+                                                <Accordion.Body>
+                                                    {this.renderRasjonale(item)}
+                                                    {this.renderPraktisk(item)}
+                                                </Accordion.Body>
+                                            </Accordion.Item>
+                                        </Accordion>
                                 </Accordion.Body>
+
                             </Accordion.Item>
                         </Accordion>
                     </div>

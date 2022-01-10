@@ -37,7 +37,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
       sctid: "",
       BMJAnamneseData: [],
       BMJFunnData: [],
-      BMJVurderingData: []
+      BMJVurderingData: [],
+      totalBMJEntries: 0
     };
   }
 
@@ -70,7 +71,18 @@ export const CareIndexing = class CareIndexing extends React.Component {
     console.log("vurdering: ", assessment);
     console.log("semanticTag: ", input.semanticTag);
 
-    this.sendRequestToCareindexing(assessment, input);
+    if(input.field === "VURDERING") {
+      this.setState({ termsWithSemanticTagDisorderForVurdering: []});
+      this.setState({datasForRenderVurdering: []});
+    } else if (input.field === "ANAMNESE") {
+        this.setState({ termsWithSemanticTagFindingForAnamnese: []});
+        this.setState({datasForRenderAnamnese: []});
+    } else if (input.field === "FUNN") {
+        this.setState({ termsWithSemanticTagFindingForFunn: []});
+        this.setState({datasForRenderFunn: []});
+    }
+
+    if(assessment?.length > 0) this.sendRequestToCareindexing(assessment, input);
   };
 
   sendRequestToCareindexing = (assessment, input) => {
@@ -101,34 +113,9 @@ export const CareIndexing = class CareIndexing extends React.Component {
         if(this.state.assessment === assessment) {
 
           console.log("DATA: ", data);
-
-          // let processedTerms = {};
-
-          // data.forEach((item) => {
-          //   if(!data[item.code]) {
-          //     // no matches yet:
-          //     data[item.$existsOnce] = true;
-          //     console.log("data: ", data);
-          //   }
-          // });
-
-          // let unique = [...new Set(data)];
-          // console.log(unique);
-
-          // const unique = (value, index, self) => {
-          //   return self.indexOf(value) === index
-          // }
-
-         
-
-          // let unique = data.filter((item, i, ar) => ar.indexOf(item) === i);
-          // console.log("unique", unique);
-
-
-          this.setState({ preferredTerms: data});
           console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
 
-          this.useSemanticTags(this.state.preferredTerms, input);
+          this.useSemanticTags(data, input);
         }
       });
   };
@@ -277,6 +264,13 @@ export const CareIndexing = class CareIndexing extends React.Component {
     //   },
     // };
 
+    this.setState({
+      BMJAnamneseData:[],
+      BMJFunnData: [],
+      BMJVurderingData: [],
+      totalBMJEntries: 0
+    });
+
     let BMJrequest = 
     'https://bestpractice.bmj.com/infobutton?knowledgeResponseType=application/javascript&mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c=';
 
@@ -289,7 +283,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
           console.log("Data from BMJ (anamn)", data);
           let BMJAnamneseData = this.state.BMJAnamneseData;
           BMJAnamneseData.push(data);
-          this.setState({BMJAnamneseData: BMJAnamneseData});
+
+          this.setState({ BMJAnamneseData: BMJAnamneseData, totalBMJEntries: this.state.totalBMJEntries + data?.feed?.entry?.length || 0 });
         }).catch(function(ex) {
           console.log('parsing failed', ex)
         });
@@ -304,7 +299,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
           console.log("Data from BMJ (funn)", data);
           let BMJFunnData = this.state.BMJFunnData;
           BMJFunnData.push(data);
-          this.setState({BMJFunnData: BMJFunnData});
+
+          this.setState({ BMJFunnData: BMJFunnData, totalBMJEntries: this.state.totalBMJEntries + data?.feed?.entry?.length || 0 });
         }).catch(function(ex) {
           console.log('parsing failed', ex)
         });
@@ -319,7 +315,8 @@ export const CareIndexing = class CareIndexing extends React.Component {
           console.log("Data from BMJ (vurd) ", data);
           let BMJVurderingData = this.state.BMJVurderingData;
           BMJVurderingData.push(data);
-          this.setState({BMJVurderingData: BMJVurderingData});
+
+          this.setState({ BMJVurderingData: BMJVurderingData, totalBMJEntries: this.state.totalBMJEntries + data?.feed?.entry?.length || 0 });
         }).catch(function(ex) {
           console.log('parsing failed', ex)
         });
@@ -449,6 +446,22 @@ export const CareIndexing = class CareIndexing extends React.Component {
         this.processResponse(data);
       });
   };
+
+  getBMJamount = () => {
+    let counter = 0;
+
+    this.state.BMJAnamneseData.forEach( (obj) => {
+      counter += obj?.feed?.entry?.length;
+    });
+    this.state.BMJFunnData.forEach( (obj) => {
+      counter += obj?.feed?.entry?.length;
+    });
+    this.state.BMJVurderingData.forEach( (obj) => {
+      counter += obj?.feed?.entry?.length;
+    }); 
+
+    return counter;
+  }
 
   render() {
     return (
@@ -638,84 +651,135 @@ export const CareIndexing = class CareIndexing extends React.Component {
                           <Accordion.Body>Text content 2</Accordion.Body>
                         </Accordion.Item>
                       </Accordion> */}
-                      
+
                     </section>
 
                     <section>
-                      <h1>BMJ</h1>
+                      {this.state.totalBMJEntries > 0 ?  <h1>BMJ</h1> : ""}
 
-                      {/* TODO: reset state when adding new terms */}
-                      {/* TODO: condition if content from BMJ exists */}
+                      {/* > TODO: reset state when adding new terms */}
+                      {/* > TODO: condition if content from BMJ exists */}
                       {/* TODO: add each link to a separate block ? */}
-                      {/* TODO: to show only unique links? */}
+                      {/* > TODO: to show only unique links? */}
                       {/* TODO: entr.link[0] is always 0 ? */}
-                       {/* TODO: no button with get data */}
+                      {/* TODO: no button with get data */}
+                       
+                      {/* {
+                        ( (this.getBMJamount() > 0) ? 
+                          ("[" + this.getBMJamount() + "] dokument" + ( (this.getBMJamount() > 1) ? "er" : "et"))
+                        : "")
+                      } */}
+                         
+                      {
+                        ( (this.state.totalBMJEntries > 0) ? 
+                          ("[" + this.state.totalBMJEntries + "] dokument" + ( (this.state.totalBMJEntries > 1) ? "er" : "et"))
+                        : "")
+                      }
 
-
+                           {/* {this.state.BMJAnamneseData.map( (obj, key) => {
+                               return (
+                                 <div key={key}>
+                                   {obj?.feed?.entry?.length || 0}
+                                 </div>
+                               );
+                            })}
+                           {this.state.BMJFunnData.map( (obj, key) => {
+                                 return (
+                                 <div key={key}>
+                                     {obj?.feed?.entry?.length || 0}
+                                   </div>
+                              );
+                            })}
+                           {this.state.BMJVurderingData.map( (obj, key) => {
+                                 return (
+                                   <div key={key}>
+                                     {obj?.feed?.entry?.length || 0}
+                                   </div>
+                                 );
+                            })} */}
+                      
 
                       <div>
                         {this.state.BMJAnamneseData.map( (obj, key) => {
-                          return (
-                            <div key={key}>
-                              {obj.feed.entry.map( (entr, idx) => {
-                                return (
-                                  <p key={idx}>
-                                    <a 
-                                      href={entr.link[0].href}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {entr.link[0].title}
-                                    </a>
-                                  </p>
-                                );
-                              })}
-                            </div>
-                          );
+
+                          if(obj.feed?.entry?.length > 0) {
+
+                            return (
+                              <div key={key}>
+                                {obj.feed.entry.map( (entr, idx) => {
+                                  return (
+                                    <p key={idx}>
+                                      <a
+                                        href={entr.link[0].href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        {entr.link[0].title}
+                                      </a>
+                                    </p>
+                                  );
+                                })}
+                              </div>
+                            );
+
+                          }
+
                         })}
                       </div>
 
                       <div>
                         {this.state.BMJFunnData.map( (obj, key) => {
-                          return (
-                            <div key={key}>
-                              {obj.feed.entry.map( (entr, idx) => {
-                                return (
-                                  <p key={idx}>
-                                    <a 
-                                      href={entr.link[0].href}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {entr.link[0].title}
-                                    </a>
-                                  </p>
-                                );
-                              })}
-                            </div>
-                          );
+
+                          if(obj.feed?.entry?.length > 0) {
+
+                            return (
+                              <div key={key}>
+                                {obj.feed.entry.map( (entr, idx) => {
+                                  return (
+                                    <p key={idx}>
+                                      <a
+                                        href={entr.link[0].href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        {entr.link[0].title}
+                                      </a>
+                                    </p>
+                                  );
+                                })}
+                              </div>
+                            );
+
+                          }
+
                         })}
                       </div>
 
                       <div>
                         {this.state.BMJVurderingData.map( (obj, key) => {
-                          return (
-                            <div key={key}>
-                              {obj.feed.entry.map( (entr, idx) => {
-                                return (
-                                  <p key={idx}>
-                                    <a 
-                                      href={entr.link[0].href}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {entr.link[0].title}
-                                    </a>
-                                  </p>
-                                );
-                              })}
-                            </div>
-                          );
+
+                          if(obj.feed?.entry?.length > 0) {
+
+                            return (
+                              <div key={key}>
+                                {obj.feed.entry.map( (entr, idx) => {
+                                  return (
+                                    <p key={idx}>
+                                      <a
+                                        href={entr.link[0].href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        {entr.link[0].title}
+                                      </a>
+                                    </p>
+                                  );
+                                })}
+                              </div>
+                            );
+
+                          }
+                          
                         })}
                       </div>
                     </section>
