@@ -722,7 +722,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                               </div>
                             );
 
-                          }
+                          } else return "";
 
                         })}
                       </div>
@@ -750,7 +750,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                               </div>
                             );
 
-                          }
+                          } else return "";
 
                         })}
                       </div>
@@ -778,7 +778,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
                               </div>
                             );
 
-                          }
+                          } else return "";
                           
                         })}
                       </div>
