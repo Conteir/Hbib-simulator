@@ -32,6 +32,7 @@ export const CareIndexing = class CareIndexing extends React.Component {
       termsWithSemanticTagDisorderForVurdering: [],
       termsWithSemanticTagFindingForAnamnese: [],
       termsWithSemanticTagFindingForFunn: [],
+      hdirData: [],
       datasForRenderAnamnese: [],
       datasForRenderFunn: [],
       datasForRenderVurdering: [],
@@ -146,8 +147,10 @@ export const CareIndexing = class CareIndexing extends React.Component {
       .then(data => {
         if(this.state.assessment === assessment) {
 
+          // this.setState({ preferredTerms: data});
+
           console.log("DATA: ", data);
-          console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
+          // console.log("responce with array of objects with preferredTerms: ", this.state.preferredTerms);
 
           this.useSemanticTags(data, input);
         }
@@ -259,17 +262,23 @@ export const CareIndexing = class CareIndexing extends React.Component {
               // Get data from hdir by code and code system
               const url = helsedirBaseUrl + "?kodeverk=" + this.state.env + "&kode=" + code;
 
+              console.log("hdir url ", url);
+
               let dataPromise = fetch(url, params)
               .then((response) => response.json())
               .then((hdirData) => {
+                console.log("hdirData", hdirData);
+                this.setState( {hdirData: hdirData} );
                 // deepest level completes a promise (!); returns a string for render
                 return JSON.stringify(hdirData);
               });
 
               return dataPromise;
             } else {
+              this.setState( {hdirData: []} );
               console.log("termObj ", termObj.conceptId);
-              alert("An error while getting a code: no code in code system for this sctid: " + termObj.conceptId + "!");
+              console.log("An error while getting a code: no code in code system for this sctid: " + termObj.conceptId + "!");
+              // alert("An error while getting a code: no code in code system for this sctid: " + termObj.conceptId + "!");
             }
           });
 
@@ -592,28 +601,30 @@ export const CareIndexing = class CareIndexing extends React.Component {
                   <Accordion.Body>
                     
                     <section>
-                      {
-                        this.state.datasForRenderAnamnese.length > 0 || 
-                        this.state.datasForRenderFunn.length > 0 ||
-                        this.state.datasForRenderVurdering.length > 0 ?
-                          <h1>
-                            Helsedirekotatet [
-                              {this.state.datasForRenderAnamnese.length + 
-                              this.state.datasForRenderFunn.length +
-                              this.state.datasForRenderVurdering.length}
-                                {" "}
-                                document
-                                {
-                                  (this.state.datasForRenderAnamnese.length + 
-                                  this.state.datasForRenderFunn.length +
-                                  this.state.datasForRenderVurdering.length) > 1 ? 
-                                  'er' 
-                                  : 'et'
-                                }
-                            ]
-                          </h1> 
-                        : null
-                      }
+                      {this.state.hdirData > 0 ? 
+                        (
+                          this.state.datasForRenderAnamnese.length > 0 || 
+                          this.state.datasForRenderFunn.length > 0 ||
+                          this.state.datasForRenderVurdering.length > 0 ?
+                            <h1>
+                              Helsedirekotatet [
+                                {this.state.datasForRenderAnamnese.length + 
+                                this.state.datasForRenderFunn.length +
+                                this.state.datasForRenderVurdering.length}
+                                  {" "}
+                                  document
+                                  {
+                                    (this.state.datasForRenderAnamnese.length + 
+                                    this.state.datasForRenderFunn.length +
+                                    this.state.datasForRenderVurdering.length) > 1 ? 
+                                    'er' 
+                                    : 'et'
+                                  }
+                              ]
+                            </h1> 
+                          : null
+                        ) 
+                        : null}
                       
                       {/* <Accordion defaultActiveKey="0">
                         <Accordion.Item eventKey="1">
