@@ -32,7 +32,6 @@ export const CareIndexing = class CareIndexing extends React.Component {
       termsWithSemanticTagDisorderForVurdering: [],
       termsWithSemanticTagFindingForAnamnese: [],
       termsWithSemanticTagFindingForFunn: [],
-      hdirData: [],
       datasForRenderAnamnese: [],
       datasForRenderFunn: [],
       datasForRenderVurdering: [],
@@ -249,51 +248,61 @@ export const CareIndexing = class CareIndexing extends React.Component {
         // Get code for code system
         const selectedCodeSystem = codeSystemEnv.find(o => o.id === this.state.env);
 
+        // if code for codeSystem exists:
         if(selectedCodeSystem) {
           let codeSystemPromise = fetch(selectedCodeSystem.url + termObj.conceptId)
-          .then((response) => response.json())
-          .then((data) => {
-            if (data?.items?.length > 0 && 
-                data.items[0]?.additionalFields?.mapTarget?.length > 0
-            ) { 
-              let code = data.items[0].additionalFields.mapTarget;
-              // TODO: ask about strange value for codes mapTarget
+            .then((response) => response.json())
+            .then((data) => {
+              if (data?.items?.length > 0 && 
+                  data.items[0]?.additionalFields?.mapTarget?.length > 0
+              ) { 
+                let code = data.items[0].additionalFields.mapTarget;
+                // TODO: ask about strange value for codes mapTarget
 
-              // Get data from hdir by code and code system
-              const url = helsedirBaseUrl + "?kodeverk=" + this.state.env + "&kode=" + code;
+                // Get data from hdir by a codeSystem's code:
+                const url = helsedirBaseUrl + "?kodeverk=" + this.state.env + "&kode=" + code;
 
-              console.log("hdir url ", url);
+                let dataPromise = fetch(url, params)
+                  .then((response) => response.json())
+                  .then((hdirData) => {
+                    console.log("hdirData", hdirData);
+                    // deepest level completes a promise (!):
+                    // returns a string for render...
+                    // ...and catch a case if there is no content in helsedir
+                    if (hdirData?.length > 0) return JSON.stringify(hdirData);
+                  });
 
-              let dataPromise = fetch(url, params)
-              .then((response) => response.json())
-              .then((hdirData) => {
-                console.log("hdirData", hdirData);
-                this.setState( {hdirData: hdirData} );
-                // deepest level completes a promise (!); returns a string for render
-                return JSON.stringify(hdirData);
-              });
+                return dataPromise;
+              } else {
+                // alert("An error while getting a code: no code in code system for this sctid: " + termObj.conceptId + "!");
+                console.log("No code exists from conceptId=" + termObj.conceptId + " in code system " + this.state.env);
+              }
+            });
 
-              return dataPromise;
-            } else {
-              this.setState( {hdirData: []} );
-              console.log("termObj ", termObj.conceptId);
-              console.log("An error while getting a code: no code in code system for this sctid: " + termObj.conceptId + "!");
-              // alert("An error while getting a code: no code in code system for this sctid: " + termObj.conceptId + "!");
-            }
-          });
-
-          codeSystemPromises.push(codeSystemPromise);
+            codeSystemPromises.push(codeSystemPromise);
         }
       });
 
       Promise.all(codeSystemPromises).then((hdirDataStrings) => {
-        if(field === "VURDERING") {
-          this.setState({datasForRenderVurdering: hdirDataStrings});
-        } else if (field === "ANAMNESE") {
-          this.setState({datasForRenderAnamnese: hdirDataStrings});
-        } else if (field === "FUNN") {
-          this.setState({datasForRenderFunn: hdirDataStrings});
+
+        if (hdirDataStrings?.length > 0) {
+          let validHdirDataStrings = [];
+
+          hdirDataStrings.forEach( (hdirDataStr) => {
+            if (hdirDataStr !== undefined) validHdirDataStrings.push(hdirDataStr);
+          });
+
+          if (validHdirDataStrings.length > 0) {
+            if (field === "VURDERING") {
+              this.setState({ datasForRenderVurdering: validHdirDataStrings });
+            } else if (field === "ANAMNESE") {
+              this.setState({ datasForRenderAnamnese: validHdirDataStrings });
+            } else if (field === "FUNN") {
+              this.setState({ datasForRenderFunn: validHdirDataStrings });
+            }
+          }
         }
+        
       });
     }
   }
@@ -601,30 +610,31 @@ export const CareIndexing = class CareIndexing extends React.Component {
                   <Accordion.Body>
                     
                     <section>
-                      {this.state.hdirData > 0 ? 
-                        (
-                          this.state.datasForRenderAnamnese.length > 0 || 
-                          this.state.datasForRenderFunn.length > 0 ||
-                          this.state.datasForRenderVurdering.length > 0 ?
-                            <h1>
-                              Helsedirekotatet [
-                                {this.state.datasForRenderAnamnese.length + 
-                                this.state.datasForRenderFunn.length +
-                                this.state.datasForRenderVurdering.length}
-                                  {" "}
-                                  document
-                                  {
-                                    (this.state.datasForRenderAnamnese.length + 
-                                    this.state.datasForRenderFunn.length +
-                                    this.state.datasForRenderVurdering.length) > 1 ? 
-                                    'er' 
-                                    : 'et'
-                                  }
-                              ]
-                            </h1> 
-                          : null
-                        ) 
-                        : null}
+                      {(
+                        this.state.datasForRenderAnamnese.length > 0 || 
+                        this.state.datasForRenderFunn.length > 0 ||
+                        this.state.datasForRenderVurdering.length > 0
+                        ) ?
+                          <h1>
+                            Helsedirekotatet [
+                              {this.state.datasForRenderAnamnese.length + 
+                              this.state.datasForRenderFunn.length +
+                              this.state.datasForRenderVurdering.length}
+                                {" "}
+                                document
+                                { 
+                                  (
+                                  this.state.datasForRenderAnamnese.length + 
+                                  this.state.datasForRenderFunn.length +
+                                  this.state.datasForRenderVurdering.length
+                                  ) > 1 ? 
+                                  'er' 
+                                  : 'et'
+                                }
+                            ]
+                          </h1> 
+                        : null
+                      }
                       
                       {/* <Accordion defaultActiveKey="0">
                         <Accordion.Item eventKey="1">
@@ -932,9 +942,9 @@ export const CareIndexing = class CareIndexing extends React.Component {
             {/* Preferred terms' render: */}
             <div className="row">
               {
-                this.state.datasForRenderAnamnese.length > 0 || 
-                this.state.datasForRenderFunn.length > 0 || 
-                this.state.datasForRenderVurdering.length > 0 ? 
+                this.state.termsWithSemanticTagFindingForAnamnese.length > 0 || 
+                this.state.termsWithSemanticTagFindingForFunn.length > 0 || 
+                this.state.termsWithSemanticTagDisorderForVurdering.length > 0 ? 
                   <div className="row">
                     <h2 className="small">SNOMED CT-konsepter funnet ved NPL</h2>
                   </div>
@@ -944,31 +954,13 @@ export const CareIndexing = class CareIndexing extends React.Component {
             
             {/* Anamnese: */}
             <div className="row">
-              {this.state.datasForRenderAnamnese.length > 0 ? 
+              {this.state.termsWithSemanticTagFindingForAnamnese.length > 0 ? 
                 <h3 className="small">SNOMED CT-konsepter (kliniske funn) funnet i feltet Anamnese</h3>
               : null}
-              {
-                this.state.termsWithSemanticTagFindingForAnamnese.map((term, index) => {
-                  console.log("termsWithSemanticTagFindingForAnamnese: ", this.state.termsWithSemanticTagFindingForAnamnese);
-                    return (
-                      <div key={index+1}>
-                        <ul>
-                          <li>{term.term}</li>
-                        </ul>
-                      </div>
-                      );
-                })
-              }
-            </div>
-
-            {/* Funn: */}
-            <div className="row">
-              {this.state.datasForRenderFunn.length > 0 ? 
-                <h3 className="small">SNOMED CT-konsepter (kliniske funn) funnet i feltet Funn</h3>
-              : null}
-                {
-                  this.state.termsWithSemanticTagFindingForFunn.map((term, index) => {
-                    console.log("termsWithSemanticTagFindingForFunn: ", this.state.termsWithSemanticTagFindingForFunn);
+              {this.state.termsWithSemanticTagFindingForAnamnese.length > 0 ? 
+                (
+                  this.state.termsWithSemanticTagFindingForAnamnese.map((term, index) => {
+                    console.log("termsWithSemanticTagFindingForAnamnese: ", this.state.termsWithSemanticTagFindingForAnamnese);
                       return (
                         <div key={index+1}>
                           <ul>
@@ -977,24 +969,51 @@ export const CareIndexing = class CareIndexing extends React.Component {
                         </div>
                         );
                   })
+                ) : null
+              }
+            </div>
+
+            {/* Funn: */}
+            <div className="row">
+              {this.state.termsWithSemanticTagFindingForFunn.length > 0 ? 
+                <h3 className="small">SNOMED CT-konsepter (kliniske funn) funnet i feltet Funn</h3>
+              : null}
+                {
+                  this.state.termsWithSemanticTagFindingForFunn.length > 0 ?
+                    (
+                    this.state.termsWithSemanticTagFindingForFunn.map((term, index) => {
+                      console.log("termsWithSemanticTagFindingForFunn: ", this.state.termsWithSemanticTagFindingForFunn);
+                        return (
+                          <div key={index+1}>
+                            <ul>
+                              <li>{term.term}</li>
+                            </ul>
+                          </div>
+                          );
+                    })
+                    )
+                  : null
                 }
             </div>
 
             {/* Vurdering: */}
             <div className="row">
-              {this.state.datasForRenderVurdering.length > 0 ? 
+              {this.state.termsWithSemanticTagDisorderForVurdering.length > 0 ? 
                 (<h3 className="small">SNOMED CT-konsepter (sykdom/tilstand) funnet i feltet Vurdering</h3>)
               : null}
-              {this.state.termsWithSemanticTagDisorderForVurdering.map((term, index) => {
-                console.log("termsWithSemanticTagDisorderForVurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);
-                  return (
-                    <div key={index+1}>
-                      <ul>
-                        <li>{term.term}</li>
-                      </ul>
-                    </div>
-                  );
-                })
+              { this.state.termsWithSemanticTagDisorderForVurdering.length > 0 ?
+                (
+                  this.state.termsWithSemanticTagDisorderForVurdering.map((term, index) => {
+                  console.log("termsWithSemanticTagDisorderForVurdering: ", this.state.termsWithSemanticTagDisorderForVurdering);
+                    return (
+                      <div key={index+1}>
+                        <ul>
+                          <li>{term.term}</li>
+                        </ul>
+                      </div>
+                    );
+                  })
+                ) : null
               }
             </div>
 
