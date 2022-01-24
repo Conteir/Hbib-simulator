@@ -186,7 +186,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
 
   renderItem(item) {
     return (
-      <CollapsibleComponent name={(this.props.tag ? this.props.tag : '') + item.id}>
+      <CollapsibleComponent
+        name={(this.props.tag ? this.props.tag : "") + item.id}
+      >
         {" "}
         {/** remember id - should be only 1! */}
         <CollapsibleHead>
@@ -209,7 +211,6 @@ export const HTMLRender = class HTMLRender extends React.Component {
             </div>*/}
           <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
 
-
           {/* behandlinger handler */}
           {item?.data?.behandlinger ? (
             <CollapsibleHead>
@@ -218,60 +219,78 @@ export const HTMLRender = class HTMLRender extends React.Component {
           ) : null}
           {item?.data?.behandlinger ? (
             <CollapsibleContent>
-                {this.renderItemBehandlinger(item.data.behandlinger)}
+              {this.renderItemBehandlinger(item.data.behandlinger)}
 
-                {/* commented praktisk */}
-                {
-                  item?.data?.praktisk ?
+              {/* commented praktisk */}
+              {item?.data?.praktisk ? (
+                <div>
+                  <b>
+                    <h1>Praktisk</h1>
+                  </b>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: item.data.praktisk.replace(/\\t/g, ""),
+                    }}
+                  ></div>
+                </div>
+              ) : null}
+
+              {/* begrunnelse */}
+              {item.data.rasjonale ? (
+                <div>
+                  <b>
+                    <h1>Begrunnelse – dette er anbefalingen basert på</h1>
+                  </b>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: item?.data.rasjonale.replace(/\\t/g, ""),
+                    }}
+                  ></div>
+
+                  {item?.data.nokkelInfo?.fordelerogulemper &&
+                  item?.data.nokkelInfo?.kvalitetdokumentasjon &&
+                  item?.data.nokkelInfo?.verdierogpreferanser &&
+                  item?.data.nokkelInfo?.ressurshensyn ? (
                     <div>
-                      <b><h1>Praktisk</h1></b>
-                      <div dangerouslySetInnerHTML={{ __html: item.data.praktisk.replace(/\\t/g, "")}} ></div>
-                    </div> 
-                  : null
-                }
+                      <div className="form-group">
+                        <b>
+                          <h4>Vurdering</h4>
+                        </b>
+                      </div>
 
-                {/* begrunnelse */}
-                {
-                  item.data.rasjonale ? 
-                    <div>
-                      <b><h1>Begrunnelse – dette er anbefalingen basert på</h1></b>
-                      <div dangerouslySetInnerHTML={{ __html: item?.data.rasjonale.replace(/\\t/g, "")}} ></div>
-                      
-                      { (
-                        item?.data.nokkelInfo?.fordelerogulemper && 
-                        item?.data.nokkelInfo?.kvalitetdokumentasjon &&
-                        item?.data.nokkelInfo?.verdierogpreferanser &&
-                        item?.data.nokkelInfo?.ressurshensyn
-                        )
-                      ?
-                        <div>
-                          <div className="form-group"><b><h4>Vurdering</h4></b></div>
+                      <b>Fordeler og ulemper</b>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: item?.data.nokkelInfo?.fordelerogulemper,
+                        }}
+                      ></div>
 
-                          <b>Fordeler og ulemper</b>
-                          <div dangerouslySetInnerHTML={{ __html: item?.data.nokkelInfo?.fordelerogulemper}} ></div>
+                      <b>Kvalitet på dokumentasjonen</b>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: item?.data.nokkelInfo?.kvalitetdokumentasjon,
+                        }}
+                      ></div>
 
-                          <b>Kvalitet på dokumentasjonen</b>
-                          <div dangerouslySetInnerHTML={{ __html: item?.data.nokkelInfo?.kvalitetdokumentasjon}} ></div>
+                      <b>Verdier og preferanser</b>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: item?.data.nokkelInfo?.verdierogpreferanser,
+                        }}
+                      ></div>
 
-                          <b>Verdier og preferanser</b>
-                          <div dangerouslySetInnerHTML={{ __html: item?.data.nokkelInfo?.verdierogpreferanser}} ></div>
-
-                          <b>Ressurshensyn</b>
-                          <div dangerouslySetInnerHTML={{ __html: item?.data.nokkelInfo?.ressurshensyn}} ></div>
-
-                        </div>
-
-                       : null
-                      }
-
-                    </div> 
-                  : null
-                }
-
-                
+                      <b>Ressurshensyn</b>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: item?.data.nokkelInfo?.ressurshensyn,
+                        }}
+                      ></div>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
             </CollapsibleContent>
           ) : null}
-
 
           {item?.data?.rasjonale ? (
             <CollapsibleHead>
@@ -287,19 +306,16 @@ export const HTMLRender = class HTMLRender extends React.Component {
           ) : null}
 
           {/**creating props to pass it to child component */}
-          {
-            !this.props.hideMetadata ? (
-              <div>
-                <CollapsibleHead>
-                  <h2>Metadata</h2>
-                </CollapsibleHead>
-                <CollapsibleContent>
-                  {this.renderItemMetadata(item)}{" "}
-                </CollapsibleContent>
-              </div>
-            ) 
-            : null
-          }
+          {!this.props.hideMetadata ? (
+            <div>
+              <CollapsibleHead>
+                <h2>Metadata</h2>
+              </CollapsibleHead>
+              <CollapsibleContent>
+                {this.renderItemMetadata(item)}{" "}
+              </CollapsibleContent>
+            </div>
+          ) : null}
 
           {/**creating props to pass it to child component */}
           {!this.props.hideLinksNavigation ? (
@@ -324,351 +340,354 @@ export const HTMLRender = class HTMLRender extends React.Component {
     return doseringregimer.map((doseregime, dosregindex) => {
       return (
         <div key={dosregindex}>
-            
           {/* the whole name of dosering regime with dose and administrasjon vei and ladningdose */}
-          <div className="form-group"> 
-
-            {
-              doseregime?.data?.legemiddeldoseringsregime.koder ?
-                doseregime?.data?.legemiddeldoseringsregime.koder.map((legemiddeldoseringsregime, legemindex) => {
-                  return (
-                    <div key={legemindex}>
-
-                      {/* if landing dose: */}
-                      { 
-                        (doseregime?.data?.dosering?.eventuellLadningsdose &&
-                          doseregime?.data?.dosering?.styrkeEnhetEventuellLadningsdose?.display &&
-                            doseregime?.data?.frekvensEventuellladningsdosePerDogn &&
-                            doseregime.data.varighetEventuellLadningsdoseAntallDogn) ? 
-                            <div> 
-                              {
-                                doseregime?.data?.dosering?.eventuellLadningsdose ? 
-                                  (doseregime.data.legemiddeldoseringsregime?.koder.map((item, index) => {
+          <div className="form-group">
+            {doseregime?.data?.legemiddeldoseringsregime.koder
+              ? doseregime?.data?.legemiddeldoseringsregime.koder.map(
+                  (legemiddeldoseringsregime, legemindex) => {
+                    return (
+                      <div key={legemindex}>
+                        {/* if landing dose: */}
+                        {doseregime?.data?.dosering?.eventuellLadningsdose &&
+                        doseregime?.data?.dosering
+                          ?.styrkeEnhetEventuellLadningsdose?.display &&
+                        doseregime?.data
+                          ?.frekvensEventuellladningsdosePerDogn &&
+                        doseregime.data
+                          .varighetEventuellLadningsdoseAntallDogn ? (
+                          <div>
+                            {doseregime?.data?.dosering?.eventuellLadningsdose
+                              ? doseregime.data.legemiddeldoseringsregime?.koder.map(
+                                  (item, index) => {
                                     return (
                                       <div key={index}>
-                                          {
-                                            item.display
-                                            + " " 
-                                            + doseregime.data.dosering.eventuellLadningsdose 
-                                            + " " 
-                                            + doseregime.data.dosering.styrkeEnhetEventuellLadningsdose.display 
-                                            + " x " 
-                                            + doseregime.data.frekvensEventuellladningsdosePerDogn
-                                            + " i "
-                                            + doseregime.data.varighetEventuellLadningsdoseAntallDogn
-                                            + " " 
-                                            + "døgn"
-                                            + " "
-                                            + "ladningsdose etterfulgt av"
-                                          }
+                                        {item.display +
+                                          " " +
+                                          doseregime.data.dosering
+                                            .eventuellLadningsdose +
+                                          " " +
+                                          doseregime.data.dosering
+                                            .styrkeEnhetEventuellLadningsdose
+                                            .display +
+                                          " x " +
+                                          doseregime.data
+                                            .frekvensEventuellladningsdosePerDogn +
+                                          " i " +
+                                          doseregime.data
+                                            .varighetEventuellLadningsdoseAntallDogn +
+                                          " " +
+                                          "døgn" +
+                                          " " +
+                                          "ladningsdose etterfulgt av"}
                                       </div>
-                                      );
-                                    }))
-                                : null
+                                    );
+                                  }
+                                )
+                              : null}
+                          </div>
+                        ) : null}
+                        {/* substance and form */}
+                        {legemiddeldoseringsregime?.display
+                          ? legemiddeldoseringsregime?.display
+                          : null}{" "}
+                        {/* if administrasjon vei: */}
+                        {doseregime?.data?.administrasjonsvei
+                          ? doseregime?.data?.administrasjonsvei?.koder.map(
+                              (item, index) => {
+                                return (
+                                  <span key={index}>
+                                    {item?.display ? item.display : null}
+                                  </span>
+                                );
                               }
-                            </div>
-                        : null
-                      }
+                            )
+                          : null}{" "}
+                        {/* 50 */}
+                        {doseregime?.data?.dosering?.dose
+                          ? doseregime.data.dosering.dose
+                          : null}{" "}
+                        {doseregime?.data?.dosering?.styrkeEnhetDosering
+                          ? doseregime?.data?.dosering?.styrkeEnhetDosering
+                              ?.display
+                          : null}
+                        {" x "}
+                        {doseregime?.data?.frekvensdoseringsregimePerDogn
+                          ? doseregime?.data?.frekvensdoseringsregimePerDogn
+                          : null}
+                        {doseregime?.data?.varighetDoseringsregimeAntallDogn
+                          ? " i " +
+                            doseregime?.data
+                              ?.varighetDoseringsregimeAntallDogn +
+                            " døgn"
+                          : null}
+                      </div>
+                    );
+                  }
+                )
+              : null}
 
-                      {/* substance and form */}
-                      {legemiddeldoseringsregime?.display ? legemiddeldoseringsregime?.display : null}
-                      {" "}
-
-                      {/* if administrasjon vei: */}
-                      {
-                        doseregime?.data?.administrasjonsvei ? doseregime?.data?.administrasjonsvei?.koder.map((item, index) => {
-                          return (
-                            <span key={index}>
-                              {item?.display ? item.display : null}
-                            </span>
-                          );
-                        }) 
-                      : null
-                      }
-                      {" "}
-
-                      {/* 50 */}
-                      {doseregime?.data?.dosering?.dose ? doseregime.data.dosering.dose : null}
-                      {" "}
-
-                      {
-                        doseregime?.data?.dosering?.styrkeEnhetDosering ? 
-                          doseregime?.data?.dosering?.styrkeEnhetDosering?.display
-                        : null
-                      }
-
-                      {
-                        " x "
-                      }
-
-                      {
-                        doseregime?.data?.frekvensdoseringsregimePerDogn ? 
-                          doseregime?.data?.frekvensdoseringsregimePerDogn
-                        : null
-                      }
-
-                      {
-                        doseregime?.data?.varighetDoseringsregimeAntallDogn ? 
-                          " i " + 
-                          doseregime?.data?.varighetDoseringsregimeAntallDogn 
-                          + " døgn"
-                        : null
-                      }
-
-                    </div>
-                  );
-                })
-              : null
-            }
-
-            {
-              doseregime?.tekst ? doseregime.tekst : null
-            } 
-
+            {doseregime?.tekst ? doseregime.tekst : null}
           </div>
         </div>
       );
-    })
+    });
   }
 
   renderDoseRegimerHensyn(doseringregimer) {
     return (
       <div>
         <CollapsibleHead>
-          {
-            doseringregimer?.length > 0 && doseringregimer?.some(doseregime => doseregime?.data?.kontraindikasjoner) ? 
-              (<h4>Spesielle hensyn: </h4>)
-            : null
-          }
+          {doseringregimer?.length > 0 &&
+          doseringregimer?.some(
+            (doseregime) => doseregime?.data?.kontraindikasjoner
+          ) ? (
+            <h4>Spesielle hensyn: </h4>
+          ) : null}
         </CollapsibleHead>
 
         <CollapsibleContent>
           {doseringregimer.map((doseregime, dosregindex) => {
-              return (
-                <div key={dosregindex}>
-                    {/* <div style={{fontWeight: "bold"}}>kontraindikasjoner: {dosregindex + 1}</div> */}
-                      {doseregime?.data.kontraindikasjoner ? 
-                        doseregime?.data.kontraindikasjoner.map((item, index)=>{
-                          let itemText = item?.tekst || null; 
-                          return (
-                            <div key={index}>
-                              
-                              {
-                                item.data?.tilstand?.koder.map((inneritemt, innerindext)=> {
-                                  return (
-                                    <div key={innerindext}>
-                                      {/* Tilstand */}
-                                      {
-                                        <h5>{inneritemt?.display ? inneritemt.display : null}</h5>
-                                      }
-                                    </div>
-                                  );
-
-                                })
-                              }
-                              {
-                                item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
-                                  return (
-                                    <div key={innerindexv}>
-                                      {/* Virkestoff */}
-                                      {
-                                        <b>{inneritemv?.display ? inneritemv.display : null}</b>
-                                      }
-                                    </div>
-                                  );
-                                })
-                              }
-                              {
-                                <div className="form-group" dangerouslySetInnerHTML={{ __html: itemText }}></div>
-                              }
-                            </div>
-                          );
-                        }
-                      )
-                      : null}
-                </div>
-              );
-            })
-          }
+            return (
+              <div key={dosregindex}>
+                {/* <div style={{fontWeight: "bold"}}>kontraindikasjoner: {dosregindex + 1}</div> */}
+                {doseregime?.data.kontraindikasjoner
+                  ? doseregime?.data.kontraindikasjoner.map((item, index) => {
+                      let itemText = item?.tekst || null;
+                      return (
+                        <div key={index}>
+                          {item.data?.tilstand?.koder.map(
+                            (inneritemt, innerindext) => {
+                              return (
+                                <div key={innerindext}>
+                                  {/* Tilstand */}
+                                  {
+                                    <h5>
+                                      {inneritemt?.display
+                                        ? inneritemt.display
+                                        : null}
+                                    </h5>
+                                  }
+                                </div>
+                              );
+                            }
+                          )}
+                          {item.data.virkestoff.koder.map(
+                            (inneritemv, innerindexv) => {
+                              return (
+                                <div key={innerindexv}>
+                                  {/* Virkestoff */}
+                                  {
+                                    <b>
+                                      {inneritemv?.display
+                                        ? inneritemv.display
+                                        : null}
+                                    </b>
+                                  }
+                                </div>
+                              );
+                            }
+                          )}
+                          {
+                            <div
+                              className="form-group"
+                              dangerouslySetInnerHTML={{ __html: itemText }}
+                            ></div>
+                          }
+                        </div>
+                      );
+                    })
+                  : null}
+              </div>
+            );
+          })}
         </CollapsibleContent>
       </div>
     );
 
-      // doseringregimer.map((doseregime, dosregindex) => {
-      //   return (
-      //     <div key={dosregindex}>                        
-      //         <CollapsibleHead>
-      //           {
-      //             doseregime?.data?.kontraindikasjoner ? 
-      //               (<h4 style={{color: "green"}}>Spesielle hensyn: </h4>)
-      //             : null
-      //           }
-      //         </CollapsibleHead>
+    // doseringregimer.map((doseregime, dosregindex) => {
+    //   return (
+    //     <div key={dosregindex}>
+    //         <CollapsibleHead>
+    //           {
+    //             doseregime?.data?.kontraindikasjoner ?
+    //               (<h4 style={{color: "green"}}>Spesielle hensyn: </h4>)
+    //             : null
+    //           }
+    //         </CollapsibleHead>
 
-      //         <CollapsibleContent>
-      //           {doseregime?.data.kontraindikasjoner ? 
-      //             doseregime?.data.kontraindikasjoner.map((item, index)=>{
-      //               let itemText = item?.tekst || null;
-      //               return (
-      //                 <div key={index}>
-                        
-      //                   {
-      //                     item.data?.tilstand?.koder.map((inneritemt, innerindext)=> {
-      //                       return (
-      //                         <div key={innerindext}>
-      //                           {/* Tilstand */}
-      //                           {
-      //                             <h5>{inneritemt?.display ? inneritemt.display : null}</h5>
-      //                           }
-      //                         </div>
-      //                       );
+    //         <CollapsibleContent>
+    //           {doseregime?.data.kontraindikasjoner ?
+    //             doseregime?.data.kontraindikasjoner.map((item, index)=>{
+    //               let itemText = item?.tekst || null;
+    //               return (
+    //                 <div key={index}>
 
-      //                     })
-      //                   }
-      //                   {
-      //                     item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
-      //                       return (
-      //                         <div key={innerindexv}>
-      //                           {/* Virkestoff */}
-      //                           {
-      //                             <b>{inneritemv?.display ? inneritemv.display : null}</b>
-      //                           }
-      //                         </div>
-      //                       );
-      //                     })
-      //                   }
-      //                   {
-      //                     <div className="form-group" dangerouslySetInnerHTML={{ __html: itemText }}></div>
-      //                   }
-      //                 </div>
-      //               );
-      //             }
-      //           )
-      //           : null}
-      //         </CollapsibleContent>
-      //     </div>
-      //   );
-      // })
+    //                   {
+    //                     item.data?.tilstand?.koder.map((inneritemt, innerindext)=> {
+    //                       return (
+    //                         <div key={innerindext}>
+    //                           {/* Tilstand */}
+    //                           {
+    //                             <h5>{inneritemt?.display ? inneritemt.display : null}</h5>
+    //                           }
+    //                         </div>
+    //                       );
+
+    //                     })
+    //                   }
+    //                   {
+    //                     item.data.virkestoff.koder.map((inneritemv, innerindexv)=> {
+    //                       return (
+    //                         <div key={innerindexv}>
+    //                           {/* Virkestoff */}
+    //                           {
+    //                             <b>{inneritemv?.display ? inneritemv.display : null}</b>
+    //                           }
+    //                         </div>
+    //                       );
+    //                     })
+    //                   }
+    //                   {
+    //                     <div className="form-group" dangerouslySetInnerHTML={{ __html: itemText }}></div>
+    //                   }
+    //                 </div>
+    //               );
+    //             }
+    //           )
+    //           : null}
+    //         </CollapsibleContent>
+    //     </div>
+    //   );
+    // })
   }
 
   // rendering behandlinger
   renderItemBehandlinger(behandlinger) {
     console.log(behandlinger);
-      
+
     if (behandlinger != null) {
-      return (
-        behandlinger.map((item, index) => (
-          <div key={index}>
-            <div className="form-group">
-              <b><h1>{item.overskrift ? item.overskrift : ""}</h1></b>
-            </div>
-            <div dangerouslySetInnerHTML={{ __html: item.behandling.tekst}}></div>
-            
-            <div className="form-group">
-              { item.behandling?.data?.ledetekstVarighetBehandling ? 
-                  ("Written out: " 
-                  + item.behandling?.data?.ledetekstVarighetBehandling)
-                : null
-              }
-            </div>
-
-            <div className="form-group">
-              { item.behandling?.data?.varighetBehandlingAntallDogn ? 
-                  ("Anbefalt behandlingsvarighet ved ukomplisert forløp (inkludert eventuell oral behandling): " +
-                  item.behandling?.data?.varighetBehandlingAntallDogn + " døgn")
-                : null
-              }
-            </div>
-
-
-            {/* Standard behandlingsregimer med antibiotika */}
-            <div className="form-group">
-              {
-                item?.behandling?.data?.standardbehandlingsregimer ? 
-                  <h2>
-                    {
-                      item?.behandling?.data?.overskriftBehandlingsregime ?
-                        item?.behandling?.data?.overskriftBehandlingsregime 
-                      : "Standardbehandling" 
-                    }
-                    </h2>
-                : null
-              }
-            </div>
-
-            {item?.behandling?.data?.standardbehandlingsregimer ?
-              item.behandling.data.standardbehandlingsregimer.map((regime, regIndex) => {
-                return (
-                  <div key={regIndex}>
-                    {/* standardbehandlingsregimer for voksne eller barn */}
-                    <div className="form-group"><h3>{regime.overskrift}</h3></div>
-
-                    {regime?.doseringregimer ? this.renderDoseRegimerHeads(regime.doseringregimer) : null}
-                    {regime?.doseringregimer ? this.renderDoseRegimerHensyn(regime.doseringregimer) : null}
-
-                  </div>
-                );
-              })
-            : null}
-
-            {/* Behandlingsalternativer (hardcoded title) */}
-            <div className="form-group">
-              {
-                item?.behandling?.data?.alternativebehandlingsregimer ? 
-                  <h2>Hardcoded title: Behandlingsalternativer</h2>
-                : null
-              }     
-            </div>  
-
-            {item?.behandling?.data?.alternativebehandlingsregimer ?
-              item.behandling.data.alternativebehandlingsregimer.map((regime, regIndex) => {
-                return (
-                  <div key={regIndex}>
-                    {/* alternativebehandlingsregimer for voksne eller barn */}
-                     <div className="form-group"><h3>{regime?.overskrift ? regime.overskrift : null}</h3></div>
-
-                     {regime?.doseringregimer ? this.renderDoseRegimerHeads(regime.doseringregimer) : null}
-                     {regime?.doseringregimer ? this.renderDoseRegimerHensyn(regime.doseringregimer) : null}
-
-                  </div>
-                );
-              })
-            : null}
-
-            {/* Overgang til oral behandling (hardcoded title) */}
-            <div className="form-group">
-              {
-                item?.behandling?.data?.overgangtiloralbehandlingsregimer ? 
-                  <h2>Hardcoded title: Overgang til oral behandling</h2>
-                : null
-              }
-            </div>
-
-            {item?.behandling?.data?.overgangtiloralbehandlingsregimer ?
-              item.behandling.data.overgangtiloralbehandlingsregimer.map((regime, regIndex) => {
-                return (
-                  <div key={regIndex}>
-                    {/* overgangtiloralbehandlingsregimer */}
-                    {/* make it instead of the harcoded title?:  */}
-                    <div className="form-group"><h2>{regime?.overskrift ? regime.overskrift : null}</h2></div>
-
-                    {regime?.doseringregimer ? this.renderDoseRegimerHeads(regime.doseringregimer) : null}
-                    {regime?.doseringregimer ? this.renderDoseRegimerHensyn(regime.doseringregimer) : null}
-
-                  </div>
-                );
-              })
-            : null}
-
-
+      return behandlinger.map((item, index) => (
+        <div key={index}>
+          <div className="form-group">
+            <b>
+              <h1>{item.overskrift ? item.overskrift : ""}</h1>
+            </b>
           </div>
-        ))
-      );
-    }
+          <div
+            dangerouslySetInnerHTML={{ __html: item.behandling.tekst }}
+          ></div>
 
+          <div className="form-group">
+            {item.behandling?.data?.ledetekstVarighetBehandling
+              ? "Written out: " +
+                item.behandling?.data?.ledetekstVarighetBehandling
+              : null}
+          </div>
+
+          <div className="form-group">
+            {item.behandling?.data?.varighetBehandlingAntallDogn
+              ? "Anbefalt behandlingsvarighet ved ukomplisert forløp (inkludert eventuell oral behandling): " +
+                item.behandling?.data?.varighetBehandlingAntallDogn +
+                " døgn"
+              : null}
+          </div>
+
+          {/* Standard behandlingsregimer med antibiotika */}
+          <div className="form-group">
+            {item?.behandling?.data?.standardbehandlingsregimer ? (
+              <h2>
+                {item?.behandling?.data?.overskriftBehandlingsregime
+                  ? item?.behandling?.data?.overskriftBehandlingsregime
+                  : "Standardbehandling"}
+              </h2>
+            ) : null}
+          </div>
+
+          {item?.behandling?.data?.standardbehandlingsregimer
+            ? item.behandling.data.standardbehandlingsregimer.map(
+                (regime, regIndex) => {
+                  return (
+                    <div key={regIndex}>
+                      {/* standardbehandlingsregimer for voksne eller barn */}
+                      <div className="form-group">
+                        <h3>{regime.overskrift}</h3>
+                      </div>
+
+                      {regime?.doseringregimer
+                        ? this.renderDoseRegimerHeads(regime.doseringregimer)
+                        : null}
+                      {regime?.doseringregimer
+                        ? this.renderDoseRegimerHensyn(regime.doseringregimer)
+                        : null}
+                    </div>
+                  );
+                }
+              )
+            : null}
+
+          {/* Behandlingsalternativer (hardcoded title) */}
+          <div className="form-group">
+            {item?.behandling?.data?.alternativebehandlingsregimer ? (
+              <h2>Behandlingsalternativer</h2>
+            ) : null}
+          </div>
+
+          {item?.behandling?.data?.alternativebehandlingsregimer
+            ? item.behandling.data.alternativebehandlingsregimer.map(
+                (regime, regIndex) => {
+                  return (
+                    <div key={regIndex}>
+                      {/* alternativebehandlingsregimer for voksne eller barn */}
+                      <div className="form-group">
+                        <h3>{regime?.overskrift ? regime.overskrift : null}</h3>
+                      </div>
+
+                      {regime?.doseringregimer
+                        ? this.renderDoseRegimerHeads(regime.doseringregimer)
+                        : null}
+                      {regime?.doseringregimer
+                        ? this.renderDoseRegimerHensyn(regime.doseringregimer)
+                        : null}
+                    </div>
+                  );
+                }
+              )
+            : null}
+
+          {/* Overgang til oral behandling (hardcoded title) */}
+          <div className="form-group">
+            {item?.behandling?.data?.overgangtiloralbehandlingsregimer ? (
+              <h2>Overgang til oral behandling</h2>
+            ) : null}
+          </div>
+
+          {item?.behandling?.data?.overgangtiloralbehandlingsregimer
+            ? item.behandling.data.overgangtiloralbehandlingsregimer.map(
+                (regime, regIndex) => {
+                  return (
+                    <div key={regIndex}>
+                      {/* overgangtiloralbehandlingsregimer */}
+                      {/* make it instead of the harcoded title?:  */}
+                      <div className="form-group">
+                        <h2>{regime?.overskrift ? regime.overskrift : null}</h2>
+                      </div>
+
+                      {regime?.doseringregimer
+                        ? this.renderDoseRegimerHeads(regime.doseringregimer)
+                        : null}
+                      {regime?.doseringregimer
+                        ? this.renderDoseRegimerHensyn(regime.doseringregimer)
+                        : null}
+                    </div>
+                  );
+                }
+              )
+            : null}
+        </div>
+      ));
+    }
   }
   //////////////////////
-
 
   renderLinksList(links) {
     if (links != null) {
