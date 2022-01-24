@@ -9,6 +9,8 @@ import { BMJ } from './components/BMJ.jsx';
 import { Helsebiblioteket } from './components/Helsebiblioteket.jsx';
 import { CareIndexing } from './components/CareIndexing.jsx';
 import { Eirik } from './components/Eirik.jsx';
+import { HAPIwithSNOMED } from './components/HAPIwithSNOMED.jsx';
+import { AdvancedHAPIwithSNOMED } from './components/AdvancedHAPIwithSNOMED.jsx';
 import Nav from 'react-bootstrap/Nav';
 
 
@@ -42,6 +44,11 @@ export const App = class App extends React.Component {
                 <Nav.Link href="/careindexing">Care Indexing</Nav.Link>
 
                 <Nav.Link href="/eirik">Eirik</Nav.Link>
+
+                <Nav.Link href="/hapiwithsnomed">HAPI with SNOMED</Nav.Link>
+
+                <Nav.Link href="/advancedhapiwithsnomed">Advanced HAPI with SNOMED</Nav.Link>
+
 
             </Nav>
 
@@ -80,6 +87,14 @@ export const App = class App extends React.Component {
 
                 <Route path="/eirik" component={Eirik}>
                   <Eirik />
+                </Route>
+
+                <Route path="/hapiwithsnomed" component={HAPIwithSNOMED}>
+                  <HAPIwithSNOMED />
+                </Route>
+
+                <Route path="/advancedhapiwithsnomed" component={AdvancedHAPIwithSNOMED}>
+                  <AdvancedHAPIwithSNOMED />
                 </Route>
 
             </Switch>
