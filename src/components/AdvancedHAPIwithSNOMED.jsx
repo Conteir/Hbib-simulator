@@ -16,7 +16,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       data: "",
       matches: -1,
       showContent: false,
-      showSpinner: false
+      showSpinner: false,
+      koderSNOMEDCT: []
     };
   }
 
@@ -119,11 +120,11 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     if (!suggestion.$codeSystemResult) return;
 
     console.log("suggestion from autosuggest", suggestion);
-    const codeSystemResult = suggestion.$codeSystemResult;
-    const codeSystem = codeSystemResult.codeSystem;
-    const code = codeSystemResult.code;
+    // const codeSystemResult = suggestion.$codeSystemResult;
+    // const codeSystem = codeSystemResult.codeSystem;
+    // const code = codeSystemResult.code;
 
-    const url = helsedirBaseUrl + "?kodeverk=" + codeSystem + "&kode=" + code;
+    const url = helsedirBaseUrl + "?kodeverk=SNOMED-CT&kode=" + suggestion.concept.conceptId;
 
     this.fetchContent(url);
   }
@@ -134,21 +135,40 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     this.setState({ matches: -1, data: "", showContent: false });
     // API key depends on environment: current -> Production
     
-
     fetch(url, params)
       .then((response) => response.json())
       .then((data) => {
+        let koder = [];
         //console.log("Content for " + codeSystem + ":", data);
         if (Array.isArray(data)) {
           this.setState({ matches: data.length, showSpinner: false });
         }
-        if (Array.isArray(data) && data.length > 0 && data[0].tekst) {
+        if (data?.length > 0 && typeof data[0].tekst === 'string') {
+
+          data.forEach(elem => {
+            if(elem?.data?.behandlinger?.length > 0) {
+              elem.data.behandlinger.forEach((item) => {
+                if(item?.behandling?.data?.standardbehandlingsregimer?.length > 0){
+                  item.behandling.data.standardbehandlingsregimer.forEach( (regime) => {
+                    if(regime?.doseringregimer?.length > 0) {
+                      regime.doseringregimer.forEach((reg) => {
+                        if(reg?.koder["SNOMED-CT"] && reg.koder["SNOMED-CT"]?.length > 0) {
+                          koder = koder.concat(reg.koder["SNOMED-CT"]);
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+          
           this.setState({
+            koderSNOMEDCT: koder,
             content: data[0].tekst,
             data: JSON.stringify(data),
             showSpinner: false,
           });
-
           //console.log("Content for " + codeSystem + ":", data);
           //console.log("Content for " + codeSystem + ":", data.length);
         }
