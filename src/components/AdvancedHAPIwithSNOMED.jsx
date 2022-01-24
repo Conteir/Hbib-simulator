@@ -169,6 +169,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
             data: JSON.stringify(data),
             showSpinner: false,
           });
+
+          console.log("Fetched koderSNOMEDCT", this.state.koderSNOMEDCT);
           //console.log("Content for " + codeSystem + ":", data);
           //console.log("Content for " + codeSystem + ":", data.length);
         }
