@@ -6,9 +6,7 @@ import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 import ModalComponent from "./ModalComponent";
-import { Modal, Button } from "react-bootstrap";
-
-// import GetParamComponent from "./GetParamComponent.jsx";
+import { proxyFat } from "../config.ts";
 
 export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React.Component {
   constructor(props) {
@@ -218,7 +216,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       .then((data) => {
         console.log("Check data to retrieve id as well", data);
         data?.items?.forEach((item) => {
-          prefTerms.push({ term: item.pt.term, conceptId: item.conceptId });
+          prefTerms.push({ term: item.pt.term, conceptId: item.conceptId, $showFatData: false});
 
           // prefTerms = prefTerms.concat(item.pt.term);
 
@@ -227,6 +225,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         });
 
         this.setState({ ptArray: prefTerms });
+        this.getFatData(prefTerms);
         console.log("This is pt array to render", this.state.ptArray);
       });
   };
@@ -235,10 +234,43 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     this.setState({ showModalLegemiddel: true });
   };
 
+  getFatData = (arrayWithECLdata) => {
+    console.log("arrayWithECLdata", arrayWithECLdata);
+
+    let promises = [];
+
+    arrayWithECLdata.forEach((ecl) => {
+      if (ecl.conceptId === "1118951000202108") {
+        let fatUrl =
+          proxyFat + "/api/medicines/clinical-drugs/" + ecl.conceptId;
+        let params = {
+          method: "GET",
+          headers: {
+            Accept: "text/plain"
+          },
+        };
+
+        // if proxy sucessful and there are no more issues then this consol log should be printed:
+        let fatPromise = fetch(fatUrl, params)
+        .then((response) => response.json())
+        .then((fatData) => {
+            console.log("Check fatData", fatData);
+            ecl.fatData = fatData;
+        });
+
+        promises.push(fatPromise);
+      }
+    });
+
+    // Just touch state to trigger rerender after getting fat data into ptArray array
+    Promise.all(promises).then(() => this.setState({showSpinner: false}));
+  };
+
   render() {
     return (
       <div>
-        <Modal.Dialog>
+        {/* <button onClick={() => {console.log(this.state)}}>Log state</button> */}
+        {/* <Modal.Dialog>
           <Modal.Header closeButton>
             <Modal.Title>Modal title</Modal.Title>
           </Modal.Header>
@@ -251,15 +283,51 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
             <Button variant="secondary">Close</Button>
             <Button variant="primary">Save changes</Button>
           </Modal.Footer>
-        </Modal.Dialog>
+        </Modal.Dialog> */}
 
         {this.state.showModalLegemiddel && (
           <ModalComponent
+            title="Legemiddel"
             onClose={() => {
               this.setState({ showModalLegemiddel: false });
             }}
-            terms={this.state.ptArray}
-          />
+          >
+            <ul>
+              {this.state.ptArray.map((term, idx) => {
+                return (
+                  <li key={idx}>
+                    <span
+                      class="link"
+                      onClick={() => {
+                        term.$showFatData = !term.$showFatData;
+                        // trigger render
+                        this.setState({showSpinner: false});
+                      }}
+                    >
+                      {term.term}
+                      {" ("}
+                      {term.conceptId}
+                      {")"}
+                    </span>
+                    
+                    {term?.fatData?.merkevarer?.length > 0 && 
+                      term.$showFatData &&
+                        <ul>
+                          {term.fatData.merkevarer.map((vare, ind) => 
+                            <li key={ind}>
+                              {vare.varenavn} {' '}
+                              {vare.produsent} {' '}
+                              {vare.administrasjonsveiNavn} {' '}
+                              {vare.atcKode}
+                            </li>
+                          )}
+                        </ul>
+                    }
+                  </li>
+                );
+              })}
+            </ul>
+          </ModalComponent>
         )}
 
         <div className="jumbotron text-left ehelse">
