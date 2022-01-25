@@ -52,7 +52,7 @@ export let terminlogyServer: string = "https://seabreeze.conteir.no";
 export let branchICD10: string = "MAIN/SNOMEDCT-NO";
 export let branchICPC2: string = "MAIN/ICPC-2";
 export let branchHelsedir: string =
-  "MAIN/SNOMEDCT-NO-DAILYBULID/HELSEDIREKTORATET";
+  "MAIN/SNOMEDCT-NO-DAILYBUILD/HELSEDIREKTORATET";
 
 export let urlParameters: string =
   "?limit=10&active=true&groupByConcept=true&semanticTags=disorder&semanticTags=finding&language=no&language=nb&language=nn&language=en&conceptActive=true";
