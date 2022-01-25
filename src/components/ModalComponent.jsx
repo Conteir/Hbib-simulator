@@ -15,10 +15,7 @@ export const ModalComponent = class ModalComponent extends React.Component {
         let params = {
           method: "GET",
           headers: {
-            accept: "text/plain",
-            "request-context":
-              "appId=cid-v1:c310e22f-57ce-4073-ace2-07613f194848",
-            server: "Kestrel",
+            Accept: "text/plain"
           },
         };
 
