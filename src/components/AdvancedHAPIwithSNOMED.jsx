@@ -262,9 +262,12 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
           />
         )}
 
-        <div className="jumbotron text-center">
-          <h1>HAPI and patients record</h1>
-          <p>Choose the code system and make a search throught SNOMED</p>
+        <div className="jumbotron text-left ehelse">
+          <img
+            src="assets/Direktoratet_for_e-helse_hovedlogo_RGB_hvit.png"
+            height="200px"
+            alt="logo"
+          ></img>
         </div>
 
         <div className="row, top">

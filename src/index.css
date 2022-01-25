@@ -316,4 +316,10 @@ ul {
   text-decoration: none;
   cursor: pointer;
 }
+.ehelse {
+  background-color: #281c2c;
+  color: white;
+  margin-right: -20px;
+  margin-left: -20px;
+}
 /* /// */
