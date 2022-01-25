@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
-import proxyFat from "../config.ts";
+import { proxyFat } from "../config.ts";
 
 export const ModalComponent = class ModalComponent extends React.Component {
   getFatData = () => {
