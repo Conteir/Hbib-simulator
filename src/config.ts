@@ -48,8 +48,7 @@ export const enviroments = [
 
 //SNOMED CT CONFIGURATIONS
 export let terminlogyServer: string = "https://snowstorm.conteir.no";
-export let proxyFat: string =
-  "https://ehr-simulator.netlify.app/.netlify/functions/proxy";
+
 export let branchICD10: string = "MAIN/SNOMEDCT-NO";
 export let branchICPC2: string = "MAIN/ICPC-2";
 export let branchHelsedir: string = "MAIN/SNOMEDCT-NO/HELSEDIREKTORATET";
@@ -108,3 +107,7 @@ export const helsedirBaseUrl =
 //// configurations for hbib
 export const hbibUrl =
   "https://qa.hbib.ntf.seeds.no/_/service/com.enonic.app.guillotine/graphql";
+
+//// proxy
+export const proxyFat =
+  "https://ehr-simulator.netlify.app/.netlify/functions/proxy";
