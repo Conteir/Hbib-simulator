@@ -17,7 +17,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       matches: -1,
       showContent: false,
       showSpinner: false,
-      koderSNOMEDCT: []
+      koderSNOMEDCT: [],
+      ptArray: []
     };
   }
 
@@ -176,9 +177,38 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         }
         console.log("So, what is here..?", data);
         this.processResponse(data);
+        this.getECLdata();
       });
   };
 
+  getECLdata = () => {
+
+    let eclConcept = this.state.koderSNOMEDCT[0];
+    let prefTerms = [];
+
+    let url = "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&ecl=%3C" + 
+      eclConcept + 
+      "&offset=0&limit=50";
+
+    let params = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Accept-Language": "no"
+      }
+    };
+
+    fetch(url, params)
+      .then((response) => response.json())
+      .then((data) => {
+        data?.items?.forEach( (item) => {
+          prefTerms = prefTerms.concat(item.pt.term);
+        });
+        
+        this.setState({ ptArray: prefTerms });
+        console.log("This is pt array to render", this.state.ptArray);
+      });
+  }
 
   render() {
     return (
@@ -302,6 +332,18 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                   <div>No content matches this code</div>
                 ) : null}
               </div>
+            </div>
+
+            <div className="row">
+              {this.state.ptArray.length > 0 ? 
+                this.state.ptArray.map( (term, index) => {
+                  return (
+                    <li key={index}>
+                      {term}
+                    </li>
+                  );
+                })
+              : null}
             </div>
 
             <div className="row">
