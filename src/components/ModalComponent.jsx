@@ -21,7 +21,10 @@ export const ModalComponent = class ModalComponent extends React.Component {
 
         // if proxy sucessful and there are no more issues then this consol log should be printed:
         fetch(fatUrl, params)
-          .then((response) => console.log("Check response", response));
+          .then((response) => response.json())
+          .then((fatData) => {
+              console.log("Check fatData", fatData);      
+          });
       }
     });
   };
