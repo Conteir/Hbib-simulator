@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
-import proxy from "../config";
+import proxyFat from "../config";
 
 export const ModalComponent = class ModalComponent extends React.Component {
   getFatData = () => {
@@ -10,7 +10,8 @@ export const ModalComponent = class ModalComponent extends React.Component {
 
     arrayWithECLdata.forEach((ecl) => {
       if (ecl.conceptId === "1118951000202108") {
-        let fatUrl = proxy + "/api/medicines/clinical-drugs/" + ecl.conceptId;
+        let fatUrl =
+          proxyFat + "/api/medicines/clinical-drugs/" + ecl.conceptId;
         let params = {
           method: "GET",
           headers: {
