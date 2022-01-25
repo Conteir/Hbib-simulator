@@ -2,8 +2,23 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import { proxyFat } from "../config.ts";
+import {
+  CollapsibleComponent,
+  CollapsibleHead,
+  CollapsibleContent,
+} from "react-collapsible-component";
 
 export const ModalComponent = class ModalComponent extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      fatData: {},
+      showSpinner: false
+    };
+  }
+
   getFatData = () => {
     let arrayWithECLdata = this.props.terms;
     console.log("arrayWithECLdata", arrayWithECLdata);
@@ -23,7 +38,8 @@ export const ModalComponent = class ModalComponent extends React.Component {
         fetch(fatUrl, params)
           .then((response) => response.json())
           .then((fatData) => {
-              console.log("Check fatData", fatData);      
+              console.log("Check fatData", fatData); 
+              this.setState({ fatData: fatData });     
           });
       }
     });
@@ -44,6 +60,28 @@ export const ModalComponent = class ModalComponent extends React.Component {
                 {" ("}
                 {term.conceptId}
                 {")"}
+
+                {
+                  this.state.fatData.merkevarer.length > 0 ? 
+                    (this.state.fatData.merkevarer.map( (vare, ind) => {
+                      return (
+                        <div key={ind}>
+
+                          <li key={idx}>
+                            {term.term}
+                          
+                            {vare.varenavn}
+                            {vare.produsent}
+                            {vare.administrasjonsveiNavn} 
+                            {vare.atcKode}
+                          </li>
+
+                        </div>
+                      );
+                    }))
+                  : null
+                }
+
               </li>
             );
           })}
