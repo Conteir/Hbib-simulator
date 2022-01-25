@@ -6,7 +6,7 @@ import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 import ModalComponent from "./ModalComponent";
-import { Modal, Button } from "react-bootstrap"
+import { Modal, Button } from "react-bootstrap";
 
 // import GetParamComponent from "./GetParamComponent.jsx";
 
@@ -22,14 +22,14 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       showSpinner: false,
       koderSNOMEDCT: [],
       ptArray: [],
-      showModalLegemiddel: false
+      showModalLegemiddel: false,
     };
   }
 
   componentDidMount() {
     const urlParams = new URLSearchParams(window.location.search);
-    const valueHapiId = urlParams.get('hapiId');
-    if(valueHapiId) {
+    const valueHapiId = urlParams.get("hapiId");
+    if (valueHapiId) {
       const url = helsedirBaseUrl + valueHapiId;
       this.fetchContent(url);
       this.setState({ showContent: true });
@@ -80,7 +80,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       });
 
       // Text render demo (commented out now) START
-        // check if there is data with required field:
+      // check if there is data with required field:
       if (data[0]?.tekst !== undefined) {
         this.setState({ content: data[0].tekst });
       }
@@ -129,17 +129,20 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     // const codeSystem = codeSystemResult.codeSystem;
     // const code = codeSystemResult.code;
 
-    const url = helsedirBaseUrl + "?kodeverk=SNOMED-CT&kode=" + suggestion.concept.conceptId;
+    const url =
+      helsedirBaseUrl +
+      "?kodeverk=SNOMED-CT&kode=" +
+      suggestion.concept.conceptId;
 
     this.fetchContent(url);
-  }
+  };
 
   fetchContent = (url) => {
     this.setState({ showSpinner: true });
     // reset state to clean results before new loading
     this.setState({ matches: -1, data: "", showContent: false });
     // API key depends on environment: current -> Production
-    
+
     fetch(url, params)
       .then((response) => response.json())
       .then((data) => {
@@ -148,26 +151,32 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         if (Array.isArray(data)) {
           this.setState({ matches: data.length, showSpinner: false });
         }
-        if (data?.length > 0 && typeof data[0].tekst === 'string') {
-
-          data.forEach(elem => {
-            if(elem?.data?.behandlinger?.length > 0) {
+        if (data?.length > 0 && typeof data[0].tekst === "string") {
+          data.forEach((elem) => {
+            if (elem?.data?.behandlinger?.length > 0) {
               elem.data.behandlinger.forEach((item) => {
-                if(item?.behandling?.data?.standardbehandlingsregimer?.length > 0){
-                  item.behandling.data.standardbehandlingsregimer.forEach( (regime) => {
-                    if(regime?.doseringregimer?.length > 0) {
-                      regime.doseringregimer.forEach((reg) => {
-                        if(reg?.koder["SNOMED-CT"] && reg.koder["SNOMED-CT"]?.length > 0) {
-                          koder = koder.concat(reg.koder["SNOMED-CT"]);
-                        }
-                      });
+                if (
+                  item?.behandling?.data?.standardbehandlingsregimer?.length > 0
+                ) {
+                  item.behandling.data.standardbehandlingsregimer.forEach(
+                    (regime) => {
+                      if (regime?.doseringregimer?.length > 0) {
+                        regime.doseringregimer.forEach((reg) => {
+                          if (
+                            reg?.koder["SNOMED-CT"] &&
+                            reg.koder["SNOMED-CT"]?.length > 0
+                          ) {
+                            koder = koder.concat(reg.koder["SNOMED-CT"]);
+                          }
+                        });
+                      }
                     }
-                  });
+                  );
                 }
               });
             }
           });
-          
+
           this.setState({
             koderSNOMEDCT: koder,
             content: data[0].tekst,
@@ -186,52 +195,45 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
   };
 
   getECLdata = () => {
-
     let eclConcept = this.state.koderSNOMEDCT[0];
     let prefTerms = [];
 
     // let eclData = [];
 
-    let url = "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&ecl=%3C" + 
-      eclConcept + 
+    let url =
+      "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&ecl=%3C" +
+      eclConcept +
       "&offset=0&limit=50";
 
     let params = {
       method: "GET",
       headers: {
         Accept: "application/json",
-        "Accept-Language": "no"
-      }
+        "Accept-Language": "no",
+      },
     };
 
     fetch(url, params)
       .then((response) => response.json())
       .then((data) => {
         console.log("Check data to retrieve id as well", data);
-        data?.items?.forEach( (item) => {
-
-          prefTerms.push(
-            { term: item.pt.term, 
-              conceptId: item.conceptId
-            }
-          );
+        data?.items?.forEach((item) => {
+          prefTerms.push({ term: item.pt.term, conceptId: item.conceptId });
 
           // prefTerms = prefTerms.concat(item.pt.term);
 
-
           // prefTerms["preferredTerm"] = prefTerms.concat(item.pt.term);
           // prefTerms["eclId"] = prefTerms.concat(item.conceptId);
-
         });
-        
+
         this.setState({ ptArray: prefTerms });
         console.log("This is pt array to render", this.state.ptArray);
       });
-  }
+  };
 
   onFinnLegemiddelClick = () => {
-    this.setState({showModalLegemiddel: true});
-  }
+    this.setState({ showModalLegemiddel: true });
+  };
 
   render() {
     return (
@@ -251,11 +253,14 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
           </Modal.Footer>
         </Modal.Dialog>
 
-        {this.state.showModalLegemiddel && 
-          <ModalComponent 
-            onClose={() => {this.setState({showModalLegemiddel: false})}}
+        {this.state.showModalLegemiddel && (
+          <ModalComponent
+            onClose={() => {
+              this.setState({ showModalLegemiddel: false });
+            }}
             terms={this.state.ptArray}
-          />}
+          />
+        )}
 
         <div className="jumbotron text-center">
           <h1>HAPI and patients record</h1>
@@ -289,7 +294,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
             <div className="row">
               <div className="form-group">
                 <label htmlFor="notat">
-                  <b>Notat:</b>
+                  <b>Anamnese:</b>
                 </label>
                 <textarea
                   aria-label="Notat"

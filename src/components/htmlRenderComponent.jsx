@@ -199,7 +199,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
         </CollapsibleHead>
         <CollapsibleContent>
           <div name={item.id}>{item.intro ? item.intro : ""}</div>
-          
+
           <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
 
           {/* behandlinger handler */}
@@ -604,21 +604,28 @@ export const HTMLRender = class HTMLRender extends React.Component {
                         <h3>{regime.overskrift}</h3>
                       </div>
 
-                      {regime?.doseringregimer ?
-                        this.renderDoseRegimerHeads(regime.doseringregimer)
-                      : null}
+                      {regime?.doseringregimer
+                        ? this.renderDoseRegimerHeads(regime.doseringregimer)
+                        : null}
 
                       {/* button to get fat data */}
-                      <span className="link" onClick={() => this.props.onFinnLegemiddelClick()}>Finn legemiddel</span>
-                      
-                      {regime?.doseringregimer ?
-                        this.renderDoseRegimerHensyn(regime.doseringregimer)
-                      : null}
+                      <p className="floatRight">
+                        <span
+                          className="link"
+                          onClick={() => this.props.onFinnLegemiddelClick()}
+                        >
+                          Finn legemiddel
+                        </span>
+                      </p>
+
+                      {regime?.doseringregimer
+                        ? this.renderDoseRegimerHensyn(regime.doseringregimer)
+                        : null}
                     </div>
                   );
                 }
               )
-          : null}
+            : null}
 
           {/* Behandlingsalternativer (hardcoded title) */}
           <div className="form-group">
@@ -667,12 +674,12 @@ export const HTMLRender = class HTMLRender extends React.Component {
                         <h2>{regime?.overskrift ? regime.overskrift : null}</h2>
                       </div>
 
-                      {regime?.doseringregimer ?
-                        this.renderDoseRegimerHeads(regime.doseringregimer)
-                      : null}
-                      {regime?.doseringregimer ? 
-                        this.renderDoseRegimerHensyn(regime.doseringregimer)
-                      : null}
+                      {regime?.doseringregimer
+                        ? this.renderDoseRegimerHeads(regime.doseringregimer)
+                        : null}
+                      {regime?.doseringregimer
+                        ? this.renderDoseRegimerHensyn(regime.doseringregimer)
+                        : null}
                     </div>
                   );
                 }
@@ -806,7 +813,6 @@ export const HTMLRender = class HTMLRender extends React.Component {
         </div>
       ));
   }
-
 };
 
 export default HTMLRender;
