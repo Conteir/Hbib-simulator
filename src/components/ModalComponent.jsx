@@ -60,25 +60,26 @@ export const ModalComponent = class ModalComponent extends React.Component {
                 {" ("}
                 {term.conceptId}
                 {")"}
-
-                {this.state.fatData.merkevarer.map( (vare, ind) => {
-                  return (
-                    <div key={ind}>
-
-                      <li key={idx}>
-                        {term.term}
-                      
-                        {vare.varenavn}
-                        {vare.produsent}
-                        {vare.administrasjonsveiNavn} 
-                        {vare.atcKode}
-                      </li>
-
-                    </div>
-                  );
-                })}
-
               </li>
+
+                // {this.state.fatData.merkevarer.map( (vare, ind) => {
+                //   return (
+                //     <div key={ind}>
+
+                //       <li key={idx}>
+                //         {term.term}
+                      
+                //         {vare.varenavn}
+                //         {vare.produsent}
+                //         {vare.administrasjonsveiNavn} 
+                //         {vare.atcKode}
+                //       </li>
+
+                //     </div>
+                //   );
+                // })}
+
+              
             );
           })}
         </div>
