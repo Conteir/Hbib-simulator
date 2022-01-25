@@ -198,17 +198,8 @@ export const HTMLRender = class HTMLRender extends React.Component {
           <h1>{item.tittel}</h1>
         </CollapsibleHead>
         <CollapsibleContent>
-          {/* zacheeeem name=? 
-            <div name={item.id}>
-              <h2>
-                {item.kortTittel !== item.tittel ? item.kortTittel : null}
-              </h2>
-            </div>
-            */}
           <div name={item.id}>{item.intro ? item.intro : ""}</div>
-          {/*<div name={item.id}>
-              {item.forstPublisert ? item.forstPublisert.substring(0, 11) : ""}
-            </div>*/}
+          
           <div dangerouslySetInnerHTML={{ __html: item.tekst }}></div>
 
           {/* behandlinger handler */}
@@ -613,17 +604,21 @@ export const HTMLRender = class HTMLRender extends React.Component {
                         <h3>{regime.overskrift}</h3>
                       </div>
 
-                      {regime?.doseringregimer
-                        ? this.renderDoseRegimerHeads(regime.doseringregimer)
-                        : null}
-                      {regime?.doseringregimer
-                        ? this.renderDoseRegimerHensyn(regime.doseringregimer)
-                        : null}
+                      {regime?.doseringregimer ?
+                        this.renderDoseRegimerHeads(regime.doseringregimer)
+                      : null}
+
+                      {/* button to get fat data */}
+                      <span className="link" onClick={() => this.props.onFinnLegemiddelClick()}>Finn legemiddel</span>
+                      
+                      {regime?.doseringregimer ?
+                        this.renderDoseRegimerHensyn(regime.doseringregimer)
+                      : null}
                     </div>
                   );
                 }
               )
-            : null}
+          : null}
 
           {/* Behandlingsalternativer (hardcoded title) */}
           <div className="form-group">
@@ -672,12 +667,12 @@ export const HTMLRender = class HTMLRender extends React.Component {
                         <h2>{regime?.overskrift ? regime.overskrift : null}</h2>
                       </div>
 
-                      {regime?.doseringregimer
-                        ? this.renderDoseRegimerHeads(regime.doseringregimer)
-                        : null}
-                      {regime?.doseringregimer
-                        ? this.renderDoseRegimerHensyn(regime.doseringregimer)
-                        : null}
+                      {regime?.doseringregimer ?
+                        this.renderDoseRegimerHeads(regime.doseringregimer)
+                      : null}
+                      {regime?.doseringregimer ? 
+                        this.renderDoseRegimerHensyn(regime.doseringregimer)
+                      : null}
                     </div>
                   );
                 }
@@ -812,24 +807,6 @@ export const HTMLRender = class HTMLRender extends React.Component {
       ));
   }
 
-  /*renderTema(tema) {
-
-    if (tema != null)
-
-      return tema.map((item, index) =>
-     
-        <div key={index}>
-          
-          <table><tbody>
-
-            <tr>
-              <td style={{ fontWeight: "bold"}}>Tema</td><td>{item.tema ? item.tema : null }</td>
-            </tr>
-
-          </tbody></table>
-
-        </div>);
-  } */
 };
 
 export default HTMLRender;

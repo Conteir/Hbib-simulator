@@ -5,6 +5,9 @@ import DisordersAutosuggest from "./DisordersAutosuggest";
 import { HTMLRender } from "./htmlRenderComponent";
 import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
+import ModalComponent from "./ModalComponent";
+import { Modal, Button } from "react-bootstrap"
+
 // import GetParamComponent from "./GetParamComponent.jsx";
 
 export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React.Component {
@@ -18,7 +21,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       showContent: false,
       showSpinner: false,
       koderSNOMEDCT: [],
-      ptArray: []
+      ptArray: [],
+      showModalLegemiddel: false
     };
   }
 
@@ -186,6 +190,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     let eclConcept = this.state.koderSNOMEDCT[0];
     let prefTerms = [];
 
+    // let eclData = [];
+
     let url = "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&ecl=%3C" + 
       eclConcept + 
       "&offset=0&limit=50";
@@ -201,8 +207,21 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     fetch(url, params)
       .then((response) => response.json())
       .then((data) => {
+        console.log("Check data to retrieve id as well", data);
         data?.items?.forEach( (item) => {
-          prefTerms = prefTerms.concat(item.pt.term);
+
+          prefTerms.push(
+            { term: item.pt.term, 
+              conceptId: item.conceptId
+            }
+          );
+
+          // prefTerms = prefTerms.concat(item.pt.term);
+
+
+          // prefTerms["preferredTerm"] = prefTerms.concat(item.pt.term);
+          // prefTerms["eclId"] = prefTerms.concat(item.conceptId);
+
         });
         
         this.setState({ ptArray: prefTerms });
@@ -210,9 +229,34 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       });
   }
 
+  onFinnLegemiddelClick = () => {
+    this.setState({showModalLegemiddel: true});
+  }
+
   render() {
     return (
       <div>
+        <Modal.Dialog>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal title</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p>Modal body text goes here.</p>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="secondary">Close</Button>
+            <Button variant="primary">Save changes</Button>
+          </Modal.Footer>
+        </Modal.Dialog>
+
+        {this.state.showModalLegemiddel && 
+          <ModalComponent 
+            onClose={() => {this.setState({showModalLegemiddel: false})}}
+            terms={this.state.ptArray}
+          />}
+
         <div className="jumbotron text-center">
           <h1>HAPI and patients record</h1>
           <p>Choose the code system and make a search throught SNOMED</p>
@@ -334,7 +378,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
               </div>
             </div>
 
-            <div className="row">
+            {/* <div className="row">
               {this.state.ptArray.length > 0 ? 
                 this.state.ptArray.map( (term, index) => {
                   return (
@@ -344,7 +388,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                   );
                 })
               : null}
-            </div>
+            </div> */}
 
             <div className="row">
               {this.state.showSpinner ? <Spinner color="success" /> : null}
@@ -370,6 +414,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                         linkCallback={this.linkCallback}
                         hideMetadata={true}
                         hideLinksNavigation={true}
+                        onFinnLegemiddelClick={this.onFinnLegemiddelClick}
                       />{" "}
                       {/** --> hide metadata */}
                     </div>
