@@ -2,11 +2,11 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import { proxyFat } from "../config.ts";
-import {
-  CollapsibleComponent,
-  CollapsibleHead,
-  CollapsibleContent,
-} from "react-collapsible-component";
+// import {
+//   CollapsibleComponent,
+//   CollapsibleHead,
+//   CollapsibleContent,
+// } from "react-collapsible-component";
 
 export const ModalComponent = class ModalComponent extends React.Component {
 
