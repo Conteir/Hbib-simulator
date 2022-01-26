@@ -330,10 +330,12 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                         <ul>
                           {term.fatData.merkevarer.map((vare, ind) => 
                             <li key={ind}>
-                              {vare.varenavn} {' '}
-                              {vare.produsent} {' '}
-                              {vare.administrasjonsveiNavn} {' '}
-                              {vare.atcKode}
+                              <p>
+                                {'Navn: '}{vare.varenavn}<br/>
+                                {'Produsent: '}{vare.produsent}<br/>
+                                {'Administrasjonsvei: '}{vare.administrasjonsveiNavn}<br/>
+                                {'ATC: '}{vare.atcKode}
+                              </p>
                             </li>
                           )}
                         </ul>
