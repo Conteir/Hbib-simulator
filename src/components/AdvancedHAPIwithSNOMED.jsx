@@ -154,6 +154,54 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
             if (elem?.data?.behandlinger?.length > 0) {
               elem.data.behandlinger.forEach((item) => {
                 if (
+                  item?.behandling?.data?.overgangtiloralbehandlingsregimer
+                    ?.length > 0
+                ) {
+                  item.behandling.data.overgangtiloralbehandlingsregimer.forEach(
+                    (regime) => {
+                      if (regime?.doseringregimer?.length > 0) {
+                        regime.doseringregimer.forEach((reg) => {
+                          if (
+                            reg?.koder["SNOMED-CT"] &&
+                            reg.koder["SNOMED-CT"]?.length > 0
+                          ) {
+                            koder = koder.concat(reg.koder["SNOMED-CT"]);
+                          }
+                        });
+                      }
+                    }
+                  );
+                }
+              });
+            }
+          });
+
+          this.setState({
+            koderOralSNOMEDCT: koder,
+            content: data[0].tekst,
+            data: JSON.stringify(data),
+            showSpinner: false,
+          });
+
+          console.log("Fetched koderSNOMEDCT", this.state.koderOralSNOMEDCT);
+          //console.log("Content for " + codeSystem + ":", data);
+          //console.log("Content for " + codeSystem + ":", data.length);
+        }
+        console.log("So, what is here..?", data);
+        this.processResponse(data);
+        this.getECLdata();
+      })
+      .then((data) => {
+        let koder = [];
+        //console.log("Content for " + codeSystem + ":", data);
+        if (Array.isArray(data)) {
+          this.setState({ matches: data.length, showSpinner: false });
+        }
+        if (data?.length > 0 && typeof data[0].tekst === "string") {
+          data.forEach((elem) => {
+            if (elem?.data?.behandlinger?.length > 0) {
+              elem.data.behandlinger.forEach((item) => {
+                if (
                   item?.behandling?.data?.standardbehandlingsregimer?.length > 0
                 ) {
                   item.behandling.data.standardbehandlingsregimer.forEach(
@@ -216,7 +264,11 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       .then((data) => {
         console.log("Check data to retrieve id as well", data);
         data?.items?.forEach((item) => {
-          prefTerms.push({ term: item.pt.term, conceptId: item.conceptId, $showFatData: false});
+          prefTerms.push({
+            term: item.pt.term,
+            conceptId: item.conceptId,
+            $showFatData: false,
+          });
 
           // prefTerms = prefTerms.concat(item.pt.term);
 
@@ -242,20 +294,20 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     arrayWithECLdata.forEach((ecl) => {
       // return condition for specific id
       // if (ecl.conceptId === "1118951000202108") {
-        let fatUrl =
-          proxyFat + "/api/medicines/clinical-drugs/" + ecl.conceptId;
-        let params = {
-          method: "GET",
-          headers: {
-            Accept: "text/plain"
-          },
-        };
+      let fatUrl = proxyFat + "/api/medicines/clinical-drugs/" + ecl.conceptId;
+      let params = {
+        method: "GET",
+        headers: {
+          Accept: "text/plain",
+        },
+      };
 
-        // if proxy sucessful and there are no more issues then this consol log should be printed:
-        let fatPromise = fetch(fatUrl, params)
-        .then((response) => {
-          if (response.ok) {
-            return response.json().then((fatData) => {
+      // if proxy sucessful and there are no more issues then this consol log should be printed:
+      let fatPromise = fetch(fatUrl, params).then((response) => {
+        if (response.ok) {
+          return response
+            .json()
+            .then((fatData) => {
               // check if there are no server errors
               if (fatData.errorMessage) {
                 alert("Internal server error! Try later.");
@@ -263,22 +315,21 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                 console.log("Check fatData", fatData);
                 ecl.fatData = fatData;
               }
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-          } else {
-            throw new Error('Something went wrong');
-          }
-        })
-      
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          throw new Error("Something went wrong");
+        }
+      });
 
-        promises.push(fatPromise);
+      promises.push(fatPromise);
       // }
     });
 
     // Just touch state to trigger rerender after getting fat data into ptArray array
-    Promise.all(promises).then(() => this.setState({showSpinner: false}));
+    Promise.all(promises).then(() => this.setState({ showSpinner: false }));
   };
 
   render() {
@@ -311,13 +362,13 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
               {this.state.ptArray.map((term, idx) => {
                 return (
                   <li key={idx}>
-                    {term?.fatData?.merkevarer ? 
+                    {term?.fatData?.merkevarer ? (
                       <span
                         className="link"
                         onClick={() => {
                           term.$showFatData = !term.$showFatData;
                           // trigger render
-                          this.setState({showSpinner: false});
+                          this.setState({ showSpinner: false });
                         }}
                       >
                         {term.term}
@@ -325,28 +376,37 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                         {term.conceptId}
                         {")"}
                       </span>
-                    : <span>
+                    ) : (
+                      <span>
                         {term.term}
                         {" ("}
                         {term.conceptId}
                         {")"}
-                      </span>}
-                    
-                      {term?.fatData?.merkevarer?.length > 0 && 
-                        term.$showFatData &&
-                          <ul>
-                            {term.fatData.merkevarer.map((vare, ind) => 
-                              <li key={ind}>
-                                <p>
-                                  <b>{'Navn: '}</b>{vare.varenavn}<br/>
-                                  <b>{'Produsent: '}</b>{vare.produsent}<br/>
-                                  <b>{'Administrasjonsvei: '}</b>{vare.administrasjonsveiNavn}<br/>
-                                  <b>{'ATC: '}</b>{vare.atcKode}
-                                </p>
-                              </li>
-                            )}
-                          </ul>
-                      }
+                      </span>
+                    )}
+
+                    {term?.fatData?.merkevarer?.length > 0 &&
+                      term.$showFatData && (
+                        <ul>
+                          {term.fatData.merkevarer.map((vare, ind) => (
+                            <li key={ind}>
+                              <p>
+                                <b>{"Navn: "}</b>
+                                {vare.varenavn}
+                                <br />
+                                <b>{"Produsent: "}</b>
+                                {vare.produsent}
+                                <br />
+                                <b>{"Administrasjonsvei: "}</b>
+                                {vare.administrasjonsveiNavn}
+                                <br />
+                                <b>{"ATC: "}</b>
+                                {vare.atcKode}
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                   </li>
                 );
               })}
