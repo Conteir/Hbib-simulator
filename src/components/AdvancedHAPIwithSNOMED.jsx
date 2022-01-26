@@ -255,23 +255,23 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         let fatPromise = fetch(fatUrl, params)
         .then((response) => {
           if (response.ok) {
-            return response.json();
+            return response.json().then((fatData) => {
+              // check if there are no server errors
+              if (fatData.errorMessage) {
+                alert("Internal server error! Try later.");
+              } else {
+                console.log("Check fatData", fatData);
+                ecl.fatData = fatData;
+              }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
           } else {
             throw new Error('Something went wrong');
           }
         })
-        .then((fatData) => {
-            // check if there are no server errors
-            if (fatData.errorMessage) {
-              alert("Internal server error! Try later.");
-            } else {
-              console.log("Check fatData", fatData);
-              ecl.fatData = fatData;
-            }
-        })
-        .catch((error) => {
-          console.log(error)
-        });
+      
 
         promises.push(fatPromise);
       // }
@@ -331,10 +331,10 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                           {term.fatData.merkevarer.map((vare, ind) => 
                             <li key={ind}>
                               <p>
-                                {'Navn: '}{vare.varenavn}<br/>
-                                {'Produsent: '}{vare.produsent}<br/>
-                                {'Administrasjonsvei: '}{vare.administrasjonsveiNavn}<br/>
-                                {'ATC: '}{vare.atcKode}
+                                <b>{'Navn: '}</b>{vare.varenavn}<br/>
+                                <b>{'Produsent: '}</b>{vare.produsent}<br/>
+                                <b>{'Administrasjonsvei: '}</b>{vare.administrasjonsveiNavn}<br/>
+                                <b>{'ATC: '}</b>{vare.atcKode}
                               </p>
                             </li>
                           )}
