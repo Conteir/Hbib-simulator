@@ -253,14 +253,24 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
 
         // if proxy sucessful and there are no more issues then this consol log should be printed:
         let fatPromise = fetch(fatUrl, params)
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Something went wrong');
+          }
+        })
         .then((fatData) => {
             // check if there are no server errors
             if (fatData.errorMessage) {
               alert("Internal server error! Try later.");
+            } else {
+              console.log("Check fatData", fatData);
+              ecl.fatData = fatData;
             }
-            console.log("Check fatData", fatData);
-            ecl.fatData = fatData;
+        })
+        .catch((error) => {
+          console.log(error)
         });
 
         promises.push(fatPromise);
