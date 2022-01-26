@@ -677,15 +677,6 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHeads(regime.doseringregimer)
                         : null}
-                      {/* button to get fat data */}
-                      <p className="floatRight">
-                        <span
-                          className="link"
-                          onClick={() => this.props.onFinnLegemiddelClick()}
-                        >
-                          Finn legemiddel
-                        </span>
-                      </p>
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHensyn(regime.doseringregimer)
                         : null}

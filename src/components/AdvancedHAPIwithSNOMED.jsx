@@ -154,54 +154,6 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
             if (elem?.data?.behandlinger?.length > 0) {
               elem.data.behandlinger.forEach((item) => {
                 if (
-                  item?.behandling?.data?.overgangtiloralbehandlingsregimer
-                    ?.length > 0
-                ) {
-                  item.behandling.data.overgangtiloralbehandlingsregimer.forEach(
-                    (regime) => {
-                      if (regime?.doseringregimer?.length > 0) {
-                        regime.doseringregimer.forEach((reg) => {
-                          if (
-                            reg?.koder["SNOMED-CT"] &&
-                            reg.koder["SNOMED-CT"]?.length > 0
-                          ) {
-                            koder = koder.concat(reg.koder["SNOMED-CT"]);
-                          }
-                        });
-                      }
-                    }
-                  );
-                }
-              });
-            }
-          });
-
-          this.setState({
-            koderOralSNOMEDCT: koder,
-            content: data[0].tekst,
-            data: JSON.stringify(data),
-            showSpinner: false,
-          });
-
-          console.log("Fetched koderSNOMEDCT", this.state.koderOralSNOMEDCT);
-          //console.log("Content for " + codeSystem + ":", data);
-          //console.log("Content for " + codeSystem + ":", data.length);
-        }
-        console.log("So, what is here..?", data);
-        this.processResponse(data);
-        this.getECLdata();
-      })
-      .then((data) => {
-        let koder = [];
-        //console.log("Content for " + codeSystem + ":", data);
-        if (Array.isArray(data)) {
-          this.setState({ matches: data.length, showSpinner: false });
-        }
-        if (data?.length > 0 && typeof data[0].tekst === "string") {
-          data.forEach((elem) => {
-            if (elem?.data?.behandlinger?.length > 0) {
-              elem.data.behandlinger.forEach((item) => {
-                if (
                   item?.behandling?.data?.standardbehandlingsregimer?.length > 0
                 ) {
                   item.behandling.data.standardbehandlingsregimer.forEach(
