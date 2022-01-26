@@ -254,6 +254,9 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         let fatPromise = fetch(fatUrl, params)
         .then((response) => response.json())
         .then((fatData) => {
+            if (fatData.errorMessage) {
+              alert("Internal server error! Try later.");
+            }
             console.log("Check fatData", fatData);
             ecl.fatData = fatData;
         });
