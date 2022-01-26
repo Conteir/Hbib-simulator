@@ -311,36 +311,42 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
               {this.state.ptArray.map((term, idx) => {
                 return (
                   <li key={idx}>
-                    <span
-                      className="link"
-                      onClick={() => {
-                        term.$showFatData = !term.$showFatData;
-                        // trigger render
-                        this.setState({showSpinner: false});
-                      }}
-                    >
-                      {term.term}
-                      {" ("}
-                      {term.conceptId}
-                      {")"}
-                    </span>
+                    {term?.fatData?.merkevarer ? 
+                      <span
+                        className="link"
+                        onClick={() => {
+                          term.$showFatData = !term.$showFatData;
+                          // trigger render
+                          this.setState({showSpinner: false});
+                        }}
+                      >
+                        {term.term}
+                        {" ("}
+                        {term.conceptId}
+                        {")"}
+                      </span>
+                    : <span>
+                        {term.term}
+                        {" ("}
+                        {term.conceptId}
+                        {")"}
+                      </span>}
                     
-                    {(term?.fatData?.merkevarer?.length > 0 && 
-                      term.$showFatData ) ?
-                        <ul>
-                          {term.fatData.merkevarer.map((vare, ind) => 
-                            <li key={ind}>
-                              <p>
-                                <b>{'Navn: '}</b>{vare.varenavn}<br/>
-                                <b>{'Produsent: '}</b>{vare.produsent}<br/>
-                                <b>{'Administrasjonsvei: '}</b>{vare.administrasjonsveiNavn}<br/>
-                                <b>{'ATC: '}</b>{vare.atcKode}
-                              </p>
-                            </li>
-                          )}
-                        </ul>
-                      : null
-                    }
+                      {term?.fatData?.merkevarer?.length > 0 && 
+                        term.$showFatData &&
+                          <ul>
+                            {term.fatData.merkevarer.map((vare, ind) => 
+                              <li key={ind}>
+                                <p>
+                                  <b>{'Navn: '}</b>{vare.varenavn}<br/>
+                                  <b>{'Produsent: '}</b>{vare.produsent}<br/>
+                                  <b>{'Administrasjonsvei: '}</b>{vare.administrasjonsveiNavn}<br/>
+                                  <b>{'ATC: '}</b>{vare.atcKode}
+                                </p>
+                              </li>
+                            )}
+                          </ul>
+                      }
                   </li>
                 );
               })}
