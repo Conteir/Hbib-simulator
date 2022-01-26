@@ -325,8 +325,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                       {")"}
                     </span>
                     
-                    {term?.fatData?.merkevarer?.length > 0 && 
-                      term.$showFatData &&
+                    {(term?.fatData?.merkevarer?.length > 0 && 
+                      term.$showFatData ) ?
                         <ul>
                           {term.fatData.merkevarer.map((vare, ind) => 
                             <li key={ind}>
@@ -339,6 +339,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                             </li>
                           )}
                         </ul>
+                      : null
                     }
                   </li>
                 );
