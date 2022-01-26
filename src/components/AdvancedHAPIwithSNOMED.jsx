@@ -241,7 +241,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
 
     arrayWithECLdata.forEach((ecl) => {
       // return condition for specific id
-      if (ecl.conceptId === "1118951000202108") {
+      // if (ecl.conceptId === "1118951000202108") {
         let fatUrl =
           proxyFat + "/api/medicines/clinical-drugs/" + ecl.conceptId;
         let params = {
@@ -274,7 +274,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         });
 
         promises.push(fatPromise);
-      }
+      // }
     });
 
     // Just touch state to trigger rerender after getting fat data into ptArray array
@@ -312,7 +312,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                 return (
                   <li key={idx}>
                     <span
-                      class="link"
+                      className="link"
                       onClick={() => {
                         term.$showFatData = !term.$showFatData;
                         // trigger render
