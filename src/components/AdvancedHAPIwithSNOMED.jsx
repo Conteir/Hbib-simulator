@@ -240,7 +240,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     let promises = [];
 
     arrayWithECLdata.forEach((ecl) => {
-      if (ecl.conceptId === "1118951000202108") {
+      // reduce specific condition
+      // if (ecl.conceptId === "1118951000202108") {
         let fatUrl =
           proxyFat + "/api/medicines/clinical-drugs/" + ecl.conceptId;
         let params = {
@@ -254,6 +255,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         let fatPromise = fetch(fatUrl, params)
         .then((response) => response.json())
         .then((fatData) => {
+            // check if there are no server errors
             if (fatData.errorMessage) {
               alert("Internal server error! Try later.");
             }
@@ -262,7 +264,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         });
 
         promises.push(fatPromise);
-      }
+      // }
     });
 
     // Just touch state to trigger rerender after getting fat data into ptArray array
