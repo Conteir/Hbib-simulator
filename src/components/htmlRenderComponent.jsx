@@ -598,18 +598,19 @@ export const HTMLRender = class HTMLRender extends React.Component {
             ? item.behandling.data.standardbehandlingsregimer.map(
                 (regime, regIndex) => {
 
-                  {/* button to get fat data */}
-                  <p className="floatRight">
-                    <span
-                      className="link"
-                      onClick={() => this.props.onFinnLegemiddelClick('STANDARD')}
-                    >
-                      Finn legemiddel
-                    </span>
-                  </p>
-
                   return (
                     <div key={regIndex}>
+
+                      {/* // button to get fat data  */}
+                      <p className="floatRight">
+                        <span
+                          className="link"
+                          onClick={() => this.props.onFinnLegemiddelClick('STANDARD')}
+                        >
+                          Finn legemiddel
+                        </span>
+                      </p>
+
                       {/* standardbehandlingsregimer for voksne eller barn */}
                       <div className="form-group">
                         <h3>{regime.overskrift}</h3>
@@ -638,19 +639,20 @@ export const HTMLRender = class HTMLRender extends React.Component {
           {item?.behandling?.data?.alternativebehandlingsregimer
             ? item.behandling.data.alternativebehandlingsregimer.map(
                 (regime, regIndex) => {
-
-                    {/* button to get fat data */}
-                    <p className="floatRight">
-                      <span
-                        className="link"
-                        onClick={() => this.props.onFinnLegemiddelClick('ALTERNATIVE')}
-                      >
-                        Finn legemiddel
-                      </span>
-                    </p>
-
+                  
                   return (
                     <div key={regIndex}>
+
+                      {/* button to get fat data */}
+                      <p className="floatRight">
+                        <span
+                          className="link"
+                          onClick={() => this.props.onFinnLegemiddelClick('ALTERNATIVE')}
+                        >
+                          Finn legemiddel
+                        </span>
+                      </p>
+
                       {/* alternativebehandlingsregimer for voksne eller barn */}
                       <div className="form-group">
                         <h3>{regime?.overskrift ? regime.overskrift : null}</h3>
@@ -680,18 +682,19 @@ export const HTMLRender = class HTMLRender extends React.Component {
             ? item.behandling.data.overgangtiloralbehandlingsregimer.map(
                 (regime, regIndex) => {
 
-                  {/* button to get fat data */}
-                  <p className="floatRight">
-                    <span
-                      className="link"
-                      onClick={() => this.props.onFinnLegemiddelClick('OVERGANG')}
-                    >
-                      Finn legemiddel
-                    </span>
-                  </p>
-                      
                   return (
                     <div key={regIndex}>
+
+                    {/* button to get fat data */}
+                    <p className="floatRight">
+                      <span
+                        className="link"
+                        onClick={() => this.props.onFinnLegemiddelClick('OVERGANG')}
+                      >
+                        Finn legemiddel
+                      </span>
+                    </p>
+
                       {/* overgangtiloralbehandlingsregimer */}
                       {/* make it instead of the harcoded title?:  */}
                       <div className="form-group">
