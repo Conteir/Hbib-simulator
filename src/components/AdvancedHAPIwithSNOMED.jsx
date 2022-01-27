@@ -199,7 +199,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     // let eclData = [];
 
     let url =
-      "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&57091000202101&ecl=%3C" +
+      "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
       eclConcept +
       "&offset=0&limit=50";
 
