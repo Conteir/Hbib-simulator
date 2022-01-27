@@ -290,11 +290,10 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       },
     };
     // let eclConceptToGetLegemiddler = this.state.SNOMEDCTcodes;
-    let prefTerms = [];
-     
+    
     // eclConceptToGetLegemiddler.forEach( (concept) => {
+    let prefTermsStandard = [];
     eclConceptToGetStandard.forEach( (concept) => {
-
       let url =
         "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
         concept +
@@ -307,22 +306,20 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         console.log("Check data to retrieve id as well", data);
         data?.items?.forEach((item) => {
           // array after each itteration:
-          prefTerms.push({
+          prefTermsStandard.push({
             term: item.pt.term,
             conceptId: item.conceptId,
             $showFatData: false,
           });
         });
 
-        this.setState({ ptArrayStandard: prefTerms });
-        this.getFatData(prefTerms);
-        console.log("This is pt array to render", this.state.ptArray);
+        this.setState({ ptArrayStandard: prefTermsStandard });
+        this.getFatData(prefTermsStandard);
       });
-      // should an array be handled?
     });
 
+    let prefTermsOvergang = [];
     eclConceptToGetOvergang.forEach( (concept) => {
-
       let url =
         "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
         concept +
@@ -335,22 +332,20 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         console.log("Check data to retrieve id as well", data);
         data?.items?.forEach((item) => {
           // array after each itteration:
-          prefTerms.push({
+          prefTermsOvergang.push({
             term: item.pt.term,
             conceptId: item.conceptId,
             $showFatData: false,
           });
         });
 
-        this.setState({ ptArrayOvergang: prefTerms });
-        this.getFatData(prefTerms);
-        console.log("This is pt array to render", this.state.ptArray);
+        this.setState({ ptArrayOvergang: prefTermsOvergang });
+        this.getFatData(prefTermsOvergang);
       });
-      // should an array be handled?
     });
 
+    let prefTermsAlternativ = [];
     eclConceptToGetAltern.forEach( (concept) => {
-
       let url =
         "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
         concept +
@@ -363,18 +358,16 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         console.log("Check data to retrieve id as well", data);
         data?.items?.forEach((item) => {
           // array after each itteration:
-          prefTerms.push({
+          prefTermsAlternativ.push({
             term: item.pt.term,
             conceptId: item.conceptId,
             $showFatData: false,
           });
         });
 
-        this.setState({ ptArrayAltern: prefTerms });
-        this.getFatData(prefTerms);
-        console.log("This is pt array to render", this.state.ptArray);
+        this.setState({ ptArrayAltern: prefTermsAlternativ });
+        this.getFatData(prefTermsAlternativ);
       });
-      // should an array be handled?
     });
 
   };
@@ -430,8 +423,10 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
               console.log(error);
             });
         } else {
-          throw new Error("Something went wrong");
+          console.error("FAT response is not OK: ", response);
         }
+      }).catch((error) => {
+        console.error("Failed to get FAT data: ", error);
       });
 
       promises.push(fatPromise);
@@ -445,7 +440,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
   render() {
     return (
       <div>
-
+        {/* <button onClick={() => console.log(this.state)}>Log state</button> */}
         {this.state.showModalLegemiddel && (
           <ModalComponent
             title="Legemiddel"

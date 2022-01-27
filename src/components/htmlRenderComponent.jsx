@@ -605,7 +605,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       <p className="floatRight">
                         <span
                           className="link"
-                          onClick={() => this.props.onFinnLegemiddelClick('STANDARD')}
+                          onClick={this.props.onFinnLegemiddelClick('STANDARD')}
                         >
                           Finn legemiddel
                         </span>
@@ -647,7 +647,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       <p className="floatRight">
                         <span
                           className="link"
-                          onClick={() => this.props.onFinnLegemiddelClick('ALTERNATIVE')}
+                          onClick={this.props.onFinnLegemiddelClick('ALTERNATIVE')}
                         >
                           Finn legemiddel
                         </span>
@@ -689,7 +689,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                     <p className="floatRight">
                       <span
                         className="link"
-                        onClick={() => this.props.onFinnLegemiddelClick('OVERGANG')}
+                        onClick={this.props.onFinnLegemiddelClick('OVERGANG')}
                       >
                         Finn legemiddel
                       </span>
