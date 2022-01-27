@@ -231,7 +231,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                             reg.koder["SNOMED-CT"]?.length > 0
                           ) {
                             koderAltern = koderAltern.concat(reg.koder["SNOMED-CT"]);
-                            console.log("koderOvergang", koderAltern);
+                            console.log("koderAltern", koderAltern);
                           }
                         });
                       }
@@ -267,30 +267,26 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
   };
 
   getECLdata = () => {
-    let eclConcept = this.state.koderSNOMEDCT[0];
-
-    // let eclConcept = this.state.SNOMEDCTcodes[0];
-    // forEach
-
-    
+    // let eclConcept = this.state.koderSNOMEDCT[0];
+    let eclConceptToGetLegemiddler = this.state.SNOMEDCTcodes;
     let prefTerms = [];
+     
+    eclConceptToGetLegemiddler.forEach( (concept) => {
 
-    // let eclData = [];
-
-    let url =
+      let url =
       "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
-      eclConcept +
+      concept +
       "&offset=0&limit=50";
 
-    let params = {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Accept-Language": "no",
-      },
-    };
+      let params = {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Accept-Language": "no",
+        },
+      };
 
-    fetch(url, params)
+      fetch(url, params)
       .then((response) => response.json())
       .then((data) => {
         console.log("Check data to retrieve id as well", data);
@@ -311,6 +307,10 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         this.getFatData(prefTerms);
         console.log("This is pt array to render", this.state.ptArray);
       });
+
+      // should an array be handled?
+    });
+
   };
 
   onFinnLegemiddelClick = () => {
