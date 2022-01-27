@@ -612,7 +612,7 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       <p className="floatRight">
                         <span
                           className="link"
-                          onClick={() => this.props.onFinnLegemiddelClick()}
+                          onClick={() => this.props.onFinnLegemiddelClick('STANDARD')}
                         >
                           Finn legemiddel
                         </span>
@@ -647,6 +647,17 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHeads(regime.doseringregimer)
                         : null}
+
+                      {/* button to get fat data */}
+                      <p className="floatRight">
+                        <span
+                          className="link"
+                          onClick={() => this.props.onFinnLegemiddelClick('ALTERNATIVE')}
+                        >
+                          Finn legemiddel
+                        </span>
+                      </p>
+
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHensyn(regime.doseringregimer)
                         : null}
@@ -677,6 +688,17 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHeads(regime.doseringregimer)
                         : null}
+
+                      {/* button to get fat data */}
+                      <p className="floatRight">
+                        <span
+                          className="link"
+                          onClick={() => this.props.onFinnLegemiddelClick('OVERGANG')}
+                        >
+                          Finn legemiddel
+                        </span>
+                      </p>
+                      
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHensyn(regime.doseringregimer)
                         : null}

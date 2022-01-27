@@ -7,6 +7,7 @@ import { codeSystemEnv, params, helsedirBaseUrl } from "../config.ts";
 import { Spinner } from "reactstrap";
 import ModalComponent from "./ModalComponent";
 import { proxyFat } from "../config.ts";
+import { LegemiddelRenderComponent } from "./LegemiddelRenderComponent";
 
 export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React.Component {
   constructor(props) {
@@ -19,8 +20,14 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       showContent: false,
       showSpinner: false,
       // koderSNOMEDCT: [],
-      SNOMEDCTcodes: [],
-      ptArray: [],
+      koderStandard: [],
+      koderOvergang: [],
+      koderAltern: [],
+      // SNOMEDCTcodes: [],
+      // ptArray: [],
+      ptArrayStandard: [],
+      ptArrayOvergang: [],
+      ptArrayAltern: [],
       showModalLegemiddel: false,
     };
   }
@@ -149,7 +156,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
         let koderStandard = [];
         let koderOvergang = [];
         let koderAltern = [];
-        let mergedCodes = [];
+        // let mergedCodes = [];
 
         if (Array.isArray(data)) {
           this.setState({ matches: data.length, showSpinner: false });
@@ -240,23 +247,26 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                   );
                 }
 
-                mergedCodes = koderStandard.concat(koderOvergang,koderAltern);
-                console.log("mergedCodes", mergedCodes);
+                // mergedCodes = koderStandard.concat(koderOvergang,koderAltern);
+                // console.log("mergedCodes", mergedCodes);
 
               });
             }
           });
 
           this.setState({
-            SNOMEDCTcodes: mergedCodes,
+            // SNOMEDCTcodes: mergedCodes,
             // koderSNOMEDCT: koder,
+            koderStandard: koderStandard,
+            koderOvergang: koderOvergang,
+            koderAltern: koderAltern,
             content: data[0].tekst,
             data: JSON.stringify(data),
             showSpinner: false,
           });
 
           // console.log("Fetched koderSNOMEDCT", this.state.koderSNOMEDCT);
-          console.log("Fetched SNOMEDCTcodes", this.state.SNOMEDCTcodes);
+          // console.log("Fetched SNOMEDCTcodes", this.state.SNOMEDCTcodes);
         }
 
         console.log("So, what is here..?", data);
@@ -267,23 +277,28 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
 
   getECLdata = () => {
     // let eclConcept = this.state.koderSNOMEDCT[0];
-    let eclConceptToGetLegemiddler = this.state.SNOMEDCTcodes;
+
+    let eclConceptToGetStandard = this.state.koderStandard;
+    let eclConceptToGetOvergang = this.state.koderOvergang;
+    let eclConceptToGetAltern = this.state.koderAltern;
+
+    let params = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Accept-Language": "no",
+      },
+    };
+    // let eclConceptToGetLegemiddler = this.state.SNOMEDCTcodes;
     let prefTerms = [];
      
-    eclConceptToGetLegemiddler.forEach( (concept) => {
+    // eclConceptToGetLegemiddler.forEach( (concept) => {
+    eclConceptToGetStandard.forEach( (concept) => {
 
       let url =
         "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
         concept +
         "&offset=0&limit=50";
-
-      let params = {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Accept-Language": "no",
-        },
-      };
 
       fetch(url, params)
       .then((response) => response.json())
@@ -299,18 +314,88 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
           });
         });
 
-        this.setState({ ptArray: prefTerms });
+        this.setState({ ptArrayStandard: prefTerms });
         this.getFatData(prefTerms);
         console.log("This is pt array to render", this.state.ptArray);
       });
+      // should an array be handled?
+    });
 
+    eclConceptToGetOvergang.forEach( (concept) => {
+
+      let url =
+        "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
+        concept +
+        "&offset=0&limit=50";
+
+      fetch(url, params)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ showSpinner: true });
+        console.log("Check data to retrieve id as well", data);
+        data?.items?.forEach((item) => {
+          // array after each itteration:
+          prefTerms.push({
+            term: item.pt.term,
+            conceptId: item.conceptId,
+            $showFatData: false,
+          });
+        });
+
+        this.setState({ ptArrayOvergang: prefTerms });
+        this.getFatData(prefTerms);
+        console.log("This is pt array to render", this.state.ptArray);
+      });
+      // should an array be handled?
+    });
+
+    eclConceptToGetAltern.forEach( (concept) => {
+
+      let url =
+        "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
+        concept +
+        "&offset=0&limit=50";
+
+      fetch(url, params)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ showSpinner: true });
+        console.log("Check data to retrieve id as well", data);
+        data?.items?.forEach((item) => {
+          // array after each itteration:
+          prefTerms.push({
+            term: item.pt.term,
+            conceptId: item.conceptId,
+            $showFatData: false,
+          });
+        });
+
+        this.setState({ ptArrayAltern: prefTerms });
+        this.getFatData(prefTerms);
+        console.log("This is pt array to render", this.state.ptArray);
+      });
       // should an array be handled?
     });
 
   };
 
-  onFinnLegemiddelClick = () => {
-    this.setState({ showModalLegemiddel: true });
+  // catch fields from htmlRender:
+  onFinnLegemiddelClick = (field) => () => {
+    let ptArray = [];
+
+    if (field === "STANDARD") {
+      ptArray = this.state.ptArrayStandard
+    }
+
+    if (field === "ALTERNATIVE") {
+      ptArray = this.state.ptArrayAltern
+    }
+
+    if (field === "OVERGANG") {
+      ptArray = this.state.ptArrayOvergang
+    }
+
+    this.setState({ showModalLegemiddel: true, ptArray: ptArray });
   };
 
   getFatData = (arrayWithECLdata) => {
@@ -356,9 +441,6 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     Promise.all(promises).then(() => this.setState({ showSpinner: false }));
   };
 
-  capitalize = (s) => {
-    return s && s[0].toUpperCase() + s.slice(1);
-  }
 
   render() {
     return (
@@ -371,7 +453,10 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
               this.setState({ showModalLegemiddel: false });
             }}
           >
-            <ul>
+            <LegemiddelRenderComponent 
+              ptArray={this.state.ptArray}
+            />
+            {/* <ul>
               {this.state.ptArray.map((term, idx) => {
                 return (
                   <li key={idx}>
@@ -423,7 +508,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                   </li>
                 );
               })}
-            </ul>
+            </ul> */}
           </ModalComponent>
         )}
 
@@ -550,18 +635,6 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                 ) : null}
               </div>
             </div>
-
-            {/* <div className="row">
-              {this.state.ptArray.length > 0 ? 
-                this.state.ptArray.map( (term, index) => {
-                  return (
-                    <li key={index}>
-                      {term}
-                    </li>
-                  );
-                })
-              : null}
-            </div> */}
 
             <div className="row">
               {this.state.showSpinner ? <Spinner color="success" /> : null}
