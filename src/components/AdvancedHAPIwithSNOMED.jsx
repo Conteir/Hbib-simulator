@@ -19,6 +19,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       showContent: false,
       showSpinner: false,
       koderSNOMEDCT: [],
+      SNOMEDCTcodes: [],
       ptArray: [],
       showModalLegemiddel: false,
     };
@@ -145,6 +146,11 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       .then((response) => response.json())
       .then((data) => {
         let koder = [];
+        let koderStandard = [];
+        let koderOvergang = [];
+        let koderAltern = [];
+        let mergedCodes = [];
+
         //console.log("Content for " + codeSystem + ":", data);
         if (Array.isArray(data)) {
           this.setState({ matches: data.length, showSpinner: false });
@@ -153,6 +159,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
           data.forEach((elem) => {
             if (elem?.data?.behandlinger?.length > 0) {
               elem.data.behandlinger.forEach((item) => {
+                // original
                 if (
                   item?.behandling?.data?.standardbehandlingsregimer?.length > 0
                 ) {
@@ -171,11 +178,76 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                     }
                   );
                 }
+                // standardbehandlingsre handler
+                if (
+                  item?.behandling?.data?.standardbehandlingsregimer?.length > 0
+                ) {
+                  item.behandling.data.standardbehandlingsregimer.forEach(
+                    (regime) => {
+                      if (regime?.doseringregimer?.length > 0) {
+                        regime.doseringregimer.forEach((reg) => {
+                          if (
+                            reg?.koder["SNOMED-CT"] &&
+                            reg.koder["SNOMED-CT"]?.length > 0
+                          ) {
+                            koderStandard = koderStandard.concat(reg.koder["SNOMED-CT"]);
+                            console.log("koderStandard", koderStandard);
+                          }
+                        });
+                      }
+                    }
+                  );
+                }
+                // overgangtiloralbehandlingsregimer handler
+                if (
+                  item?.behandling?.data?.overgangtiloralbehandlingsregimer?.length > 0
+                ) {
+                  item.behandling.data.overgangtiloralbehandlingsregimer.forEach(
+                    (regime) => {
+                      if (regime?.doseringregimer?.length > 0) {
+                        regime.doseringregimer.forEach((reg) => {
+                          if (
+                            reg?.koder["SNOMED-CT"] &&
+                            reg.koder["SNOMED-CT"]?.length > 0
+                          ) {
+                            koderOvergang = koderOvergang.concat(reg.koder["SNOMED-CT"]);
+                            console.log("koderOvergang", koderOvergang);
+                          }
+                        });
+                      }
+                    }
+                  );
+                }
+                // alternativebehandlingsregimer handler
+                if (
+                  item?.behandling?.data?.alternativebehandlingsregimer?.length > 0
+                ) {
+                  item.behandling.data.alternativebehandlingsregimer.forEach(
+                    (regime) => {
+                      if (regime?.doseringregimer?.length > 0) {
+                        regime.doseringregimer.forEach((reg) => {
+                          if (
+                            reg?.koder["SNOMED-CT"] &&
+                            reg.koder["SNOMED-CT"]?.length > 0
+                          ) {
+                            koderAltern = koderAltern.concat(reg.koder["SNOMED-CT"]);
+                            console.log("koderOvergang", koderAltern);
+                          }
+                        });
+                      }
+                    }
+                  );
+                }
+
+                mergedCodes = koderStandard.concat(koderOvergang,koderAltern);
+                console.log("mergedCodes", mergedCodes);
+
               });
             }
           });
 
           this.setState({
+            SNOMEDCTcodes: mergedCodes,
             koderSNOMEDCT: koder,
             content: data[0].tekst,
             data: JSON.stringify(data),
@@ -183,6 +255,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
           });
 
           console.log("Fetched koderSNOMEDCT", this.state.koderSNOMEDCT);
+          console.log("Fetched SNOMEDCTcodes", this.state.SNOMEDCTcodes);
+
           //console.log("Content for " + codeSystem + ":", data);
           //console.log("Content for " + codeSystem + ":", data.length);
         }
@@ -194,6 +268,11 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
 
   getECLdata = () => {
     let eclConcept = this.state.koderSNOMEDCT[0];
+
+    // let eclConcept = this.state.SNOMEDCTcodes[0];
+    // forEach
+
+    
     let prefTerms = [];
 
     // let eclData = [];
