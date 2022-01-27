@@ -18,7 +18,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       matches: -1,
       showContent: false,
       showSpinner: false,
-      koderSNOMEDCT: [],
+      // koderSNOMEDCT: [],
       SNOMEDCTcodes: [],
       ptArray: [],
       showModalLegemiddel: false,
@@ -145,13 +145,12 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     fetch(url, params)
       .then((response) => response.json())
       .then((data) => {
-        let koder = [];
+        // let koder = [];
         let koderStandard = [];
         let koderOvergang = [];
         let koderAltern = [];
         let mergedCodes = [];
 
-        //console.log("Content for " + codeSystem + ":", data);
         if (Array.isArray(data)) {
           this.setState({ matches: data.length, showSpinner: false });
         }
@@ -160,24 +159,25 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
             if (elem?.data?.behandlinger?.length > 0) {
               elem.data.behandlinger.forEach((item) => {
                 // original
-                if (
-                  item?.behandling?.data?.standardbehandlingsregimer?.length > 0
-                ) {
-                  item.behandling.data.standardbehandlingsregimer.forEach(
-                    (regime) => {
-                      if (regime?.doseringregimer?.length > 0) {
-                        regime.doseringregimer.forEach((reg) => {
-                          if (
-                            reg?.koder["SNOMED-CT"] &&
-                            reg.koder["SNOMED-CT"]?.length > 0
-                          ) {
-                            koder = koder.concat(reg.koder["SNOMED-CT"]);
-                          }
-                        });
-                      }
-                    }
-                  );
-                }
+                // if (
+                //   item?.behandling?.data?.standardbehandlingsregimer?.length > 0
+                // ) {
+                //   item.behandling.data.standardbehandlingsregimer.forEach(
+                //     (regime) => {
+                //       if (regime?.doseringregimer?.length > 0) {
+                //         regime.doseringregimer.forEach((reg) => {
+                //           if (
+                //             reg?.koder["SNOMED-CT"] &&
+                //             reg.koder["SNOMED-CT"]?.length > 0
+                //           ) {
+                //             koder = koder.concat(reg.koder["SNOMED-CT"]);
+                //           }
+                //         });
+                //       }
+                //     }
+                //   );
+                // }
+
                 // standardbehandlingsre handler
                 if (
                   item?.behandling?.data?.standardbehandlingsregimer?.length > 0
@@ -198,6 +198,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                     }
                   );
                 }
+
                 // overgangtiloralbehandlingsregimer handler
                 if (
                   item?.behandling?.data?.overgangtiloralbehandlingsregimer?.length > 0
@@ -248,18 +249,16 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
 
           this.setState({
             SNOMEDCTcodes: mergedCodes,
-            koderSNOMEDCT: koder,
+            // koderSNOMEDCT: koder,
             content: data[0].tekst,
             data: JSON.stringify(data),
             showSpinner: false,
           });
 
-          console.log("Fetched koderSNOMEDCT", this.state.koderSNOMEDCT);
+          // console.log("Fetched koderSNOMEDCT", this.state.koderSNOMEDCT);
           console.log("Fetched SNOMEDCTcodes", this.state.SNOMEDCTcodes);
-
-          //console.log("Content for " + codeSystem + ":", data);
-          //console.log("Content for " + codeSystem + ":", data.length);
         }
+
         console.log("So, what is here..?", data);
         this.processResponse(data);
         this.getECLdata();
@@ -274,9 +273,9 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     eclConceptToGetLegemiddler.forEach( (concept) => {
 
       let url =
-      "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
-      concept +
-      "&offset=0&limit=50";
+        "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
+        concept +
+        "&offset=0&limit=50";
 
       let params = {
         method: "GET",
@@ -289,18 +288,15 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       fetch(url, params)
       .then((response) => response.json())
       .then((data) => {
+        this.setState({ showSpinner: true });
         console.log("Check data to retrieve id as well", data);
         data?.items?.forEach((item) => {
+          // array after each itteration:
           prefTerms.push({
             term: item.pt.term,
             conceptId: item.conceptId,
             $showFatData: false,
           });
-
-          // prefTerms = prefTerms.concat(item.pt.term);
-
-          // prefTerms["preferredTerm"] = prefTerms.concat(item.pt.term);
-          // prefTerms["eclId"] = prefTerms.concat(item.conceptId);
         });
 
         this.setState({ ptArray: prefTerms });
@@ -323,8 +319,6 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     let promises = [];
 
     arrayWithECLdata.forEach((ecl) => {
-      // return condition for specific id
-      // if (ecl.conceptId === "1118951000202108") {
       let fatUrl = proxyFat + "/api/medicines/clinical-drugs/" + ecl.conceptId;
       let params = {
         method: "GET",
@@ -334,12 +328,12 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       };
 
       // if proxy sucessful and there are no more issues then this consol log should be printed:
-      let fatPromise = fetch(fatUrl, params).then((response) => {
+      let fatPromise = fetch(fatUrl, params).then( (response) => {
         if (response.ok) {
           return response
             .json()
             .then((fatData) => {
-              // check if there are no server errors
+              // check if there are no internal server errors (not on our side):
               if (fatData.errorMessage) {
                 alert("Internal server error! Try later.");
               } else {
@@ -356,31 +350,19 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       });
 
       promises.push(fatPromise);
-      // }
     });
 
-    // Just touch state to trigger rerender after getting fat data into ptArray array
+    // Just touch state to trigger reRender after getting fat data into ptArray array
     Promise.all(promises).then(() => this.setState({ showSpinner: false }));
   };
+
+  capitalize = (s) => {
+    return s && s[0].toUpperCase() + s.slice(1);
+  }
 
   render() {
     return (
       <div>
-        {/* <button onClick={() => {console.log(this.state)}}>Log state</button> */}
-        {/* <Modal.Dialog>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal title</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <p>Modal body text goes here.</p>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button variant="secondary">Close</Button>
-            <Button variant="primary">Save changes</Button>
-          </Modal.Footer>
-        </Modal.Dialog> */}
 
         {this.state.showModalLegemiddel && (
           <ModalComponent
@@ -402,14 +384,14 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                           this.setState({ showSpinner: false });
                         }}
                       >
-                        {term.term}
+                        {this.capitalize(term.term)}
                         {" ("}
                         {term.conceptId}
                         {")"}
                       </span>
                     ) : (
                       <span>
-                        {term.term}
+                        {this.capitalize(term.term)}
                         {" ("}
                         {term.conceptId}
                         {")"}
