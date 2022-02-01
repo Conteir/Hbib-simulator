@@ -163,7 +163,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
           this.setState({ matches: data.length, showSpinner: false });
         }
 
-        if (data?.length > 0 && typeof data[0].tekst === "string") { // check if tekst field!!
+        if (data?.length > 0 && typeof data[0].tekst === "string") {
+          // check if tekst field!!
 
           // for each regime!
           data.forEach((elem) => {
@@ -173,8 +174,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
             elem.$koderAltern = {};
 
             if (elem?.data?.behandlinger?.length > 0) {
-              elem.data.behandlinger.forEach( (item) => {
-
+              elem.data.behandlinger.forEach((item) => {
                 // standardbehandlingsre handler
                 if (
                   item?.behandling?.data?.standardbehandlingsregimer?.length > 0
@@ -202,7 +202,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
 
                 // overgangtiloralbehandlingsregimer handler
                 if (
-                  item?.behandling?.data?.overgangtiloralbehandlingsregimer?.length > 0
+                  item?.behandling?.data?.overgangtiloralbehandlingsregimer
+                    ?.length > 0
                 ) {
                   item.behandling.data.overgangtiloralbehandlingsregimer.forEach(
                     (regime) => {
@@ -227,7 +228,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
 
                 // alternativebehandlingsregimer handler
                 if (
-                  item?.behandling?.data?.alternativebehandlingsregimer?.length > 0
+                  item?.behandling?.data?.alternativebehandlingsregimer
+                    ?.length > 0
                 ) {
                   item.behandling.data.alternativebehandlingsregimer.forEach(
                     (regime) => {
@@ -249,7 +251,6 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                     }
                   );
                 }
-
               });
             }
           });
@@ -265,7 +266,6 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
             data: data, // hdir data as an array
             showSpinner: false,
           });
-
         }
 
         console.log("So, what is here..?", data);
@@ -288,22 +288,23 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     // });
 
     // console.log("idStandard", idStandard);
-    
+
     // let eclConceptToGetStandard = this.state.koderStandard;
     // let eclConceptToGetOvergang = this.state.koderOvergang;
     // let eclConceptToGetAltern = this.state.koderAltern;
 
-    const url = "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&offset=0&limit=50&module=57091000202101&ecl=%3C";
+    const url =
+      "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&offset=0&limit=50&module=57091000202101&ecl=%3C";
 
     const params = {
       method: "GET",
       headers: {
-        'Accept': "application/json",
+        Accept: "application/json",
         "Accept-Language": "no",
       },
     };
     // let eclConceptToGetLegemiddler = this.state.SNOMEDCTcodes;
-    
+
     // eclConceptToGetLegemiddler.forEach( (concept) => {
     // let prefTermsStandard = [];
 
@@ -313,71 +314,70 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
 
       for (let concept in elem.$koderStandard) {
         fetch(url + concept, params)
-        .then((response) => response.json())
-        .then((data) => {
-          this.setState({ showSpinner: true });
-          console.log("Check data after ecl fetch", data);
+          .then((response) => response.json())
+          .then((data) => {
+            this.setState({ showSpinner: true });
+            console.log("Check data after ecl fetch", data);
 
-          data?.items?.forEach((item) => {
-            if (!elem.$prefTermsStandard) elem.$prefTermsStandard = [];
-            // array after each iteration:
-            elem.$prefTermsStandard.push({
-              term: item.pt.term,
-              conceptId: item.conceptId,
-              $showFatData: false,
+            data?.items?.forEach((item) => {
+              if (!elem.$prefTermsStandard) elem.$prefTermsStandard = [];
+              // array after each iteration:
+              elem.$prefTermsStandard.push({
+                term: item.pt.term,
+                conceptId: item.conceptId,
+                $showFatData: false,
+              });
+              console.log("prefTermsStandard", elem.$prefTermsStandard);
             });
-            console.log("prefTermsStandard", elem.$prefTermsStandard);
-          });
 
-          // this.setState({ ptArrayStandard: prefTermsStandard });
-          this.getFatData(elem.$prefTermsStandard);
-        });
+            // this.setState({ ptArrayStandard: prefTermsStandard });
+            this.getFatData(elem.$prefTermsStandard);
+          });
       }
 
       for (let concept in elem.$koderOvergang) {
         fetch(url + concept, params)
-        .then((response) => response.json())
-        .then((data) => {
-          this.setState({ showSpinner: true });
-          console.log("Check data after ecl fetch", data);
-          
-          data?.items?.forEach((item) => {
-            if (!elem.$prefTermsOvergang) elem.$prefTermsOvergang = [];
-            // array after each itteration:
-            elem.$prefTermsOvergang.push({
-              term: item.pt.term,
-              conceptId: item.conceptId,
-              $showFatData: false,
+          .then((response) => response.json())
+          .then((data) => {
+            this.setState({ showSpinner: true });
+            console.log("Check data after ecl fetch", data);
+
+            data?.items?.forEach((item) => {
+              if (!elem.$prefTermsOvergang) elem.$prefTermsOvergang = [];
+              // array after each itteration:
+              elem.$prefTermsOvergang.push({
+                term: item.pt.term,
+                conceptId: item.conceptId,
+                $showFatData: false,
+              });
             });
+
+            // this.setState({ ptArrayOvergang: prefTermsOvergang });
+            this.getFatData(elem.$prefTermsOvergang);
           });
-  
-          // this.setState({ ptArrayOvergang: prefTermsOvergang });
-          this.getFatData(elem.$prefTermsOvergang);
-        });
       }
 
       for (let concept in elem.$koderAltern) {
         fetch(url + concept, params)
-        .then((response) => response.json())
-        .then((data) => {
-          this.setState({ showSpinner: true });
-          console.log("Check data after ecl fetch", data);
-          
-          if (!elem.$prefTermsAlternativ) elem.$prefTermsAlternativ = [];
-          data?.items?.forEach((item) => {
-            // array after each itteration:
-            elem.$prefTermsAlternativ.push({
-              term: item.pt.term,
-              conceptId: item.conceptId,
-              $showFatData: false,
+          .then((response) => response.json())
+          .then((data) => {
+            this.setState({ showSpinner: true });
+            console.log("Check data after ecl fetch", data);
+
+            if (!elem.$prefTermsAlternativ) elem.$prefTermsAlternativ = [];
+            data?.items?.forEach((item) => {
+              // array after each itteration:
+              elem.$prefTermsAlternativ.push({
+                term: item.pt.term,
+                conceptId: item.conceptId,
+                $showFatData: false,
+              });
             });
+
+            // this.setState({ ptArrayAltern: prefTermsAlternativ });
+            this.getFatData(elem.$prefTermsAlternativ);
           });
-
-          // this.setState({ ptArrayAltern: prefTermsAlternativ });
-          this.getFatData(elem.$prefTermsAlternativ);
-        });
       }
-
     });
 
     // let prefTermsOvergang = [];
@@ -408,7 +408,6 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     //     this.getFatData(prefTermsAlternativ);
     //   });
     // });
-
   };
 
   // catch fields from htmlRender:
@@ -445,28 +444,30 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       };
 
       // if proxy sucessful and there are no more issues then this consol log should be printed:
-      let fatPromise = fetch(fatUrl, params).then( (response) => {
-        if (response.ok) {
-          return response
-            .json()
-            .then((fatData) => {
-              // check if there are no internal server errors (not on our side):
-              if (fatData.errorMessage) {
-                alert("Internal server error! Try later.");
-              } else {
-                console.log("Check fatData", fatData);
-                ecl.fatData = fatData;
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        } else {
-          console.error("FAT response is not OK: ", response);
-        }
-      }).catch((error) => {
-        console.error("Failed to get FAT data: ", error);
-      });
+      let fatPromise = fetch(fatUrl, params)
+        .then((response) => {
+          if (response.ok) {
+            return response
+              .json()
+              .then((fatData) => {
+                // check if there are no internal server errors (not on our side):
+                if (fatData.errorMessage) {
+                  alert("Internal server error! Try later.");
+                } else {
+                  console.log("Check fatData", fatData);
+                  ecl.fatData = fatData;
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          } else {
+            console.error("FAT response is not OK: ", response);
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to get FAT data: ", error);
+        });
 
       promises.push(fatPromise);
     });
@@ -474,7 +475,6 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     // Just touch state to trigger reRender after getting fat data into ptArray array
     Promise.all(promises).then(() => this.setState({ showSpinner: false }));
   };
-
 
   render() {
     return (
@@ -487,9 +487,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
               this.setState({ showModalLegemiddel: false });
             }}
           >
-            <LegemiddelRenderComponent 
-              ptArray={this.state.ptArray}
-            />
+            <LegemiddelRenderComponent ptArray={this.state.ptArray} />
           </ModalComponent>
         )}
 
