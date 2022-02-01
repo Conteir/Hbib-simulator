@@ -7,6 +7,8 @@ export const LegemiddelRenderComponent = class LegemiddelRenderComponent extends
   }
 
   render() {
+    // catch if there is no regime:
+    if(!this.props.ptArray) return (<></>);
     return (
       <ul>
         {this.props.ptArray.map((term, idx) => {

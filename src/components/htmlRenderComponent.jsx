@@ -210,7 +210,8 @@ export const HTMLRender = class HTMLRender extends React.Component {
           ) : null}
           {item?.data?.behandlinger ? (
             <CollapsibleContent>
-              {this.renderItemBehandlinger(item.data.behandlinger)}
+              {/* need item from parent to get preferred terms */}
+              {this.renderItemBehandlinger(item.data.behandlinger, item)}
 
               {/* commented praktisk */}
               {item?.data?.praktisk ? (
@@ -553,8 +554,8 @@ export const HTMLRender = class HTMLRender extends React.Component {
   }
 
   // rendering behandlinger
-  renderItemBehandlinger(behandlinger) {
-    console.log(behandlinger);
+  renderItemBehandlinger(behandlinger, parentItem) {
+    // console.log(behandlinger);
 
     if (behandlinger != null) {
       return behandlinger.map((item, index) => (
@@ -605,9 +606,10 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       <p className="floatRight">
                         <span
                           className="link"
-                          onClick={this.props.onFinnLegemiddelClick('STANDARD')}
+                          // custom field from item
+                          onClick={this.props.onFinnLegemiddelClick(parentItem.$prefTermsStandard)}
                         >
-                          Finn legemiddel
+                          Finn legemiddel (standard regime)
                         </span>
                       </p>
 
@@ -647,9 +649,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       <p className="floatRight">
                         <span
                           className="link"
-                          onClick={this.props.onFinnLegemiddelClick('ALTERNATIVE')}
+                          onClick={this.props.onFinnLegemiddelClick(parentItem.$prefTermsAlternativ)}
                         >
-                          Finn legemiddel
+                          Finn legemiddel (alternative regime)
                         </span>
                       </p>
 
@@ -689,9 +691,9 @@ export const HTMLRender = class HTMLRender extends React.Component {
                     <p className="floatRight">
                       <span
                         className="link"
-                        onClick={this.props.onFinnLegemiddelClick('OVERGANG')}
+                        onClick={this.props.onFinnLegemiddelClick(parentItem.$prefTermsOvergang)}
                       >
-                        Finn legemiddel
+                        Finn legemiddel (oral regime)
                       </span>
                     </p>
 

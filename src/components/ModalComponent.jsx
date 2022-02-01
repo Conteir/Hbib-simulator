@@ -7,6 +7,7 @@ export const ModalComponent = class ModalComponent extends React.Component {
     return (
       <div className="my-modal-backdrop">
         <div className="my-modal-content">
+
           <div className="my-modal-head">
             <h1>{this.props.title}</h1>
             <span 
@@ -14,9 +15,11 @@ export const ModalComponent = class ModalComponent extends React.Component {
               className="my-modal-close">&times;
             </span>
           </div>
+
           <div>
             {this.props.children}
           </div>
+          
         </div>
       </div>
     );

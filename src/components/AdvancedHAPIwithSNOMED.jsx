@@ -15,19 +15,19 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
 
     this.state = {
       env: "",
-      data: "",
+      data: null,
       matches: -1,
       showContent: false,
       showSpinner: false,
       // koderSNOMEDCT: [],
-      koderStandard: [],
-      koderOvergang: [],
-      koderAltern: [],
+      // koderStandard: [],
+      // koderOvergang: [],
+      // koderAltern: [],
       // SNOMEDCTcodes: [],
-      // ptArray: [],
-      ptArrayStandard: [],
-      ptArrayOvergang: [],
-      ptArrayAltern: [],
+      ptArray: [],
+      // ptArrayStandard: [],
+      // ptArrayOvergang: [],
+      // ptArrayAltern: [],
       showModalLegemiddel: false,
     };
   }
@@ -110,13 +110,14 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
     }
 
     Promise.all(promises).then(() => {
-      this.setState({ data: JSON.stringify(data), showSpinner: false });
+      // data as an array! to keep fields
+      this.setState({ data: data, showSpinner: false });
     });
   };
 
   // callback to hdir
   linkCallback = (url) => {
-    this.setState({ data: "", showSpinner: true });
+    this.setState({ data: null, showSpinner: true });
     fetch(url, params)
       .then((response) => response.json())
       .then(
@@ -146,44 +147,33 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
   fetchContent = (url) => {
     this.setState({ showSpinner: true });
     // reset state to clean results before new loading
-    this.setState({ matches: -1, data: "", showContent: false });
+    this.setState({ matches: -1, data: null, showContent: false });
     // API key depends on environment: current -> Production
 
     fetch(url, params)
       .then((response) => response.json())
       .then((data) => {
         // let koder = [];
-        let koderStandard = [];
-        let koderOvergang = [];
-        let koderAltern = [];
+        // let koderStandard = [];
+        // let koderOvergang = [];
+        // let koderAltern = [];
         // let mergedCodes = [];
 
         if (Array.isArray(data)) {
           this.setState({ matches: data.length, showSpinner: false });
         }
-        if (data?.length > 0 && typeof data[0].tekst === "string") {
+
+        if (data?.length > 0 && typeof data[0].tekst === "string") { // check if tekst field!!
+
+          // for each regime!
           data.forEach((elem) => {
+            // create new fields to collect concept ids from each regime
+            elem.$koderStandard = {};
+            elem.$koderOvergang = {};
+            elem.$koderAltern = {};
+
             if (elem?.data?.behandlinger?.length > 0) {
-              elem.data.behandlinger.forEach((item) => {
-                // original
-                // if (
-                //   item?.behandling?.data?.standardbehandlingsregimer?.length > 0
-                // ) {
-                //   item.behandling.data.standardbehandlingsregimer.forEach(
-                //     (regime) => {
-                //       if (regime?.doseringregimer?.length > 0) {
-                //         regime.doseringregimer.forEach((reg) => {
-                //           if (
-                //             reg?.koder["SNOMED-CT"] &&
-                //             reg.koder["SNOMED-CT"]?.length > 0
-                //           ) {
-                //             koder = koder.concat(reg.koder["SNOMED-CT"]);
-                //           }
-                //         });
-                //       }
-                //     }
-                //   );
-                // }
+              elem.data.behandlinger.forEach( (item) => {
 
                 // standardbehandlingsre handler
                 if (
@@ -195,10 +185,14 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                         regime.doseringregimer.forEach((reg) => {
                           if (
                             reg?.koder["SNOMED-CT"] &&
-                            reg.koder["SNOMED-CT"]?.length > 0
+                            reg.koder["SNOMED-CT"]?.length > 0 &&
+                            // check duplicates:
+                            !elem.$koderStandard[reg.koder["SNOMED-CT"]]
                           ) {
-                            koderStandard = koderStandard.concat(reg.koder["SNOMED-CT"]);
-                            console.log("koderStandard", koderStandard);
+                            // koderStandard = koderStandard.concat(reg.koder["SNOMED-CT"]);
+                            // add fields:
+                            elem.$koderStandard[reg.koder["SNOMED-CT"]] = true;
+                            console.log("koderStandard", elem.$koderStandard);
                           }
                         });
                       }
@@ -216,16 +210,21 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                         regime.doseringregimer.forEach((reg) => {
                           if (
                             reg?.koder["SNOMED-CT"] &&
-                            reg.koder["SNOMED-CT"]?.length > 0
+                            reg.koder["SNOMED-CT"]?.length > 0 &&
+                            // check duplicates:
+                            !elem.$koderOvergang[reg.koder["SNOMED-CT"]]
                           ) {
-                            koderOvergang = koderOvergang.concat(reg.koder["SNOMED-CT"]);
-                            console.log("koderOvergang", koderOvergang);
+                            // koderOvergang = koderOvergang.concat(reg.koder["SNOMED-CT"]);
+                            // add fields:
+                            elem.$koderOvergang[reg.koder["SNOMED-CT"]] = true;
+                            console.log("koderOvergang", elem.$koderOvergang);
                           }
                         });
                       }
                     }
                   );
                 }
+
                 // alternativebehandlingsregimer handler
                 if (
                   item?.behandling?.data?.alternativebehandlingsregimer?.length > 0
@@ -236,19 +235,20 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                         regime.doseringregimer.forEach((reg) => {
                           if (
                             reg?.koder["SNOMED-CT"] &&
-                            reg.koder["SNOMED-CT"]?.length > 0
+                            reg.koder["SNOMED-CT"]?.length > 0 &&
+                            // check duplicates:
+                            !elem.$koderAltern[reg.koder["SNOMED-CT"]]
                           ) {
-                            koderAltern = koderAltern.concat(reg.koder["SNOMED-CT"]);
-                            console.log("koderAltern", koderAltern);
+                            // koderAltern = koderAltern.concat(reg.koder["SNOMED-CT"]);
+                            // add fields:
+                            elem.$koderAltern[reg.koder["SNOMED-CT"]] = true;
+                            console.log("koderAltern", elem.$koderAltern);
                           }
                         });
                       }
                     }
                   );
                 }
-
-                // mergedCodes = koderStandard.concat(koderOvergang,koderAltern);
-                // console.log("mergedCodes", mergedCodes);
 
               });
             }
@@ -257,136 +257,175 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
           this.setState({
             // SNOMEDCTcodes: mergedCodes,
             // koderSNOMEDCT: koder,
-            koderStandard: koderStandard,
-            koderOvergang: koderOvergang,
-            koderAltern: koderAltern,
+            // koderStandard: koderStandard,
+            // koderOvergang: koderOvergang,
+            // koderAltern: koderAltern,
             content: data[0].tekst,
-            data: JSON.stringify(data),
+            // data: JSON.stringify(data),
+            data: data, // hdir data as an array
             showSpinner: false,
           });
 
-          // console.log("Fetched koderSNOMEDCT", this.state.koderSNOMEDCT);
-          // console.log("Fetched SNOMEDCTcodes", this.state.SNOMEDCTcodes);
         }
 
         console.log("So, what is here..?", data);
         this.processResponse(data);
-        this.getECLdata();
+        this.getECLdata(data); // pass data to use ids
       });
   };
 
-  getECLdata = () => {
+  // get ecl concept-ids
+  getECLdata = (data) => {
+    if (!Array.isArray(data)) return;
     // let eclConcept = this.state.koderSNOMEDCT[0];
 
-    let eclConceptToGetStandard = this.state.koderStandard;
-    let eclConceptToGetOvergang = this.state.koderOvergang;
-    let eclConceptToGetAltern = this.state.koderAltern;
+    // let idStandard = data[0].data.behandlinger.forEach( (behandling) => {
+    //   behandling.behandling.data.standardbehandlingsregimer.forEach( (standardregim) => {
+    //     standardregim.doseringregimer.forEach( (dosereg) => {
+    //       return dosereg.id
+    //     });
+    //   });
+    // });
 
-    let params = {
+    // console.log("idStandard", idStandard);
+    
+    // let eclConceptToGetStandard = this.state.koderStandard;
+    // let eclConceptToGetOvergang = this.state.koderOvergang;
+    // let eclConceptToGetAltern = this.state.koderAltern;
+
+    const url = "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&offset=0&limit=50&module=57091000202101&ecl=%3C";
+
+    const params = {
       method: "GET",
       headers: {
-        Accept: "application/json",
+        'Accept': "application/json",
         "Accept-Language": "no",
       },
     };
     // let eclConceptToGetLegemiddler = this.state.SNOMEDCTcodes;
     
     // eclConceptToGetLegemiddler.forEach( (concept) => {
-    let prefTermsStandard = [];
-    eclConceptToGetStandard.forEach( (concept) => {
-      let url =
-        "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
-        concept +
-        "&offset=0&limit=50";
+    // let prefTermsStandard = [];
 
-      fetch(url, params)
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ showSpinner: true });
-        console.log("Check data to retrieve id as well", data);
-        data?.items?.forEach((item) => {
-          // array after each itteration:
-          prefTermsStandard.push({
-            term: item.pt.term,
-            conceptId: item.conceptId,
-            $showFatData: false,
+    data.forEach((elem) => {
+      // elem - each hdir data with custom fields with regimer
+      console.log("elem from data", elem);
+
+      for (let concept in elem.$koderStandard) {
+        fetch(url + concept, params)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({ showSpinner: true });
+          console.log("Check data after ecl fetch", data);
+
+          data?.items?.forEach((item) => {
+            if (!elem.$prefTermsStandard) elem.$prefTermsStandard = [];
+            // array after each iteration:
+            elem.$prefTermsStandard.push({
+              term: item.pt.term,
+              conceptId: item.conceptId,
+              $showFatData: false,
+            });
+            console.log("prefTermsStandard", elem.$prefTermsStandard);
           });
-        });
 
-        this.setState({ ptArrayStandard: prefTermsStandard });
-        this.getFatData(prefTermsStandard);
-      });
+          // this.setState({ ptArrayStandard: prefTermsStandard });
+          this.getFatData(elem.$prefTermsStandard);
+        });
+      }
+
+      for (let concept in elem.$koderOvergang) {
+        fetch(url + concept, params)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({ showSpinner: true });
+          console.log("Check data after ecl fetch", data);
+          
+          data?.items?.forEach((item) => {
+            if (!elem.$prefTermsOvergang) elem.$prefTermsOvergang = [];
+            // array after each itteration:
+            elem.$prefTermsOvergang.push({
+              term: item.pt.term,
+              conceptId: item.conceptId,
+              $showFatData: false,
+            });
+          });
+  
+          // this.setState({ ptArrayOvergang: prefTermsOvergang });
+          this.getFatData(elem.$prefTermsOvergang);
+        });
+      }
+
+      for (let concept in elem.$koderAltern) {
+        fetch(url + concept, params)
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({ showSpinner: true });
+          console.log("Check data after ecl fetch", data);
+          
+          if (!elem.$prefTermsAlternativ) elem.$prefTermsAlternativ = [];
+          data?.items?.forEach((item) => {
+            // array after each itteration:
+            elem.$prefTermsAlternativ.push({
+              term: item.pt.term,
+              conceptId: item.conceptId,
+              $showFatData: false,
+            });
+          });
+
+          // this.setState({ ptArrayAltern: prefTermsAlternativ });
+          this.getFatData(elem.$prefTermsAlternativ);
+        });
+      }
+
     });
 
-    let prefTermsOvergang = [];
-    eclConceptToGetOvergang.forEach( (concept) => {
-      let url =
-        "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
-        concept +
-        "&offset=0&limit=50";
+    // let prefTermsOvergang = [];
 
-      fetch(url, params)
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ showSpinner: true });
-        console.log("Check data to retrieve id as well", data);
-        data?.items?.forEach((item) => {
-          // array after each itteration:
-          prefTermsOvergang.push({
-            term: item.pt.term,
-            conceptId: item.conceptId,
-            $showFatData: false,
-          });
-        });
+    // let prefTermsAlternativ = [];
+    // eclConceptToGetAltern.forEach( (concept) => {
+    //   let url =
+    //     "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
+    //     concept +
+    //     "&offset=0&limit=50";
 
-        this.setState({ ptArrayOvergang: prefTermsOvergang });
-        this.getFatData(prefTermsOvergang);
-      });
-    });
+    //   fetch(url, params)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     this.setState({ showSpinner: true });
+    //     console.log("Check data to retrieve id as well", data);
+    //     data?.items?.forEach((item) => {
+    //       // array after each itteration:
+    //       prefTermsAlternativ.push({
+    //         term: item.pt.term,
+    //         conceptId: item.conceptId,
+    //         $showFatData: false,
 
-    let prefTermsAlternativ = [];
-    eclConceptToGetAltern.forEach( (concept) => {
-      let url =
-        "https://seabreeze.conteir.no/MAIN%2FSNOMEDCT-NO-DAILYBUILD/concepts?termActive=true&module=57091000202101&ecl=%3C" +
-        concept +
-        "&offset=0&limit=50";
+    //       });
+    //     });
 
-      fetch(url, params)
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({ showSpinner: true });
-        console.log("Check data to retrieve id as well", data);
-        data?.items?.forEach((item) => {
-          // array after each itteration:
-          prefTermsAlternativ.push({
-            term: item.pt.term,
-            conceptId: item.conceptId,
-            $showFatData: false,
-          });
-        });
-
-        this.setState({ ptArrayAltern: prefTermsAlternativ });
-        this.getFatData(prefTermsAlternativ);
-      });
-    });
+    //     this.setState({ ptArrayAltern: prefTermsAlternativ });
+    //     this.getFatData(prefTermsAlternativ);
+    //   });
+    // });
 
   };
 
   // catch fields from htmlRender:
-  onFinnLegemiddelClick = (field) => () => {
-    let ptArray = [];
+  onFinnLegemiddelClick = (ptArray) => () => {
+    // let ptArray = [];
 
-    if (field === "STANDARD") {
-      ptArray = this.state.ptArrayStandard
-    }
+    // if (field === "STANDARD") {
+    //   ptArray = this.state.ptArrayStandard
+    // }
 
-    if (field === "ALTERNATIVE") {
-      ptArray = this.state.ptArrayAltern
-    }
+    // if (field === "ALTERNATIVE") {
+    //   ptArray = this.state.ptArrayAltern
+    // }
 
-    if (field === "OVERGANG") {
-      ptArray = this.state.ptArrayOvergang
-    }
+    // if (field === "OVERGANG") {
+    //   ptArray = this.state.ptArrayOvergang
+    // }
 
     this.setState({ showModalLegemiddel: true, ptArray: ptArray });
   };
@@ -440,7 +479,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
   render() {
     return (
       <div>
-        {/* <button onClick={() => console.log(this.state)}>Log state</button> */}
+        <button onClick={() => console.log(this.state)}>Log state</button>
         {this.state.showModalLegemiddel && (
           <ModalComponent
             title="Legemiddel"
@@ -451,59 +490,6 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
             <LegemiddelRenderComponent 
               ptArray={this.state.ptArray}
             />
-            {/* <ul>
-              {this.state.ptArray.map((term, idx) => {
-                return (
-                  <li key={idx}>
-                    {term?.fatData?.merkevarer ? (
-                      <span
-                        className="link"
-                        onClick={() => {
-                          term.$showFatData = !term.$showFatData;
-                          // trigger render
-                          this.setState({ showSpinner: false });
-                        }}
-                      >
-                        {this.capitalize(term.term)}
-                        {" ("}
-                        {term.conceptId}
-                        {")"}
-                      </span>
-                    ) : (
-                      <span>
-                        {this.capitalize(term.term)}
-                        {" ("}
-                        {term.conceptId}
-                        {")"}
-                      </span>
-                    )}
-
-                    {term?.fatData?.merkevarer?.length > 0 &&
-                      term.$showFatData && (
-                        <ul>
-                          {term.fatData.merkevarer.map((vare, ind) => (
-                            <li key={ind}>
-                              <p>
-                                <b>{"Navn: "}</b>
-                                {vare.varenavn}
-                                <br />
-                                <b>{"Produsent: "}</b>
-                                {vare.produsent}
-                                <br />
-                                <b>{"Administrasjonsvei: "}</b>
-                                {vare.administrasjonsveiNavn}
-                                <br />
-                                <b>{"ATC: "}</b>
-                                {vare.atcKode}
-                              </p>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                  </li>
-                );
-              })}
-            </ul> */}
           </ModalComponent>
         )}
 
@@ -651,7 +637,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
                     </div>
                     <div className="content">
                       <HTMLRender
-                        data={this.state.data}
+                        // only here string is needed!
+                        data={JSON.stringify(this.state.data)}
                         linkCallback={this.linkCallback}
                         hideMetadata={true}
                         hideLinksNavigation={true}
