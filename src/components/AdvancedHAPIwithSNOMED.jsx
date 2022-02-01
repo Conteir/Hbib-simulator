@@ -479,7 +479,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
   render() {
     return (
       <div>
-        <button onClick={() => console.log(this.state)}>Log state</button>
+        {/* <button onClick={() => console.log(this.state)}>Log state</button> */}
         {this.state.showModalLegemiddel && (
           <ModalComponent
             title="Legemiddel"
