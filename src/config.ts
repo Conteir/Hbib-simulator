@@ -49,19 +49,30 @@ export const enviroments = [
 //SNOMED CT CONFIGURATIONS
 export let terminlogyServer: string = "https://seabreeze.conteir.no";
 
-export let branchICD10: string = "MAIN/SNOMEDCT-NO";
-export let branchICPC2: string = "MAIN/ICPC-2";
-export let branchHelsedir: string =
-  "MAIN/SNOMEDCT-NO-DAILYBUILD/HELSEDIREKTORATET";
+// export let branchICD10: string = "MAIN/SNOMEDCT-NO";
+export let branchICD10: string = "MAIN";
+// export let branchICPC2: string = "MAIN/ICPC-2";
+export let branchICPC2: string = "MAIN";
+// export let branchHelsedir: string =
+//   "MAIN/SNOMEDCT-NO-DAILYBUILD/HELSEDIREKTORATET";
+export let branchHelsedir: string = "MAIN";
+export let branchForAutosuggest: string = "MAIN/SNOMEDCT-NO-DAILYBUILD"; //is used for every requests to seabreeze
+export let refsetBranch: string = "MAIN/SNOMEDCT-NO-DAILYBUILD/REFSETS"; //is used for icpc (now)
 
 export let urlParameters: string =
   "?limit=10&active=true&groupByConcept=true&semanticTags=disorder&semanticTags=finding&language=no&language=nb&language=nn&language=en&conceptActive=true";
 
 export const snomedURLs = {
   getTerms:
+    // terminlogyServer +
+    // "/browser/" +
+    // branchHelsedir +
+    // "/descriptions" +
+    // urlParameters +
+    // "&term=",
     terminlogyServer +
     "/browser/" +
-    branchHelsedir +
+    branchForAutosuggest +
     "/descriptions" +
     urlParameters +
     "&term=",
@@ -74,10 +85,12 @@ export const codeSystemEnv = [
     url:
       terminlogyServer +
       "/browser/" +
-      branchICPC2 +
+      // branchICPC2 +
+      refsetBranch +
       "/members" +
       urlParameters +
-      "&referenceSet=450993002" +
+      // "&referenceSet=450993002" + // old
+      "&referenceSet=68101000202102" +
       "&referencedComponentId=",
   },
   {
@@ -86,7 +99,8 @@ export const codeSystemEnv = [
     url:
       terminlogyServer +
       "/browser/" +
-      branchICD10 +
+      // branchICD10 +
+      branchForAutosuggest +
       "/members" +
       urlParameters +
       "&referenceSet=447562003" +
