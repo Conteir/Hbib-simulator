@@ -598,21 +598,8 @@ export const HTMLRender = class HTMLRender extends React.Component {
           {item?.behandling?.data?.standardbehandlingsregimer
             ? item.behandling.data.standardbehandlingsregimer.map(
                 (regime, regIndex) => {
-
                   return (
                     <div key={regIndex}>
-
-                      {/* // button to get fat data  */}
-                      <p className="floatRight">
-                        <span
-                          className="link"
-                          // custom field from item
-                          onClick={this.props.onFinnLegemiddelClick(parentItem.$prefTermsStandard)}
-                        >
-                          Finn legemiddel (standard regime)
-                        </span>
-                      </p>
-
                       {/* standardbehandlingsregimer for voksne eller barn */}
                       <div className="form-group">
                         <h3>{regime.overskrift}</h3>
@@ -621,6 +608,18 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHeads(regime.doseringregimer)
                         : null}
+                      {/* // button to get fat data  */}
+                      <p className="floatRight">
+                        <span
+                          className="link"
+                          // custom field from item
+                          onClick={this.props.onFinnLegemiddelClick(
+                            parentItem.$prefTermsStandard
+                          )}
+                        >
+                          Finn legemiddel (standard regime)
+                        </span>
+                      </p>
 
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHensyn(regime.doseringregimer)
@@ -641,19 +640,19 @@ export const HTMLRender = class HTMLRender extends React.Component {
           {item?.behandling?.data?.alternativebehandlingsregimer
             ? item.behandling.data.alternativebehandlingsregimer.map(
                 (regime, regIndex) => {
-                  
                   return (
                     <div key={regIndex}>
-
-                      {/* button to get fat data */}
+                      {/* button to get fat data 
                       <p className="floatRight">
                         <span
                           className="link"
-                          onClick={this.props.onFinnLegemiddelClick(parentItem.$prefTermsAlternativ)}
+                          onClick={this.props.onFinnLegemiddelClick(
+                            parentItem.$prefTermsAlternativ
+                          )}
                         >
                           Finn legemiddel (alternative regime)
                         </span>
-                      </p>
+                      </p> */}
 
                       {/* alternativebehandlingsregimer for voksne eller barn */}
                       <div className="form-group">
@@ -683,20 +682,8 @@ export const HTMLRender = class HTMLRender extends React.Component {
           {item?.behandling?.data?.overgangtiloralbehandlingsregimer
             ? item.behandling.data.overgangtiloralbehandlingsregimer.map(
                 (regime, regIndex) => {
-
                   return (
                     <div key={regIndex}>
-
-                    {/* button to get fat data */}
-                    <p className="floatRight">
-                      <span
-                        className="link"
-                        onClick={this.props.onFinnLegemiddelClick(parentItem.$prefTermsOvergang)}
-                      >
-                        Finn legemiddel (oral regime)
-                      </span>
-                    </p>
-
                       {/* overgangtiloralbehandlingsregimer */}
                       {/* make it instead of the harcoded title?:  */}
                       <div className="form-group">
@@ -706,7 +693,17 @@ export const HTMLRender = class HTMLRender extends React.Component {
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHeads(regime.doseringregimer)
                         : null}
-
+                      {/* button to get fat data */}
+                      <p className="floatRight">
+                        <span
+                          className="link"
+                          onClick={this.props.onFinnLegemiddelClick(
+                            parentItem.$prefTermsOvergang
+                          )}
+                        >
+                          Finn legemiddel (oral regime)
+                        </span>
+                      </p>
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHensyn(regime.doseringregimer)
                         : null}

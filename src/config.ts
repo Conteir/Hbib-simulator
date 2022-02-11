@@ -125,6 +125,4 @@ export const hbibUrl =
 
 //// proxy
 export const proxyFat =
-  // "https://ehr-simulator.netlify.app/.netlify/functions/proxy";
-  "http://fat-prod.azurewebsites.net";
-
+  "https://ehr-simulator.netlify.app/.netlify/functions/proxy";
