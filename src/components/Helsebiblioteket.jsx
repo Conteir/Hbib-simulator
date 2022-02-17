@@ -106,7 +106,7 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
       <div>
         <div className="jumbotron text-center">
           <h1>HELSEBIBLIOTEKET</h1>
-          <p>Choose the code system and make a search throught SNOMED</p>
+          <p>Choose a code system and make a search throught SNOMED</p>
         </div>
 
         <div className="row top">
