@@ -105,7 +105,7 @@ export const Helsebiblioteket = class Helsebiblioteket extends React.Component {
     return (
       <div>
         <div className="jumbotron text-center">
-          <h1>HELSEBIBLIOTEKET</h1>
+          <h1>HELSEBIBLIOTEKET (test)</h1>
           <p>Choose a code system and make a search throught SNOMED</p>
         </div>
 
