@@ -20,10 +20,10 @@ export const codeSystems = [
 ];
 
 //SNOMED CT CONFIGURATIONS
-export let terminlogyServer: string = "https://snowstorm.conteir.no";
-export let branchICD10: string = "MAIN/SNOMEDCT-NO";
-export let branchICPC2: string = "MAIN/ICPC-2";
-export let branchHbib: string = "MAIN/SNOMEDCT-NO/HELSEBIBLIOTEKET";
+export let terminlogyServer: string = "https://seabreeze.conteir.no";
+export let branchICD10: string = "MAIN";
+export let branchICPC2: string = "MAIN/SNOMEDCT-NO-DAILYBUILD/REFSETS";
+export let branchHbib: string = "MAIN/SNOMEDCT-NO-DAILYBUILD";
 
 export let urlParameters: string =
   "?limit=10&active=true&groupByConcept=true&semanticTags=disorder&semanticTags=finding&language=no&language=nb&language=nn&language=en&conceptActive=true";
@@ -48,7 +48,7 @@ export const codeSystemEnv = [
       branchICPC2 +
       "/members" +
       urlParameters +
-      "&referenceSet=450993002" +
+      "&referenceSet=68101000202102" +
       "&referencedComponentId=",
   },
   {
@@ -74,9 +74,10 @@ export const params = {
 };
 
 //// configurations for hbib
-// export const hbibUrl = 'https://qa.hbib.ntf.seeds.no/_/service/com.enonic.app.guillotine/graphql';
+//export const hbibUrl =
+//"https://qa.hbib.ntf.seeds.no/_/service/com.enonic.app.guillotine/graphql";
 
 export const hbibUrl =
   "https://snowstorm.conteir.no/hbibgraph/_/service/com.enonic.app.guillotine/graphql";
-export const contentType = "recommendation";
-export const contentTypeCap = "Recommendation";
+export const contentType = "treatment_recommendation";
+export const contentTypeCap = "TreatmentRecommendation";
