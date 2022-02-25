@@ -140,6 +140,8 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
       helsedirBaseUrl +
       "?kodeverk=SNOMED-CT&kode=" +
       suggestion.concept.conceptId;
+    
+    console.log("ecl url ", url);
 
     this.fetchContent(url);
   };
