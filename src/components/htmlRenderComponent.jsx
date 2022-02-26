@@ -609,17 +609,20 @@ export const HTMLRender = class HTMLRender extends React.Component {
                         ? this.renderDoseRegimerHeads(regime.doseringregimer)
                         : null}
                       {/* // button to get fat data  */}
-                      <p className="floatRight">
-                        <span
-                          className="link"
-                          // custom field from item
-                          onClick={this.props.onFinnLegemiddelClick(
-                            parentItem.$prefTermsStandard
-                          )}
-                        >
-                          Finn legemiddel (standard regime)
-                        </span>
-                      </p>
+                      {/* show links to legemidler only if data exists */}
+                      {typeof this.props.onFinnLegemiddelClick==="function" ?
+                        <p className="floatRight">
+                          <span
+                            className="link"
+                            // custom field from item
+                            onClick={this.props.onFinnLegemiddelClick(
+                              parentItem.$prefTermsStandard
+                            )}
+                          >
+                            Finn legemiddel (standard regime)
+                          </span>
+                        </p>
+                      : null}
 
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHensyn(regime.doseringregimer)
@@ -642,18 +645,22 @@ export const HTMLRender = class HTMLRender extends React.Component {
                 (regime, regIndex) => {
                   return (
                     <div key={regIndex}>
-                      {/* button to get fat data 
-                      <p className="floatRight">
-                        <span
-                          className="link"
-                          onClick={this.props.onFinnLegemiddelClick(
-                            parentItem.$prefTermsAlternativ
-                          )}
-                        >
-                          Finn legemiddel (alternative regime)
-                        </span>
-                      </p> */}
-
+                      {/* button to get fat data */}
+                      {/* UNCOMMENTED alternative */}
+                      {/* show links to legemidler only if data exists */}
+                      {typeof this.props.onFinnLegemiddelClick==="function" ?
+                        <p className="floatRight">
+                          <span
+                            className="link"
+                            onClick={this.props.onFinnLegemiddelClick(
+                              parentItem.$prefTermsAlternativ
+                            )}
+                          >
+                            Finn legemiddel (alternative regime)
+                          </span>
+                        </p>
+                      : null}
+                      
                       {/* alternativebehandlingsregimer for voksne eller barn */}
                       <div className="form-group">
                         <h3>{regime?.overskrift ? regime.overskrift : null}</h3>
@@ -694,16 +701,20 @@ export const HTMLRender = class HTMLRender extends React.Component {
                         ? this.renderDoseRegimerHeads(regime.doseringregimer)
                         : null}
                       {/* button to get fat data */}
-                      <p className="floatRight">
-                        <span
-                          className="link"
-                          onClick={this.props.onFinnLegemiddelClick(
-                            parentItem.$prefTermsOvergang
-                          )}
-                        >
-                          Finn legemiddel (oral regime)
-                        </span>
-                      </p>
+                      {/* show links to legemidler only if data exists */}
+                      {typeof this.props.onFinnLegemiddelClick==="function" ?
+                        <p className="floatRight">
+                          <span
+                            className="link"
+                            onClick={this.props.onFinnLegemiddelClick(
+                              parentItem.$prefTermsOvergang
+                            )}
+                          >
+                            Finn legemiddel (oral regime)
+                          </span>
+                        </p>
+                      : null}
+                      
                       {regime?.doseringregimer
                         ? this.renderDoseRegimerHensyn(regime.doseringregimer)
                         : null}

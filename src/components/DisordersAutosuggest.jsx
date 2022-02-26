@@ -81,7 +81,7 @@ export default class DisordersAutosuggest extends React.Component {
                 let codeSystemPromise = fetch(selectedCodeSystem.url + conceptId)
                 .then((response) => response.json())
                 .then((data) => {
-                  console.log("Code system: " + selectedCodeSystem.id, data);
+                  // console.log("Code system: " + selectedCodeSystem.id, data);
                   // Check if array is not empty (means that there is no info for this term, probably its children have)
                   if (data && Array.isArray(data.items) && data.items.length > 0) { //check if object is not empty
                     // 1. check that code exests (for any reason?) and 2. if it !== undefined to make a condition

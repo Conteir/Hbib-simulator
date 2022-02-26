@@ -278,6 +278,7 @@ export const AdvancedHAPIwithSNOMED = class AdvancedHAPIwithSNOMED extends React
 
   // get ecl concept-ids
   getECLdata = (data) => {
+    console.log("data when get ecl executes", data);
     if (!Array.isArray(data)) return;
     // let eclConcept = this.state.koderSNOMEDCT[0];
 
